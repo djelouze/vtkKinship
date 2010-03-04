@@ -1,4 +1,3 @@
-INCLUDE_DIRECTORIES (${VTK_ALGO_SRCS_PATH})
 
 ### Find VTK
 INCLUDE (${CMAKE_ROOT}/Modules/FindVTK.cmake)
@@ -7,17 +6,16 @@ IF (USE_VTK_FILE)
 ENDIF (USE_VTK_FILE)
 
 ### Listing of the files used in VesselExtraction
-FILE(GLOB SRC_VTKCONVOLUTIONS *.cxx *.h)
+FILE(GLOB SRC_VTKKINSHIP_FILTERS *.cxx *.h)
 
-### Defines VesselExtractionVTK lib an links
 IF( WIN32 )
-   ADD_LIBRARY( vtkConvolutions STATIC ${SRC_VTKCONVOLUTIONS} )
+   ADD_LIBRARY( vtkKinshipFilters STATIC ${SRC_VTKKINSHIP_FILTERS} )
 ELSE( WIN32 )
-   ADD_LIBRARY( vtkConvolutions SHARED ${SRC_VTKCONVOLUTIONS} )
+   ADD_LIBRARY( vtkKinshipFilters SHARED ${SRC_VTKKINSHIP_FILTERS} )
 ENDIF( WIN32)
 
 TARGET_LINK_LIBRARIES( 
-                       vtkConvolutions
+                       vtkKinshipFilters
                        vtkFiltering 
                        vtkRendering 
                        vtkGraphics 
