@@ -1,0 +1,12 @@
+###############
+# vtkKinship  #
+###############
+
+Extents VTK (http://www.vtk.org) filters and sources
+
+----------------
+Build with CMake
+----------------
+
+copyright Jerome Velut 2010
+
