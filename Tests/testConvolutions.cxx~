@@ -1,0 +1,29 @@
+#include <vtkNewImageConvolve.h>
+
+#include <vtkSmartPointer.h>
+#include <vtkImageGaussianSource.h>
+#include <vtkImageData.h>
+
+int main( int argc, char* argv[] )
+{
+   // Objects instanciation
+   vtkSmartPointer<vtkImageGaussianSource> image = vtkSmartPointer<vtkImageGaussianSource>::New( );
+   vtkSmartPointer<vtkImageGaussianSource> kernel = vtkSmartPointer<vtkImageGaussianSource>::New( );
+   vtkSmartPointer<vtkNewImageConvolve> convolutionFilter = vtkSmartPointer<vtkNewImageConvolve>::New( );
+
+   // Pipeline construction
+   convolutionFilter->SetInputConnection( image->GetOutputPort( ) );
+//   convolutionFilter->SetKernelConnection( kernel->GetOutputPort( ) );
+
+   // Setting the image
+   image->SetWholeExtent( 0, 127, 0, 127, 0, 0 );
+   image->SetCenter( 63.5, 63.5, 0 );
+
+   // Setting the kernel
+   kernel->SetWholeExtent( 0, 4, 0, 4, 0, 0 );
+   kernel->SetCenter( 2, 2, 0 );
+
+   convolutionFilter->Update( );
+
+   convolutionFilter->GetOutput( )->PrintSelf( cout, vtkIndent( ) );
+}

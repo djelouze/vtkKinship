@@ -1,0 +1,98 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="filters">
+      <!-- ==================================================================== -->
+      <SourceProxy name="NewImageConvolve" class="vtkNewImageConvolve" label="Image Convolve (Custom Kernel)">
+         <Documentation
+                       long_help=""
+                       short_help="">
+         </Documentation>
+         
+         <InputProperty
+                       name="Input"
+                       command="SetInputConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Kernel"
+                       command="SetKernelConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+
+        <StringVectorProperty name="OutputDataName"
+                              command="SetOutputDataName"
+                              number_of_elements="1"
+                              default_values="ImageConvolution">
+          
+        </StringVectorProperty>
+      </SourceProxy>
+      <!-- End NewImageConvolve -->
+      
+      <!-- ==================================================================== -->
+      <SourceProxy name="LocalImageConvolve" class="vtkLocalImageConvolve" label="Image Convolve (local)">
+         <Documentation
+                       long_help=""
+                       short_help="">
+         </Documentation>
+         
+         <InputProperty
+                       name="Input"
+                       command="SetInputConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkPointSet"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Kernel"
+                       command="SetKernelConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Image"
+                       command="SetImageConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+
+        <StringVectorProperty name="OutputDataName"
+                      command="SetOutputDataName"
+                      number_of_elements="1"
+                      default_values="Convolution">
+
+        </StringVectorProperty>
+      </SourceProxy>
+      <!-- End LocalImageConvolve -->
+   </ProxyGroup>
+   <!-- End Filter Group -->
+   
+</ServerManagerConfiguration>
+
