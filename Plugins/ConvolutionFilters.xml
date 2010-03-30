@@ -1,7 +1,7 @@
 <ServerManagerConfiguration>
    <ProxyGroup name="filters">
       <!-- ==================================================================== -->
-      <SourceProxy name="NewImageConvolve" class="vtkNewImageConvolve" label="Image Convolve (Custom Kernel)">
+      <SourceProxy name="ImageConvolution" class="vtkImageConvolution" label="Image Convolution">
          <Documentation
                        long_help=""
                        short_help="">
@@ -41,7 +41,7 @@
       <!-- End NewImageConvolve -->
       
       <!-- ==================================================================== -->
-      <SourceProxy name="LocalImageConvolve" class="vtkLocalImageConvolve" label="Image Convolve (local)">
+      <SourceProxy name="ImageLocalConvolution" class="vtkImageLocalConvolution" label="Image Local Convolution">
          <Documentation
                        long_help=""
                        short_help="">
