@@ -20,6 +20,7 @@
 #include "vtkPolyDataAlgorithm.h"
 #include "vtkWarpVector.h"
 #include "vtkProbeFilter.h"
+#include "vtkImageData.h"
 
 
 class VTK_EXPORT vtkDeformableMesh : public vtkPolyDataAlgorithm
@@ -44,7 +45,7 @@ protected:
   int RequestData( vtkInformation*, 
                    vtkInformationVector**, 
                    vtkInformationVector*);
-
+  int FillInputPortInformation(int port, vtkInformation *info);
 
 private:
   vtkDeformableMesh(const vtkDeformableMesh&);  // Not implemented.
