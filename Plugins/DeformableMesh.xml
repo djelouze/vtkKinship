@@ -1,0 +1,51 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="filters">
+      <!-- ==================================================================== -->
+      <SourceProxy name="DeformableMesh" class="vtkDeformableMesh" label="Deformable Mesh">
+         <Documentation
+                       long_help=""
+                       short_help="">
+         </Documentation>
+         
+         <InputProperty
+                       name="Input"
+                       command="SetInputConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkPolyData"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Image"
+                       command="SetInputConnection"
+                       port_index="1">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+
+        <IntVectorProperty name="IterateFromZero"
+                              command="SetIterateFromZero"
+                              number_of_elements="1"
+                              default_values="1">
+           <BooleanDomain name="boolean"/>
+        </IntVectorProperty>
+         <IntVectorProperty name="NumberOfIterations"
+                              command="SetNumberOfIterations"
+                              number_of_elements="1"
+                              default_values="1">
+        </IntVectorProperty>
+      </SourceProxy>
+      <!-- End DeformableMesh -->
+   </ProxyGroup>
+   <!-- End Filter Group -->
+</ServerManagerConfiguration>
+
