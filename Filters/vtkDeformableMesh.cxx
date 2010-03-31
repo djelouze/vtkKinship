@@ -19,6 +19,8 @@ vtkDeformableMesh::vtkDeformableMesh()
    this->CachedInput = vtkPolyData::New( );
    this->WarpFilter = vtkWarpVector::New( );
    this->ProbeFilter = vtkProbeFilter::New( );
+   
+   this->WarpFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
 }
 
 
@@ -71,11 +73,11 @@ int vtkDeformableMesh::RequestData(
    this->ProbeFilter->SetInput( this->CachedInput );
    this->ProbeFilter->SetSource( cachedImage );
 
-   this->WarpFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
+   this->WarpFilter->SetInputArrayToProcess( 0,
+                              this->ProbeFilter->GetOutputPortInformation( 0 ) );
 
    while( this->CurrentIteration < this->NumberOfIterations )
    {
-      this->WarpFilter->SetScaleFactor( 200 );
       this->WarpFilter->Update( );
       
       this->CachedInput->DeepCopy( static_cast<vtkPolyData*>(this->WarpFilter
