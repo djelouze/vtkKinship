@@ -1,0 +1,45 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="filters">
+      <!-- ==================================================================== -->
+      <SourceProxy name="ImageConvolution" class="vtkImageConvolution" label="Image Convolution">
+         <Documentation
+                       long_help=""
+                       short_help="">
+         </Documentation>
+         
+         <InputProperty
+                       name="Input"
+                       command="SetInputConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Kernel"
+                       command="SetKernelConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+
+        <StringVectorProperty name="OutputDataName"
+                              command="SetOutputDataName"
+                              number_of_elements="1"
+                              default_values="ImageConvolution">
+          
+        </StringVectorProperty>
+      </SourceProxy>
+      <!-- End ImageConvolution -->
+   </ProxyGroup>
+   <!-- End Filter Group -->
+</ServerManagerConfiguration>
+
