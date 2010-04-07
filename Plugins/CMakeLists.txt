@@ -5,6 +5,8 @@ INCLUDE(${PARAVIEW_USE_FILE})
 SET( PLUGINS_SRCS
                   ../Filters/vtkImageConvolution.cxx
                   ../Filters/vtkImageLocalConvolution.cxx
+                  ../Filters/vtkImageCropVOI.cxx
+                  ../Filters/vtkImageMomentKernelSource.cxx
                   ../Filters/vtkDeformableMesh.cxx
                   
 )
@@ -13,7 +15,10 @@ SET( PLUGINS_SRCS
  ADD_PARAVIEW_PLUGIN(
    vtkPVKinship          #<--Name for the plugin
   "1.0"                        #<--Version string
-   SERVER_MANAGER_XML ConvolutionFilters.xml DeformableMesh.xml  #<-- server manager xml
+   SERVER_MANAGER_XML ImageConvolution.xml
+                      ImageLocalConvolution.xml
+                      ImageMomentKernelSource.xml
+                      DeformableMesh.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
  )
 

@@ -1,0 +1,38 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="filters">
+      <!-- ==================================================================== -->
+      <SourceProxy name="ImageCropVOI" class="vtkImageCropVOI" label="Image Crop VOI">
+         <Documentation
+                       long_help="Crop input image according to the second input's bounding box"
+                       short_help="">
+         </Documentation>
+         
+         <InputProperty
+                       name="Input"
+                       command="SetInputConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkImageData"/>
+            </DataTypeDomain>
+         </InputProperty>
+         
+         <InputProperty
+                       name="Bounds"
+                       command="SetBoundsConnection">
+            <ProxyGroupDomain name="groups">
+               <Group name="sources"/>
+               <Group name="filters"/>
+            </ProxyGroupDomain>
+            <DataTypeDomain name="input_type">
+               <DataType value="vtkDataSet"/>
+            </DataTypeDomain>
+         </InputProperty>
+      </SourceProxy>
+      <!-- End ImageCropVOI -->
+   </ProxyGroup>
+   <!-- End Filter Group -->
+</ServerManagerConfiguration>
+

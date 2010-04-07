@@ -1,0 +1,58 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="sources">
+      <!-- ================================================================== -->
+      <SourceProxy name="ImageMomentKernelSource" 
+                   class="vtkImageMomentKernelSource"
+                   label="Image Moment kernel">
+         <Documentation
+                       long_help="Creates a geometric moment kernel. The output is a 3D vtkImageData 
+                       of size KernelSize with 10 components of type double."
+                       short_help="">
+         </Documentation>
+         <IntVectorProperty
+                           name="KernelSize"
+                           label="KernelSize"
+                           number_of_elements="1"
+                           command="SetKernelSize"
+                           default_values="5" 
+                           animateable="1">
+            <Documentation>
+            </Documentation>
+         </IntVectorProperty>
+         <IntVectorProperty
+                           name="SubSampling"
+                           label="SubSampling"
+                           number_of_elements="1"
+                           command="SetSubSampling"
+                           default_values="100" >
+            <Documentation>
+               This property defines the rate of subsampling used to approximate
+               the convolution kernel elements.
+               - If the AutoSubSampling property is true, the source find the
+               closest value to SubSampling in order to ensure an integer
+               subdivision of each voxel depending on kernel size (e.g if KernelSize
+               is 23 and SubSampling is 100, the 'real' subsampling will be
+               (int)(100/23)*23 = 92. Then each voxel will be divided in 92/23 = 4
+               sub-voxels.
+               - If the AutoSubSampling property is false, each voxel is divided in
+               'SubSampling' sub-voxels.
+            </Documentation>
+         </IntVectorProperty>
+         <IntVectorProperty
+                           name="AutoSubSampling"
+                           label="AutoSubSampling"
+                           number_of_elements="1"
+                           command="SetAutoSubSampling"
+                           default_values="1" >
+            <BooleanDomain name="bool"/>
+            <Documentation>
+               If 1, the voxel subsampling depends on the kernel size. If 0, each
+               voxel is divided in 'SubSampling' subvoxels.
+            </Documentation>
+         </IntVectorProperty>
+      </SourceProxy>
+      <!-- End ImageMomentKernelSource -->
+   </ProxyGroup>
+   <!-- End Source Group -->   
+</ServerManagerConfiguration>
+
