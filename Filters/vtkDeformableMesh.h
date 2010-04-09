@@ -17,34 +17,27 @@
 #ifndef __vtkDeformableMesh_h
 #define __vtkDeformableMesh_h
 
-#include "vtkPolyDataAlgorithm.h"
+#include "vtkIterativePolyDataAlgorithm.h"
 #include "vtkWarpVector.h"
 #include "vtkProbeFilter.h"
 #include "vtkImageData.h"
 
 
-class VTK_EXPORT vtkDeformableMesh : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkDeformableMesh : public vtkIterativePolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkDeformableMesh,vtkPolyDataAlgorithm);
+  vtkTypeRevisionMacro(vtkDeformableMesh,vtkIterativePolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkDeformableMesh *New();
 
-  vtkSetMacro( NumberOfIterations, int );
-  vtkGetMacro( NumberOfIterations, int );
-
-  vtkSetMacro( IterateFromZero, int );
-  vtkGetMacro( IterateFromZero, int );
-  vtkBooleanMacro( IterateFromZero, int );
 
 protected:
   vtkDeformableMesh();
   ~vtkDeformableMesh() {};
 
-  int RequestData( vtkInformation*, 
-                   vtkInformationVector**, 
-                   vtkInformationVector*);
+  void IterativeRequestData( vtkInformationVector** );
+  void Reset( vtkInformationVector** );
   int FillInputPortInformation(int port, vtkInformation *info);
 
 private:
@@ -54,12 +47,6 @@ private:
 
   vtkWarpVector* WarpFilter; //!< deformation filter
   vtkProbeFilter* ProbeFilter; //!< get the deformation from the image
-  vtkPolyData* CachedInput; //!< mesh that is iterated
-
-  int NumberOfIterations; //!< Number of iterations to reached
-  int CurrentIteration; //!< Actual iteration
-  int IterateFromZero; //!< If 1, the input will be copied over the cached 
-                       //!< input at each RequestData
 };
 
 #endif
