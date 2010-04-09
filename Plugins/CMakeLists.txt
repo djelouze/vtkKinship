@@ -7,6 +7,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkImageLocalConvolution.cxx
                   ../Filters/vtkImageCropVOI.cxx
                   ../Filters/vtkImageMomentKernelSource.cxx
+                  ../Filters/vtkIterativePolyDataAlgorithm.cxx
                   ../Filters/vtkDeformableMesh.cxx
                   
 )
