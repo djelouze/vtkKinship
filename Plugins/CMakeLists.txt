@@ -9,6 +9,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkImageMomentKernelSource.cxx
                   ../Filters/vtkIterativePolyDataAlgorithm.cxx
                   ../Filters/vtkDeformableMesh.cxx
+                  ../Filters/vtkThickTubeFilter.cxx
                   
 )
 
@@ -20,6 +21,7 @@ SET( PLUGINS_SRCS
                       ImageLocalConvolution.xml
                       ImageMomentKernelSource.xml
                       DeformableMesh.xml
+                      ThickTubeFilter.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
  )
 
