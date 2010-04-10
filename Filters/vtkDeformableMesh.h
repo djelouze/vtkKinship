@@ -24,18 +24,18 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //! \class vtkDeformableMesh
-//! \brief Implements a regularized deformation of a vtkPolyData
+//! \brief Implements a simple deformation of a polydata embedded in a vector
+//! field
 //!
-//! This class implements an iterative mechanism that deforms
-//! the input given a number of iterations. The output is used
-//! as input until the property Reset is set to 1.
-//! 
-//! At each iteration, the input probes the vector of the image
-//! (second input). The regularization is performed as a smoothing of
-//! these displacement vectors ( Default is a laplacian smoothing). 
-//! Finally, the input mesh is warped along the regularized deformation
-//! vector (vtkWarpVector)
+//! This filter takes two inputs: 
+//! - a PolyData (port 0) that will be iterated and copied to output after
+//!   last iteration
+//! - an ImageData (port 1) that contains vector data. The polydata is warp
+//!   according to these vectors.
 //!
+//! The iterative process is a combination of vtkProbeFilter->vtkWarpVector.
+//!
+//! \seealso vtkIterativePolyDataFilter
 //! \author Jerome Velut
 //! \date 28 mar 2010
 
@@ -56,6 +56,10 @@ public:
 
   static vtkDeformableMesh *New();
 
+  //! Set the scale factor of the vtkWarpVector
+  vtkSetMacro( ScaleFactor, double );
+  //! Get the scale factor of the vtkWarpVector
+  vtkGetMacro( ScaleFactor, double );
 
 protected:
   vtkDeformableMesh();
@@ -72,6 +76,8 @@ private:
 
   vtkWarpVector* WarpFilter; //!< deformation filter
   vtkProbeFilter* ProbeFilter; //!< get the deformation from the image
+
+  double ScaleFactor; //!< scale applied to the probed vectors
 };
 
 #endif
