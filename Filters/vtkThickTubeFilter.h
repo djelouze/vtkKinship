@@ -27,11 +27,14 @@
 //! \brief Build a tube around polyline with thick borders 
 //!
 //! This filter creates a ring with user-given InnerRadius and OuterRadius,
-//! resolution being NumberOfSides. The ring is then extruded along each
-//! input polylines to create a tube with thick border.
+//! resolution being NumberOfSides. The ring is then extruded along the
+//! input polyline to create a tube with thick border.
 //!
 //! It uses two vtkTubeFilters internally with CappingOff. The capping is made
 //! manually by this vtkThickTubeFilter.
+//!
+//! \warning It works for polydata with only one polyline
+//! \todo Handle several polylines as input
 //!
 //! \author Jerome Velut
 //! \date 9 apr 2010
