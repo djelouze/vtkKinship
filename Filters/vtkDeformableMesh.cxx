@@ -23,12 +23,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-//include "vtkDeformableMesh.h"
+#include "vtkDeformableMesh.h"
 
-//include "vtkInformation.h"
-//include "vtkInformationVector.h"
-//include "vtkObjectFactory.h"
-//include "vtkSmartPointer.h"
+#include "vtkInformation.h"
+#include "vtkInformationVector.h"
+#include "vtkObjectFactory.h"
+#include "vtkSmartPointer.h"
 
 vtkCxxRevisionMacro(vtkDeformableMesh, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkDeformableMesh);
@@ -87,6 +87,7 @@ void vtkDeformableMesh::Reset( vtkInformationVector** inputVector )
 void vtkDeformableMesh::IterativeRequestData(
   vtkInformationVector **inputVector)
 {
+   this->WarpFilter->SetScaleFactor( this->GetScaleFactor( ) );
    this->WarpFilter->Update( );
    this->ProbeFilter->Modified( );
 }

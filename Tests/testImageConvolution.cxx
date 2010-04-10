@@ -25,14 +25,14 @@
 
 
 
-//include <vtkImageConvolution.h>
+#include <vtkImageConvolution.h>
 
-//include <vtkSmartPointer.h>
-//include <vtkImageGaussianSource.h>
-//include <vtkImageCanvasSource2D.h>
-//include <vtkJPEGWriter.h>
-//include <vtkImageCast.h>
-//include <vtkImageData.h>
+#include <vtkSmartPointer.h>
+#include <vtkImageGaussianSource.h>
+#include <vtkImageCanvasSource2D.h>
+#include <vtkJPEGWriter.h>
+#include <vtkImageCast.h>
+#include <vtkImageData.h>
 
 int main( int argc, char* argv[] )
 {
