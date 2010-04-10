@@ -24,23 +24,14 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //! \class vtkThickTubeFilter
-//! \brief Implements an iterative interface for polydata algorithm
+//! \brief Build a tube around polyline with thick borders 
 //!
-//! This class provides functionalities to process a vtkPolyData
-//! iteratively. The proposed mechanism allows one to stop the
-//! process at one iteration and to restart at the last iteration
-//! on next Update( ).
+//! This filter creates a ring with user-given InnerRadius and OuterRadius,
+//! resolution being NumberOfSides. The ring is then extruded along each
+//! input polylines to create a tube with thick border.
 //!
-//! If IterateFromZero is On, then the stop-and-start hints is 
-//! disable. The filter iterates from 0 to NumberOfIterations.
-//! Otherwise, the current iteration is considered as filter
-//! input at next update, and the iterations run until the new
-//! NumberOfIterations, if it changed. 
-//!
-//! One application is a real-time animation with ParaView: just
-//! set an animation key on NumberOfIterations from 0 to what you want.
-//! the incremented NumberOfIterations will triggered an update of
-//! the filter from the last time-step num. iteration to the new one.
+//! It uses two vtkTubeFilters internally with CappingOff. The capping is made
+//! manually by this vtkThickTubeFilter.
 //!
 //! \author Jerome Velut
 //! \date 9 apr 2010
@@ -62,13 +53,19 @@ public:
 
   static vtkThickTubeFilter *New();
 
+  //! Set the radius of the inner 'hole'
   vtkSetMacro( InnerRadius, double );
+  //! Get the radius of the inner 'hole'
   vtkGetMacro( InnerRadius, double );
 
+  //! Set the radius of the outer cylinder
   vtkSetMacro( OuterRadius, double );
+  //! Get the radius of the outer cylinder
   vtkGetMacro( OuterRadius, double );
 
+  //! Set the resolution of the cylinder (the number of each generating circles)
   vtkSetMacro( NumberOfSides, int );
+  //! Get the resolution of the cylinder (the number of each generating circles)
   vtkGetMacro( NumberOfSides, int );
   
 
@@ -86,8 +83,8 @@ private:
 
 
   int NumberOfSides; //!< TubeFilter parameter
-  double InnerRadius; //!< 
-  double OuterRadius; //!< 
+  double InnerRadius; //!< Radius of the inner hole 
+  double OuterRadius; //!< Radius of the outer cylinder
 };
 
 #endif
