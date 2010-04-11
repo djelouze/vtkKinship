@@ -60,22 +60,26 @@ int vtkThickTubeFilter::RequestData(
    vtkPolyData* outputMesh = vtkPolyData::SafeDownCast(
     outMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-   vtkPolyData* shallowInput = vtkPolyData::New( );
+   vtkSmartPointer<vtkPolyData> shallowInput;
+   shallowInput = vtkSmartPointer<vtkPolyData>::New( );
    shallowInput->ShallowCopy( inputMesh );
 
-   vtkTubeFilter* innerTubeFilter = vtkTubeFilter::New( );
+   vtkSmartPointer<vtkTubeFilter> innerTubeFilter;
+   innerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
    innerTubeFilter->SetInput( shallowInput );
    innerTubeFilter->SetRadius( this->InnerRadius );
    innerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    innerTubeFilter->CappingOff( );
 
-   vtkTubeFilter* outerTubeFilter = vtkTubeFilter::New( );
+   vtkSmartPointer<vtkTubeFilter> outerTubeFilter;
+   outerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
    outerTubeFilter->SetInput( shallowInput );
    outerTubeFilter->SetRadius( this->OuterRadius );
    outerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    outerTubeFilter->CappingOff( );
 
-   vtkAppendPolyData* append = vtkAppendPolyData::New( );
+   vtkSmartPointer<vtkAppendPolyData> append;
+   append = vtkSmartPointer<vtkAppendPolyData>::New( );
    append->AddInputConnection( innerTubeFilter->GetOutputPort( ));   
    append->AddInputConnection( outerTubeFilter->GetOutputPort( ));   
    append->Update( );
