@@ -68,6 +68,12 @@
                               default_values="1">
            <IntRangeDomain name="range" min="0"/>
         </IntVectorProperty>
+          <DoubleVectorProperty name="ScaleFactor"
+                              command="SetScaleFactor"
+                              number_of_elements="1"
+                              default_values="1">
+           
+        </DoubleVectorProperty>
       </SourceProxy>
       <!-- End DeformableMesh -->
    </ProxyGroup>
