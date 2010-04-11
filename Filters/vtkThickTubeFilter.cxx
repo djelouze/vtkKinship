@@ -88,6 +88,8 @@ int vtkThickTubeFilter::RequestData(
    outputMesh->DeepCopy( append->GetOutput( ) );
 
    // Get the number of point of a cylinder ('spine' length x num. sides)
+   //! \note this implies that only one polyline is taken into account
+   // Better way would be to check each input polyline cell.
    vtkPolyData* innerTube = static_cast<vtkPolyData*>(innerTubeFilter->GetOutput( ));
    int length = innerTube->GetNumberOfPoints( );
 
