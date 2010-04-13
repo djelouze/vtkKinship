@@ -1,0 +1,13 @@
+<ParaViewFilters>
+  <Category name="Image" menu_label="&amp;Image">
+    <Filter name="ImageConvolution" />
+  </Category>
+  <Category name="PolyData" menu_label="&amp;PolyData">
+  </Category>
+  <Category name="Hybrid" menu_label="&amp;Hybrid">
+    <Filter name="ImageLocalConvolution" />
+    <Filter name="ImageCropVOI" />
+    <Filter name="DeformableMesh" />
+    <Filter name="RegularizedDeformableMesh" />
+  </Category>
+</ParaViewFilters>

@@ -25,6 +25,7 @@ SET( PLUGINS_SRCS
                       RegularizedDeformableMesh.xml
                       ThickTubeFilter.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
+   GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )
 
 TARGET_LINK_LIBRARIES( vtkPVKinship vtkKinshipFilters )
