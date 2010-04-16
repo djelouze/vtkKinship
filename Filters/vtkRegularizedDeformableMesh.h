@@ -68,17 +68,19 @@ protected:
   vtkRegularizedDeformableMesh();
   ~vtkRegularizedDeformableMesh() {};
 
-  void IterativeRequestData( vtkInformationVector** );
-  void Reset( vtkInformationVector** );
-  int FillInputPortInformation(int port, vtkInformation *info);
+  virtual void IterativeRequestData( vtkInformationVector** );
+  virtual void Reset( vtkInformationVector** );
+  virtual int FillInputPortInformation(int port, vtkInformation *info);
 
 private:
   vtkRegularizedDeformableMesh(const vtkRegularizedDeformableMesh&);  // Not implemented.
   void operator=(const vtkRegularizedDeformableMesh&);  // Not implemented.
 
 
-  vtkWarpVector* WarpFilter; //!< deformation filter
-  vtkProbeFilter* ProbeFilter; //!< get the deformation from the image
+  //BTX
+  vtkSmartPointer<vtkWarpVector> WarpFilter; //!< deformation filter
+  vtkSmartPointer<vtkProbeFilter> ProbeFilter; //!< get the deformation from the image
+  //ETX
   vtkPolyDataAlgorithm* RegularizationFilter; //!< abstract filter that 
                                               //!< implements the regularization
 
