@@ -62,17 +62,18 @@ protected:
   vtkDeformableMesh();
   ~vtkDeformableMesh() {};
 
-  void IterativeRequestData( vtkInformationVector** );
-  void Reset( vtkInformationVector** );
-  int FillInputPortInformation(int port, vtkInformation *info);
+  virtual void IterativeRequestData( vtkInformationVector** );
+  virtual void Reset( vtkInformationVector** );
+  virtual int FillInputPortInformation(int port, vtkInformation *info);
 
 private:
   vtkDeformableMesh(const vtkDeformableMesh&);  // Not implemented.
   void operator=(const vtkDeformableMesh&);  // Not implemented.
 
-
-  vtkWarpVector* WarpFilter; //!< deformation filter
-  vtkProbeFilter* ProbeFilter; //!< get the deformation from the image
+  //BTX
+  vtkSmartPointer<vtkWarpVector> WarpFilter; //!< deformation filter
+  vtkSmartPointer<vtkProbeFilter> ProbeFilter; //!< get the deformation from the image
+  //ETX
 
   double ScaleFactor; //!< scale applied to the probed vectors
 };

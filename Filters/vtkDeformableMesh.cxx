@@ -34,8 +34,8 @@ vtkDeformableMesh::vtkDeformableMesh()
 {
    this->SetNumberOfInputPorts( 2 );
 
-   this->WarpFilter = vtkWarpVector::New( );
-   this->ProbeFilter = vtkProbeFilter::New( );
+   this->WarpFilter = vtkSmartPointer<vtkWarpVector>::New( );
+   this->ProbeFilter = vtkSmartPointer<vtkProbeFilter>::New( );
    
    this->WarpFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
 }
@@ -70,7 +70,7 @@ void vtkDeformableMesh::Reset( vtkInformationVector** inputVector )
    vtkImageData* inputImage = vtkImageData::SafeDownCast(
     inImageInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-   vtkImageData* cachedImage = vtkImageData::New( );
+   vtkSmartPointer<vtkImageData> cachedImage = vtkSmartPointer<vtkImageData>::New( );
    cachedImage->ShallowCopy( inputImage );
    
    this->ProbeFilter->SetInput( this->GetCachedInput() );
