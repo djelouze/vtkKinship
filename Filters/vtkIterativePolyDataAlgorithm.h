@@ -47,7 +47,7 @@
 #define __vtkIterativePolyDataAlgorithm_h
 
 #include "vtkPolyDataAlgorithm.h"
-
+#include "vtkSmartPointer.h"
 
 class VTK_EXPORT vtkIterativePolyDataAlgorithm : public vtkPolyDataAlgorithm
 {
@@ -78,14 +78,17 @@ protected:
   virtual void Reset( vtkInformationVector** ){};
 
   vtkPolyData* GetCachedInput( ){return this->CachedInput; };
-  vtkPolyData* SetIterativeOutput( vtkPolyData* io){this->IterativeOutput = io;};
+  void* SetIterativeOutput( vtkPolyData* io){this->IterativeOutput = io;};
+  vtkPolyData* GetIterativeOutput( ){return this->IterativeOutput;};
 
 private:
   vtkIterativePolyDataAlgorithm(const vtkIterativePolyDataAlgorithm&);  // Not implemented.
   void operator=(const vtkIterativePolyDataAlgorithm&);  // Not implemented.
 
 
-  vtkPolyData* CachedInput; //!< mesh that is iterated
+  //BTX
+  vtkSmartPointer<vtkPolyData> CachedInput; //!< mesh that is iterated
+  //ETX
   vtkPolyData* IterativeOutput; //!< output of one iteration
 
   int NumberOfIterations; //!< Number of iterations to reached

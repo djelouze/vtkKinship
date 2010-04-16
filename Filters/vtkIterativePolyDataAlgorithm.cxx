@@ -33,13 +33,11 @@ vtkStandardNewMacro(vtkIterativePolyDataAlgorithm);
 
 vtkIterativePolyDataAlgorithm::vtkIterativePolyDataAlgorithm()
 {
-   this->SetNumberOfInputPorts( 2 );
-
    this->IterateFromZero = 1;
    this->NumberOfIterations = 0;
    this->CurrentIteration = 0;
 
-   this->CachedInput = vtkPolyData::New( );
+   this->CachedInput = vtkSmartPointer<vtkPolyData>::New( );
    // Default behaviour: iterating on itself.
    this->SetIterativeOutput( this->CachedInput );
 }
