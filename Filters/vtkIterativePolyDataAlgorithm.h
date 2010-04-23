@@ -78,7 +78,7 @@ protected:
   virtual void Reset( vtkInformationVector** ){};
 
   vtkPolyData* GetCachedInput( ){return this->CachedInput; };
-  void* SetIterativeOutput( vtkPolyData* io){this->IterativeOutput = io;};
+  void SetIterativeOutput( vtkPolyData* io){this->IterativeOutput = io;};
   vtkPolyData* GetIterativeOutput( ){return this->IterativeOutput;};
 
 private:
