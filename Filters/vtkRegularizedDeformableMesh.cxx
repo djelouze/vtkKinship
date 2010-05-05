@@ -35,11 +35,13 @@ vtkRegularizedDeformableMesh::vtkRegularizedDeformableMesh()
    this->SetNumberOfInputPorts( 2 );
 
    this->RegularizationFilter = vtkSmartPointer<vtkSmoothPolyDataVectors>::New( );
+   this->Normals = vtkSmartPointer<vtkPolyDataNormals>::New( );
    this->WarpFilter = vtkSmartPointer<vtkWarpVector>::New( );
    this->ProbeFilter = vtkSmartPointer<vtkProbeFilter>::New( );
    
 
-   this->RegularizationFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
+   this->Normals->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
+   this->RegularizationFilter->SetInputConnection( this->Normals->GetOutputPort( ) );
    this->WarpFilter->SetInputConnection( this->RegularizationFilter->GetOutputPort( ) );
 }
 

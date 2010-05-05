@@ -43,6 +43,7 @@
 #include "vtkIterativePolyDataAlgorithm.h"
 #include "vtkWarpVector.h"
 #include "vtkSmoothPolyDataVectors.h"
+#include "vtkPolyDataNormals.h"
 #include "vtkProbeFilter.h"
 #include "vtkImageData.h"
 
@@ -79,6 +80,7 @@ private:
   vtkSmartPointer<vtkWarpVector> WarpFilter; //!< deformation filter
   vtkSmartPointer<vtkProbeFilter> ProbeFilter; //!< get the deformation from the image
   vtkSmartPointer<vtkSmoothPolyDataVectors> RegularizationFilter;
+  vtkSmartPointer<vtkPolyDataNormals> Normals;
   //ETX
 
   double ScaleFactor; //!< scale applied to the probed vectors
