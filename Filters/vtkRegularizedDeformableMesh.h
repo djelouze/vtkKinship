@@ -42,6 +42,7 @@
 
 #include "vtkIterativePolyDataAlgorithm.h"
 #include "vtkWarpVector.h"
+#include "vtkSmoothPolyDataVectors.h"
 #include "vtkProbeFilter.h"
 #include "vtkImageData.h"
 
@@ -59,10 +60,7 @@ public:
   //! Get the scale factor of the vtkWarpVector
   vtkGetMacro( ScaleFactor, double );
 
-  //! Set the regularization filter
-  vtkSetObjectMacro( RegularizationFilter, vtkPolyDataAlgorithm );
-  //! Get the regularization filter
-  vtkGetObjectMacro( RegularizationFilter, vtkPolyDataAlgorithm );
+  void SetNumberOfSmoothingIterations( int nbIte );
 
 protected:
   vtkRegularizedDeformableMesh();
@@ -80,9 +78,8 @@ private:
   //BTX
   vtkSmartPointer<vtkWarpVector> WarpFilter; //!< deformation filter
   vtkSmartPointer<vtkProbeFilter> ProbeFilter; //!< get the deformation from the image
+  vtkSmartPointer<vtkSmoothPolyDataVectors> RegularizationFilter;
   //ETX
-  vtkPolyDataAlgorithm* RegularizationFilter; //!< abstract filter that 
-                                              //!< implements the regularization
 
   double ScaleFactor; //!< scale applied to the probed vectors
 };

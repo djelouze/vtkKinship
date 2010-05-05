@@ -34,12 +34,13 @@ vtkRegularizedDeformableMesh::vtkRegularizedDeformableMesh()
 {
    this->SetNumberOfInputPorts( 2 );
 
-   this->RegularizationFilter = 0;
-
+   this->RegularizationFilter = vtkSmartPointer<vtkSmoothPolyDataVectors>::New( );
    this->WarpFilter = vtkSmartPointer<vtkWarpVector>::New( );
    this->ProbeFilter = vtkSmartPointer<vtkProbeFilter>::New( );
    
-   this->WarpFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
+
+   this->RegularizationFilter->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
+   this->WarpFilter->SetInputConnection( this->RegularizationFilter->GetOutputPort( ) );
 }
 
 
@@ -48,6 +49,12 @@ void vtkRegularizedDeformableMesh::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os,indent);
 
 
+}
+
+void vtkRegularizedDeformableMesh::SetNumberOfSmoothingIterations(int nbIte )
+{
+   this->RegularizationFilter->SetNumberOfIterations( nbIte );
+   this->Modified( );
 }
 
 //---------------------------------------------------------------------------
@@ -76,26 +83,16 @@ void vtkRegularizedDeformableMesh::Reset( vtkInformationVector** inputVector )
    cachedImage->ShallowCopy( inputImage );
    
    this->ProbeFilter->SetInput( this->GetCachedInput() );
+   this->ProbeFilter->SetInputArrayToProcess( 0, inImageInfo ); 
    this->ProbeFilter->SetSource( cachedImage );
 
-   if( this->RegularizationFilter )
-   {
-      this->RegularizationFilter
-          ->SetInputConnection( this->ProbeFilter
-                                    ->GetOutputPort( ) 
-                              );
-      this->WarpFilter
-          ->SetInputConnection( this->RegularizationFilter
-                                    ->GetOutputPort( ) 
-                              );
-   }
-   else
-      this->WarpFilter
-         ->SetInputConnection( this->ProbeFilter->GetOutputPort( ) );
-
-   this->WarpFilter
+   this->RegularizationFilter
        ->SetInputArrayToProcess( 0, this->ProbeFilter
                                         ->GetOutputPortInformation( 0 ) );
+
+
+   this->WarpFilter
+       ->SetInputArrayToProcess( 0, 0, 0, 0, "SmoothedVectors");
 
    this->SetIterativeOutput( static_cast<vtkPolyData*>(this->WarpFilter
                                                            ->GetOutput( )) );
