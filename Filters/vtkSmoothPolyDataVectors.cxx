@@ -85,7 +85,7 @@ int vtkSmoothPolyDataVectors::RequestData(
    vectorsToPoints = vtkSmartPointer<vtkPolyData>::New( );
    vectorsToPoints->DeepCopy( inputMesh );
 
-   vtkDataArray* vectors = this->GetInputArrayToProcess( 1, inputVector );
+   vtkDataArray* vectors = this->GetInputArrayToProcess( 0, inputVector );
    if( !vectors )
       return( 0 );
 
