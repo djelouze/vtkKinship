@@ -33,6 +33,7 @@
 //!
 //! \warning It works for polydata with only one polyline
 //! \todo Handle several polylines as input
+//! \todo Handle varying radius
 //!
 //! \author Jerome Velut
 //! \date 9 apr 2010
@@ -41,10 +42,6 @@
 #define __vtkThickTubeFilter_h
 
 #include "vtkPolyDataAlgorithm.h"
-#include "vtkTubeFilter.h"
-#include "vtkAppendPolyData.h"
-#include "vtkCellArray.h"
-
 
 class VTK_EXPORT vtkThickTubeFilter : public vtkPolyDataAlgorithm
 {

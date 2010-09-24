@@ -23,6 +23,9 @@
 
 #include "vtkThickTubeFilter.h"
 
+#include "vtkTubeFilter.h"
+#include "vtkCellArray.h"
+#include "vtkAppendPolyData.h"
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
@@ -62,6 +65,7 @@ int vtkThickTubeFilter::RequestData(
    shallowInput = vtkSmartPointer<vtkPolyData>::New( );
    shallowInput->ShallowCopy( inputMesh );
 
+   // Inner tube setup
    vtkSmartPointer<vtkTubeFilter> innerTubeFilter;
    innerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
    innerTubeFilter->SetInput( shallowInput );
@@ -69,6 +73,7 @@ int vtkThickTubeFilter::RequestData(
    innerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    innerTubeFilter->CappingOff( );
 
+   // Outer tube setup
    vtkSmartPointer<vtkTubeFilter> outerTubeFilter;
    outerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
    outerTubeFilter->SetInput( shallowInput );
@@ -76,6 +81,7 @@ int vtkThickTubeFilter::RequestData(
    outerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    outerTubeFilter->CappingOff( );
 
+   // Join both onner and outer tube
    vtkSmartPointer<vtkAppendPolyData> append;
    append = vtkSmartPointer<vtkAppendPolyData>::New( );
    append->AddInputConnection( innerTubeFilter->GetOutputPort( ));   
