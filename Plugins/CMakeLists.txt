@@ -12,6 +12,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkRegularizedDeformableMesh.cxx
                   ../Filters/vtkThickTubeFilter.cxx
                   ../Filters/vtkSmoothPolyDataVectors.cxx
+                  ../Filters/vtkFrenetSerretFrame.cxx
                   
 )
 
@@ -26,6 +27,7 @@ SET( PLUGINS_SRCS
                       RegularizedDeformableMesh.xml
                       ThickTubeFilter.xml
                       SmoothPolyDataVectors.xml
+                      FrenetSerretFrame.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )
