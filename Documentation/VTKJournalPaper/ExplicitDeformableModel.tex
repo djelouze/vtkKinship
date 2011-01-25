@@ -1,0 +1,152 @@
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', which is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%     http://www.itk.org/
+
+\documentclass{InsightArticle}
+
+\usepackage[dvips]{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvips,
+bookmarks,
+bookmarksopen,
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+
+
+%  This is a template for Papers to the Insight Journal. 
+%  It is comparable to a technical report format.
+
+% The title should be descriptive enough for people to be able to find
+% the relevant document. 
+\title{Explicit Deformable Model in VTK}
+
+% 
+% NOTE: This is the last number of the "handle" URL that 
+% The Insight Journal assigns to your paper as part of the
+% submission process. Please replace the number "1338" with
+% the actual handle number that you get assigned.
+%
+\newcommand{\IJhandlerIDnumber}{Xxxx}
+
+% Increment the release number whenever significant changes are made.
+% The author and/or editor can define 'significant' however they like.
+\release{1.00}
+
+% At minimum, give your name and an email address.  You can include a
+% snail-mail address if you like.
+\author{J\'er\^ome Velut$^{1}$}
+\authoraddress{$^{1}$France, jerome.velut@gmail.com}
+
+\begin{document}
+
+%
+% Add hyperlink to the web location and license of the paper.
+% The argument of this command is the handler identifier given
+% by the Insight Journal to this paper.
+% 
+\IJhandlefooter{\IJhandlerIDnumber}
+
+
+\ifpdf
+\else
+   %
+   % Commands for including Graphics when using latex
+   % 
+   \DeclareGraphicsExtensions{.eps,.jpg,.gif,.tiff,.bmp,.png}
+   \DeclareGraphicsRule{.jpg}{eps}{.jpg.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.gif}{eps}{.gif.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.tiff}{eps}{.tiff.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.bmp}{eps}{.bmp.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.png}{eps}{.png.bb}{`convert #1 eps:-}
+\fi
+
+
+\maketitle
+
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+
+% The abstract should be a paragraph or two long, and describe the
+% scope of the document.
+\begin{abstract}
+\noindent
+This document describes a set of classes\footnote{It is a subset of the
+vtkKinship library \url{http://github.com/jeromevelut/vtkKinship}} that 
+design a generic explicit deformable model in VTK. The iterative mechanism
+is first introduced through an inheritance of the vtkPolyDataAlgorithm class. 
+This vtkIterativePolyDataAlgorithm is then a based for an implementation of the
+deformation. 
+\end{abstract}
+
+\IJhandlenote{\IJhandlerIDnumber}
+
+\tableofcontents
+
+The deformable models are part of a wide family of image processing methods.
+The snakes \cite{KAS87} are often cited as the seminal work that induced the
+huge amount of existing paper today \cite{MON01}. The main idea was to minimize
+an energy computed under a curve evolving in an image domain. The proposed 
+implementation was a discretization of the steepest descent algorithm, which
+led to an iterative displacement of each point related to a trade-off between
+internal and external forces. The explicit deformable models refer to this 
+iterative deformation of the geometry, as opposed to implicit deformable
+models \cite{}.
+
+In this paper, we focus on the iterative design of an explicit deformable 
+model. First, we present the vtkIterativePolyDataAlgorithm class, that 
+inherits from vtkPolyDataAlgorithm. It allows a VTK filter to iteratively
+process the input until a number of iteration is reached. A step-by-step
+mechanism is also implemented, bringing useful interactive capabilities
+-especially inside ParaView-. Second, a deformable model is designed through
+a class derived from vtkIterativePolyDataAlgorithm. It has been kept as simple
+as possible, e.g the user is responsible of the forces computation and the
+initialisation. Finally, a ParaView plugin is provided and a short example 
+is given in which the animation feature is used in order to interact with the 
+deformable model.
+
+\section{Making PolyData algorithms iterative}
+
+\section{Explicit deformable model}
+
+\section{Paraview plugin}
+
+
+\section{Software Requirements}
+
+You need to have the following software installed:
+
+% The {itemize} environment uses a bullet for each \item.  If you want the 
+% \item's numbered, use the {enumerate} environment instead.
+\begin{itemize}
+  \item  VTK-5.4
+  \item  CMake-2.8
+  \item  ParaView-3.8 (optional)
+\end{itemize}
+
+\appendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+
+\end{document}
+
