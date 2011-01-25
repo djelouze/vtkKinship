@@ -1,4 +1,4 @@
-PROJECT (vtkKinship)
+PROJECT (vtkExplicitDeformableModel)
 
 ### The following are needed to avoid warnings. See CMake doc. ######
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
@@ -8,19 +8,19 @@ cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 #####################################################################
 
-SET (LIBRARY_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+SET (LIBRARY_OUTPUT_PATH ${vtkExplicitDeformableModel_BINARY_DIR}/bin
      CACHE 
      PATH
      "Single output directory for building all libraries.")
 
-SET (EXECUTABLE_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+SET (EXECUTABLE_OUTPUT_PATH ${vtkExplicitDeformableModel_BINARY_DIR}/bin
      CACHE
      PATH
      "Single output directory for building all executables.")
      
 INCLUDE_DIRECTORIES (${LIBRARY_OUTPUT_PATH})
 INCLUDE_DIRECTORIES (${EXECUTABLE_OUTPUT_PATH})
-INCLUDE_DIRECTORIES (${vtkKinship_SOURCE_DIR}/Filters)
+INCLUDE_DIRECTORIES (${vtkExplicitDeformableModel_SOURCE_DIR}/Filters)
 
 MARK_AS_ADVANCED(
    LIBRARY_OUTPUT_PATH

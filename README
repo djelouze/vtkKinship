@@ -1,12 +1,13 @@
 ###############################################################################
-#                                vtkKinhip                                    #
+#                                vtkExplicitDeformableModel                   #
 ###############################################################################
 
 
 1. Introduction
 ---------------
 
-Extents VTK (http://www.vtk.org) filters and sources
+The purpose of this library is to share the code related to a VTK journal
+submission. It is also a subset of the vtkKinship library.
 
 2. Build and install
 --------------------
