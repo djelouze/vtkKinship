@@ -6,6 +6,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkIterativePolyDataAlgorithm.cxx
                   ../Filters/vtkDeformableMesh.cxx
                   ../Filters/vtkRegularizedDeformableMesh.cxx
+                  ../Filters/vtkPolyDataIterativeWarp.cxx
                   ../Filters/vtkSmoothPolyDataVectors.cxx
 )
 
@@ -16,6 +17,7 @@ SET( PLUGINS_SRCS
    SERVER_MANAGER_XML SmoothPolyDataVectors.xml
                       DeformableMesh.xml
                       RegularizedDeformableMesh.xml
+                      PolyDataIterativeWarp.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES ExplicitDeformableModelMenu.xml
  )
