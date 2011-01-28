@@ -95,7 +95,10 @@ deformation.
 
 \tableofcontents
 
-The deformable models are part of a wide family of image processing methods.
+The deformable models are part of a wide family of computer graphics methods.
+They were initially proposed in the context of real physics simulation, 
+in particular for solid and soft body deformations \cite{TERXX}. One of the
+applications concerns the segmentation task in image processing:
 The snakes \cite{KAS87} are often cited as the seminal work that induced the
 huge amount of existing paper today \cite{MON01}. The main idea was to minimize
 an energy computed under a curve evolving in an image domain. The proposed 
@@ -116,9 +119,19 @@ as possible, e.g the user is responsible of the forces computation and the
 initialisation. Finally, a ParaView plugin is provided and a short example 
 is given in which the animation feature is used in order to interact with the 
 deformable model.
-
+%
 \section{Making PolyData algorithms iterative}
-
+\subsection{basics}
+The design of the VTK library is based on a pipeline of data processing. The
+modification of an input anywhere in the pipeline triggers the execution of the
+whole remaining, downward processes. An obvious consequence is the 
+impossibility to plug the output of a filter directly to an upward input 
+'as is': this feedback connection will create in many cases an infinite loop.
+However, it is possible to do almost everything in the execution method, unless
+the inputs are not modified.
+%
+\subsection{Caching the input}
+%
 \section{Explicit deformable model}
 
 \section{Paraview plugin}
