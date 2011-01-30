@@ -110,7 +110,7 @@ models \cite{}.
 
 In this paper, we focus on the iterative design of an explicit deformable 
 model. First, we present the vtkIterativePolyDataAlgorithm class, that 
-inherits from vtkPolyDataAlgorithm. It allows a VTK filter to iteratively
+inherits from \doxygen{vtkPolyDataAlgorithm}. It allows a VTK filter to iteratively
 process the input until a number of iteration is reached. A step-by-step
 mechanism is also implemented, bringing useful interactive capabilities
 -especially inside ParaView-. Second, a deformable model is designed through
@@ -127,10 +127,99 @@ modification of an input anywhere in the pipeline triggers the execution of the
 whole remaining, downward processes. An obvious consequence is the 
 impossibility to plug the output of a filter directly to an upward input 
 'as is': this feedback connection will create in many cases an infinite loop.
-However, it is possible to do almost everything in the execution method, unless
-the inputs are not modified.
+However, it is possible to do almost everything in the execution method, as far
+as the inputs are not modified. The first element of the deformable model suit
+is a \doxygen{vtkPolyDataAlgorithm}-inherited class, namely vtkIterativePolyDataAlgorithm.
+It implements a caching procedure and a special iteration mechanism.
 %
 \subsection{Caching the input}
+%
+In order to avoid a modification of the input, a call to 
+\verb!vtkIterativePolyDataAlgorithm::RequestData! copy the first connection of 
+the first input port into a CachedInput member under certain condition:
+\begin{itemize}
+ \item this is the first iteration (i.e. \verb!CurrentIteration! is false)
+ \item the filter is asked to compute all the iteration at each Update (i.e.
+   \verb!IterateFromZero! is true)
+ \item Maximum number of iterations (variable \verb!NumberOfIterations!) has 
+been set to zero
+\end{itemize}
+The copy is a performed by:
+\begin{verbatim}
+      // Copy input
+      this->CachedInput->DeepCopy( inputMesh );
+      // Reset current iteration
+      this->CurrentIteration = 0;
+      // User define initial condition
+      this->Reset( inputVector ); 
+\end{verbatim}
+%
+Here, \verb!inputMesh! points to the first input connection of the first port.
+This copy implies that the \verb!CurrentIteration! is 0. Child classes should
+overwrite the \verb!Reset! function in order to implement special initial 
+states.
+%
+\subsection{Iterating}
+%
+While \verb!CurrentIteration! is less than \verb!NumberOfIterations!, the 
+classical iterative process is performed :
+\begin{itemize}
+ \item transform the \verb!CachedInput! and name it \verb!IterativeOutput!
+ \item Increment the \verb!CurrentIteration!
+ \item copy the \verb!IterativeOutput! over \verb!CachedInput!
+\end{itemize}
+%
+The manipulation of \verb!CachedInput! is implemented in the specialisations of 
+\verb!vtkIterativePolyDataAlgorithm::IterativeRequestData!:
+%
+\begin{verbatim}
+   while( this->CurrentIteration < this->NumberOfIterations )
+   {
+      // Effective call to the iterative algorithm. Child classes
+      // should override this function
+      this->IterativeRequestData( inputVector ); 
+
+      this->CachedInput->DeepCopy( this->IterativeOutput );
+      this->CurrentIteration ++;      
+   }     
+\end{verbatim}
+%
+Two important points are illustrated in these lines of code. First, it is the 
+responsability of the \verb!IterativeRequestData! function to set the
+\verb!IterativeOutput! data. Second, the algorithm will iterate from 
+\verb!CurrentIteration! to \verb!NumberOfIterations!. It means that the whole
+iterations are not necessarily computed, unless it is explicitely asked by 
+setting \verb!IterateFromZero! to $1$. It is useful for a dynamic visualisation
+of an iterative process.
+
+The final step, in a VTK point of view, is to copy the iterative output over
+the real output of the filter:
+%
+\begin{verbatim}
+   vtkInformation *outMeshInfo = outputVector->GetInformationObject(0);
+   vtkPolyData* outputMesh = vtkPolyData::SafeDownCast(
+                             outMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
+
+   if( this->NumberOfIterations == 0 )
+      outputMesh->DeepCopy( inputMesh );
+   else
+      outputMesh->DeepCopy( this->IterativeOutput );  
+\end{verbatim}
+%
+In the case where the iterations do not begin from 0 at each \verb!Update( )!, 
+the iterative process could be resetted by setting \verb!NumberOfIterations! to
+0:
+\begin{itemize}
+ \item the initial input cache is performed
+ \item the output of the filter is set to inputMesh
+\end{itemize}
+%
+\subsection{Dynamic point warping}
+%
+A simple implementation of the deformation of a point set is realized in
+\verb!vtkPolyDataIterativeWarp!. An internal pipeline made of brownian vectors
+and point warping is built. The input of this pipeline is \verb!CachedInput!
+and the \verb!IterativeOutput! is set to be the output of the warp filter.
 %
 \section{Explicit deformable model}
 
