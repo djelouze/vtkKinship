@@ -98,6 +98,9 @@ int vtkIterativePolyDataAlgorithm::RequestData(
       this->CurrentIteration ++;      
    }    
   
+  if( this->NumberOfIterations == 0 )
+    outputMesh->DeepCopy( inputMesh );
+  else
    outputMesh->DeepCopy( this->IterativeOutput );
 
    return( 1 );
