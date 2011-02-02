@@ -39,6 +39,8 @@ vtkPolyDataIterativeWarp::vtkPolyDataIterativeWarp()
 
    this->WarpFilter = vtkSmartPointer<vtkWarpVector>::New( );
    this->BrownianPoints = vtkSmartPointer<vtkBrownianPoints>::New( );
+   
+   this->ScaleFactor = 1.0;
 }
 
 
