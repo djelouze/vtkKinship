@@ -220,12 +220,21 @@ A simple implementation of the deformation of a point set is realized in
 \verb!vtkPolyDataIterativeWarp!. An internal pipeline made of brownian vectors
 and point warping is built. The input of this pipeline is \verb!CachedInput!
 and the \verb!IterativeOutput! is set to be the output of the warp filter.
+
+A basic illustration may be found in \verb!Examples/IterativeWarp.cxx!. A point
+cloud \verb!vtkPointSource! is passed through the 
+\verb!vtkIterativePolyDataAlgorithm! and an infinite loop increments the 
+number of iterations before rendering the output. The example may run for a 
+while, as it doesn't iterate from zero at each update of the filter.
 %
 \section{Explicit deformable model}
+%
 
+%
 \section{Paraview plugin}
+%
 
-
+%
 \section{Software Requirements}
 
 You need to have the following software installed:
