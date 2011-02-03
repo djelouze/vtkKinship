@@ -9,6 +9,7 @@
 \documentclass{InsightArticle}
 
 \usepackage[dvips]{graphicx}
+\usepackage{subfigure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -121,6 +122,7 @@ is given in which the animation feature is used in order to interact with the
 deformable model.
 %
 \section{Making PolyData algorithms iterative}
+%
 \subsection{basics}
 The design of the VTK library is based on a pipeline of data processing. The
 modification of an input anywhere in the pipeline triggers the execution of the
@@ -214,6 +216,8 @@ the iterative process could be resetted by setting \verb!NumberOfIterations! to
  \item the output of the filter is set to inputMesh
 \end{itemize}
 %
+\section{Explicit deformable model}
+%
 \subsection{Dynamic point warping}
 %
 A simple implementation of the deformation of a point set is realized in
@@ -227,26 +231,98 @@ cloud \verb!vtkPointSource! is passed through the
 number of iterations before rendering the output. The example may run for a 
 while, as it doesn't iterate from zero at each update of the filter.
 %
-\section{Explicit deformable model}
+\subsection{Deformable mesh}
 %
+This iterative point warping is easily extended to an explicit deformable mesh
+framework. Let the input be a polygonal mesh, roughly a point cloud with 
+topological information; let the warp vectors being computed from a second
+input volume: If the warp vectors point to a minimum of an energy, then each
+point of the mesh will convergence towards these minima.
+
+The class \verb!vtkDeformableMesh! implements such a behaviour. The main 
+difference between this one and \verb!vtkPolyDataIterativeWarp! is that the warp
+vectors are not randomly generated. They are expected as a vector array inside 
+a \verb!vtkImageData! given on input port 1.
+
+Although the input mesh may include topological information, those are not taken
+into account: Each point are moved independently from each other. It means that
+it is not possible to introduce internal forces in the deformation process.
+
+The example \verb!Examples/DeformableMesh.cxx! shows this deformable model 
+evolving in a volume of size $64^3$, representing an ellipsoid of radius 
+$(20,10,20)$ and centered in the volume. The external forces are computed in a 
+classical fashion. Let $I$ be an intensity image, $\mathcal{S}$ the 3D Sobel
+operator and $G_\sigma$ the gaussian kernel. The second input of the 
+\verb!vtkDeformableMesh! is then $\mathcal{S}(|\mathcal{S}(G_\sigma * I)|)$. The
+input is an UV-sphere (\verb!vtkSphereSource!). Executing the example shows the
+sphere deforming to an ellipsoid (figure~\ref{fig:deform-sphere}).
+%
+\begin{figure}
+\centering
+ \subfigure[$i=0$]{\includegraphics[width=0.3\textwidth]{./Figures/sphere-i0}}
+ \subfigure[$i=100$]{\includegraphics[width=0.3\textwidth]{./Figures/sphere-i100}}
+ \subfigure[$i=250$]{\includegraphics[width=0.3\textwidth]{./Figures/sphere-i250}}
+\caption{Deformation of a spherical mesh towards an ellipsoid image at different
+iterations $i$}
+\label{fig:deform-sphere}
+\end{figure}
 
 %
 \section{Paraview plugin}
 %
+The presented VTK classes are optionnally wrapped into a ParaView plugin. If 
+the option ``BUILD\_PARAVIEW\_PLUGINS'' has been set to true during the CMake 
+procedure, then the compilation will output a \verb!vtkPVExplicitDeformableModel!
+dynamic library. This library is loadable in ParaView:
+%
+\begin{verbatim}
+ "Tools" -> "Manage Plugins" -> "Load New ..."
+\end{verbatim}
+%
+A new submenu \verb!Deformable model! appears in the \verb!Filters! menu, with
+both \verb!Iterative Warp! and \verb!Deformable Mesh!.
+%
+\subsection{Basic pipeline}
+%
+The ParaView filters are directly linked to the VTK classes. The parameters have
+then the same meaning. \verb!Deformable Mesh! is a multiple input filter: First,
+the input mesh has to be selected and put as input of \verb!Deformable Mesh!.
+Then, a dialog box will appear to ask for a second input containing Vectors.
 
+When triggering the \verb!Apply! button, the iterative polydata filter will 
+iterate internally until \verb!NumberOfIterations!.
+%
+\subsection{Rendering of successive iterations}
+%
+By harnessing the Animation View, it is possible to litteraly see the input mesh
+or point cloud deforming, while keeping the usual interactions on the render 
+window available. The screenshot in figure~\ref{fig:animation-view} shows the
+settings of the animation view. The option \verb!IterateFromZero! is important
+here, as it will avoid the computation of the whole iterations at each 
+timestep.
+%
+\begin{figure}
+ \includegraphics[width=\textwidth]{./Figures/animation-view}
+\caption{Setting of the animation view to see the iterative deformation of the 
+input PolyData}
+\label{fig:animation-view}
+\end{figure}
 %
 \section{Software Requirements}
+%
+This software has been successfully tested with ParaView-3.8.1 and ParaView-3.9
+development branch on Linux Fedora 13.
+%
+\section{Conclusion}
+%
+We presented a set of classes that design the iterative deformation of a point
+set. A generic class, inherited from \verb!vtkPolyDataAlgorithm! is derived to
+specialize the deformation process. These deformable models are available in 
+ParaView for interactive visualization of the deformation.
 
-You need to have the following software installed:
-
-% The {itemize} environment uses a bullet for each \item.  If you want the 
-% \item's numbered, use the {enumerate} environment instead.
-\begin{itemize}
-  \item  VTK-5.4
-  \item  CMake-2.8
-  \item  ParaView-3.8 (optional)
-\end{itemize}
-
+Future works will focus on the regularization of deformable meshes for a 
+segmentation point of view, and the generalisation of input data structures
+%
 \appendix
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
