@@ -12,12 +12,12 @@
 
 #include "vtkSphereSource.h"
 #include "vtkImageEllipsoidSource.h"
-#include "vtkImageGaussianSmooth.h"
 #include "vtkImageSobel3D.h"
 #include "vtkImageMagnitude.h"
 
 #include "vtkPolyDataMapper.h"
 #include "vtkActor.h"
+#include "vtkProperty.h"
 #include "vtkRenderer.h"
 #include "vtkRenderWindow.h"
 #include "vtkRenderWindowInteractor.h"
@@ -42,39 +42,34 @@ int main( int argc, char** argv )
    vtkSmartPointer<vtkImageMagnitude> magnitude;
    magnitude = vtkSmartPointer<vtkImageMagnitude>::New();
    
-   vtkSmartPointer<vtkImageGaussianSmooth> gaussianSmooth;
-   gaussianSmooth = vtkSmartPointer<vtkImageGaussianSmooth>::New();
-
    vtkSmartPointer<vtkImageSobel3D> sobel2;
    sobel2 = vtkSmartPointer<vtkImageSobel3D>::New();
 
    // Configure PointSource
    ellipsoidSource->SetWholeExtent(0,63,0,63,0,63);
    ellipsoidSource->SetCenter(31,31,31);
-   ellipsoidSource->SetRadius(20, 10, 20);
+   ellipsoidSource->SetRadius(18, 14, 18);
 
-   gaussianSmooth->SetDimensionality(3);
-   gaussianSmooth->SetStandardDeviation(6);
-   gaussianSmooth->SetInputConnection(ellipsoidSource->GetOutputPort());
-
-   sobel1->SetInputConnection(gaussianSmooth->GetOutputPort( ));
-   
+   // External forces computation
+   sobel1->SetInputConnection(ellipsoidSource->GetOutputPort( ));
    magnitude->SetInputConnection(sobel1->GetOutputPort());
-   
    sobel2->SetInputConnection(magnitude->GetOutputPort());
    
+   // Deformable model initialisation
    sphereSource->SetCenter(31,31,31);
-   sphereSource->SetRadius(20);
+   sphereSource->SetRadius(16);
    sphereSource->SetPhiResolution(36);
    sphereSource->SetThetaResolution(36);
    
-   // Configure iterativeWarp
+   // Configure deformableMesh
    deformableMesh->IterateFromZeroOff();
-   deformableMesh->SetScaleFactor(.02);
+   deformableMesh->SetScaleFactor(.0003);
+   // Model
    deformableMesh->SetInputConnection(0, sphereSource->GetOutputPort());
+   // Deformation forces
    deformableMesh->SetInputConnection(1, sobel2->GetOutputPort( ));
    
-   
+   // Visualisation pipeline
    vtkSmartPointer<vtkPolyDataMapper> mapper;
    mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
    
@@ -88,11 +83,17 @@ int main( int argc, char** argv )
    renWin = vtkSmartPointer<vtkRenderWindow>::New();
    
    mapper->SetInputConnection(deformableMesh->GetOutputPort());
+   mapper->SetScalarVisibility(0);
+
    actor->SetMapper(mapper);
+   actor->GetProperty()->SetRepresentationToWireframe();
    renderer->AddActor(actor);
    
    renWin->AddRenderer(renderer);
    
+   // Iterative loop: 
+   // - Increment the number of iteration
+   // - Render -> it will trigger only one iteration in the DeformableMesh.
    while( 1 )
    {
      deformableMesh->SetNumberOfIterations(deformableMesh->GetNumberOfIterations()+1);
