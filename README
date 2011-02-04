@@ -12,7 +12,13 @@ submission. It is also a subset of the vtkKinship library.
 2. Build and install
 --------------------
 
-Build with CMake
+Build with CMake:
+- A simple 'cmake /path/to/sources/' will generate a Makefile for compiling
+  the core library vtkExplicitDeformableModel
+- Using ccmake or cmake-gui, you can choose to build the examples related in the
+  paper
+- Using ccmake or cmake-gui and if you have a ParaView development version, you
+  can also choose to build the ParaView plugin.
 
 3. Copying
 ----------
