@@ -5,18 +5,14 @@ INCLUDE(${PARAVIEW_USE_FILE})
 SET( PLUGINS_SRCS
                   ../Filters/vtkIterativePolyDataAlgorithm.cxx
                   ../Filters/vtkDeformableMesh.cxx
-                  ../Filters/vtkRegularizedDeformableMesh.cxx
                   ../Filters/vtkPolyDataIterativeWarp.cxx
-                  ../Filters/vtkSmoothPolyDataVectors.cxx
 )
 
   # Use the ADD_PARAVIEW_PLUGIN macro to build a plugin
  ADD_PARAVIEW_PLUGIN(
    vtkPVExplicitDeformableModel          #<--Name for the plugin
   "1.0"                        #<--Version string
-   SERVER_MANAGER_XML SmoothPolyDataVectors.xml
-                      DeformableMesh.xml
-                      RegularizedDeformableMesh.xml
+   SERVER_MANAGER_XML DeformableMesh.xml
                       PolyDataIterativeWarp.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES ExplicitDeformableModelMenu.xml

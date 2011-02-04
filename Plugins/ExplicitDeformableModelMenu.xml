@@ -1,7 +1,6 @@
 <ParaViewFilters>
   <Category name="DeformableModel" menu_label="&amp;Deformable Model">
     <Filter name="DeformableMesh" />
-    <Filter name="RegularizedDeformableMesh" />
     <Filter name="PolyDataIterativeWarp" />
   </Category>
 </ParaViewFilters>
