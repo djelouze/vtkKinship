@@ -89,7 +89,9 @@ vtkKinship library \url{http://github.com/jeromevelut/vtkKinship}} that
 design a generic explicit deformable model in VTK. The iterative mechanism
 is first introduced through an inheritance of the vtkPolyDataAlgorithm class. 
 This vtkIterativePolyDataAlgorithm is then a based for an implementation of the
-deformation. 
+deformation. Two examples of deformation is presented through an inheritage of
+this base class. The provided source code may be used to build a ParaView plugin
+that harnesses the animation feature.
 \end{abstract}
 
 \IJhandlenote{\IJhandlerIDnumber}
@@ -102,7 +104,7 @@ in particular for solid and soft body deformations \cite{TERXX}. One of the
 applications concerns the segmentation task in image processing:
 The snakes \cite{KAS87} are often cited as the seminal work that induced the
 huge amount of existing paper today \cite{MON01}. The main idea was to minimize
-an energy computed under a curve evolving in an image domain. The proposed 
+an energy computed under a curve evolving in an image domain. A proposed 
 implementation was a discretization of the steepest descent algorithm, which
 led to an iterative displacement of each point related to a trade-off between
 internal and external forces. The explicit deformable models refer to this 
@@ -110,16 +112,15 @@ iterative deformation of the geometry, as opposed to implicit deformable
 models \cite{}.
 
 In this paper, we focus on the iterative design of an explicit deformable 
-model. First, we present the vtkIterativePolyDataAlgorithm class, that 
-inherits from \doxygen{vtkPolyDataAlgorithm}. It allows a VTK filter to iteratively
+model. First, we present the \verb!vtkIterativePolyDataAlgorithm! class, that 
+inherits from \verb!vtkPolyDataAlgorithm!. It allows a VTK filter to iteratively
 process the input until a number of iteration is reached. A step-by-step
 mechanism is also implemented, bringing useful interactive capabilities
--especially inside ParaView-. Second, a deformable model is designed through
-a class derived from vtkIterativePolyDataAlgorithm. It has been kept as simple
-as possible, e.g the user is responsible of the forces computation and the
-initialisation. Finally, a ParaView plugin is provided and a short example 
-is given in which the animation feature is used in order to interact with the 
-deformable model.
+-especially inside ParaView-. Second, two specialisations are presented: a 
+brownian movement and a deformable model, designed through two classes derived 
+from \verb!vtkIterativePolyDataAlgorithm!. Finally, a ParaView plugin is 
+provided and a short example is given in which the animation feature is used in 
+order to interact with the deformable model.
 %
 \section{Making PolyData algorithms iterative}
 %
@@ -131,8 +132,9 @@ impossibility to plug the output of a filter directly to an upward input
 'as is': this feedback connection will create in many cases an infinite loop.
 However, it is possible to do almost everything in the execution method, as far
 as the inputs are not modified. The first element of the deformable model suit
-is a \doxygen{vtkPolyDataAlgorithm}-inherited class, namely vtkIterativePolyDataAlgorithm.
-It implements a caching procedure and a special iteration mechanism.
+is a \verb!vtkPolyDataAlgorithm!-inherited class, namely 
+\verb!vtkIterativePolyDataAlgorithm!. It implements a caching procedure and a 
+special iteration mechanism.
 %
 \subsection{Caching the input}
 %
@@ -208,9 +210,8 @@ the real output of the filter:
       outputMesh->DeepCopy( this->IterativeOutput );  
 \end{verbatim}
 %
-In the case where the iterations do not begin from 0 at each \verb!Update( )!, 
-the iterative process could be resetted by setting \verb!NumberOfIterations! to
-0:
+In the case where \verb!IterateFromZero! is $1$, the iterative process could be 
+resetted by setting \verb!NumberOfIterations! to 0:
 \begin{itemize}
  \item the initial input cache is performed
  \item the output of the filter is set to inputMesh
@@ -234,10 +235,9 @@ while, as it doesn't iterate from zero at each update of the filter.
 \subsection{Deformable mesh}
 %
 This iterative point warping is easily extended to an explicit deformable mesh
-framework. Let the input be a polygonal mesh, roughly a point cloud with 
-topological information; let the warp vectors being computed from a second
-input volume: If the warp vectors point to a minimum of an energy, then each
-point of the mesh will convergence towards these minima.
+framework. Let the input be a polygonal mesh; let the warp vectors being 
+computed from a second input volume: If the warp vectors point to a minimum of 
+an energy, then each point of the mesh will convergence towards these minima.
 
 The class \verb!vtkDeformableMesh! implements such a behaviour. The main 
 difference between this one and \verb!vtkPolyDataIterativeWarp! is that the warp
@@ -246,14 +246,15 @@ a \verb!vtkImageData! given on input port 1.
 
 Although the input mesh may include topological information, those are not taken
 into account: Each point are moved independently from each other. It means that
-it is not possible to introduce internal forces in the deformation process.
+it is not possible to introduce internal forces in the deformation process in 
+this class. Another specialisation has to be implemented.
 
 The example \verb!Examples/DeformableMesh.cxx! shows this deformable model 
 evolving in a volume of size $64^3$, representing an ellipsoid of radius 
-$(20,10,20)$ and centered in the volume. The external forces are computed in a 
+$(18,14,28)$ and centered in the volume. The external forces are computed in a 
 classical fashion. Let $I$ be an intensity image, $\mathcal{S}$ the 3D Sobel
-operator and $G_\sigma$ the gaussian kernel. The second input of the 
-\verb!vtkDeformableMesh! is then $\mathcal{S}(|\mathcal{S}(G_\sigma * I)|)$. The
+operator. The second input of the \verb!vtkDeformableMesh! is then 
+$\mathcal{S}(|\mathcal{S}(I)|)$. The
 input is an UV-sphere (\verb!vtkSphereSource!). Executing the example shows the
 sphere deforming to an ellipsoid (figure~\ref{fig:deform-sphere}).
 %
@@ -266,7 +267,6 @@ sphere deforming to an ellipsoid (figure~\ref{fig:deform-sphere}).
 iterations $i$}
 \label{fig:deform-sphere}
 \end{figure}
-
 %
 \section{Paraview plugin}
 %
@@ -317,11 +317,11 @@ development branch on Linux Fedora 13.
 %
 We presented a set of classes that design the iterative deformation of a point
 set. A generic class, inherited from \verb!vtkPolyDataAlgorithm! is derived to
-specialize the deformation process. These deformable models are available in 
+specialise the deformation process. These deformable models are available in 
 ParaView for interactive visualization of the deformation.
 
 Future works will focus on the regularization of deformable meshes for a 
-segmentation point of view, and the generalisation of input data structures
+segmentation point of view, and the generalisation of input data structures.
 %
 \appendix
 
