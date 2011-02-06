@@ -57,24 +57,35 @@ public:
 
   static vtkIterativePolyDataAlgorithm *New();
 
+  //! NumberOfIterations accessors
   vtkSetMacro( NumberOfIterations, int );
+  //! NumberOfIterations accessors
   vtkGetMacro( NumberOfIterations, int );
 
+  //! IterateFromZero accessors
   vtkSetMacro( IterateFromZero, int );
+  //! IterateFromZero accessors
   vtkGetMacro( IterateFromZero, int );
+  //! IterateFromZero accessors
   vtkBooleanMacro( IterateFromZero, int );
 
 protected:
+  //! constructor
   vtkIterativePolyDataAlgorithm();
-  ~vtkIterativePolyDataAlgorithm() {};
+  //! destructor
+  virtual ~vtkIterativePolyDataAlgorithm() {};
 
+  //! VTK Pipeline function
   int RequestData( vtkInformation*, 
                    vtkInformationVector**, 
                    vtkInformationVector*);
+  //! VTK Pipeline function
   int FillInputPortInformation(int port, vtkInformation *info);
 
+  //! Pure virtual implementing one iteration
   virtual void IterativeRequestData( vtkInformationVector** ){};
 
+  //! 
   virtual void Reset( vtkInformationVector** ){};
 
   vtkPolyData* GetCachedInput( ){return this->CachedInput; };
@@ -88,11 +99,11 @@ private:
 
   //BTX
   vtkSmartPointer<vtkPolyData> CachedInput; //!< mesh that is iterated
+  vtkSmartPointer<vtkPolyData> IterativeOutput; //!< output of one iteration
   //ETX
-  vtkPolyData* IterativeOutput; //!< output of one iteration
 
-  int NumberOfIterations; //!< Number of iterations to reached
-  int CurrentIteration; //!< Actual iteration
+  unsigned int NumberOfIterations; //!< Number of iterations to reached
+  unsigned int CurrentIteration; //!< Actual iteration
   int IterateFromZero; //!< If 1, the input will be copied over the cached 
                        //!< input at each RequestData
 };

@@ -8,6 +8,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkImageCropVOI.cxx
                   ../Filters/vtkImageMomentKernelSource.cxx
                   ../Filters/vtkIterativePolyDataAlgorithm.cxx
+                  ../Filters/vtkPolyDataIterativeWarp.cxx
                   ../Filters/vtkDeformableMesh.cxx
                   ../Filters/vtkRegularizedDeformableMesh.cxx
                   ../Filters/vtkThickTubeFilter.cxx
@@ -24,6 +25,7 @@ SET( PLUGINS_SRCS
                       ImageLocalConvolution.xml
                       ImageMomentKernelSource.xml
                       DeformableMesh.xml
+                      PolyDataIterativeWarp.xml
                       RegularizedDeformableMesh.xml
                       ThickTubeFilter.xml
                       SmoothPolyDataVectors.xml

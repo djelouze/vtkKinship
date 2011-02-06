@@ -43,6 +43,11 @@ OPTION( BUILD_TESTS
         "Build tests (filters and sources)"
         OFF )
 
+OPTION( BUILD_EXAMPLES
+        "Build examples"
+        OFF )
+
+
 IF( BUILD_DOCUMENTATION )
    SUBDIRS(Documentation)
 ENDIF( BUILD_DOCUMENTATION )
@@ -54,4 +59,8 @@ ENDIF( BUILD_PARAVIEW_PLUGINS)
 IF( BUILD_TESTS)
    SUBDIRS(Tests)
 ENDIF( BUILD_TESTS )
+
+IF( BUILD_EXAMPLES )
+   SUBDIRS(Examples)
+ENDIF( BUILD_EXAMPLES )
 

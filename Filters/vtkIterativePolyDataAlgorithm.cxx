@@ -46,8 +46,9 @@ vtkIterativePolyDataAlgorithm::vtkIterativePolyDataAlgorithm()
 void vtkIterativePolyDataAlgorithm::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
-
-
+  os << indent << "IterateFromZero: " << this->IterateFromZero << endl;
+  os << indent << "NumberOfIterations: " << this->NumberOfIterations << endl;
+  os << indent << "CurrentIteration: " << this->CurrentIteration << endl;
 }
 
 //---------------------------------------------------------------------------
@@ -97,6 +98,9 @@ int vtkIterativePolyDataAlgorithm::RequestData(
       this->CurrentIteration ++;      
    }    
   
+  if( this->NumberOfIterations == 0 )
+    outputMesh->DeepCopy( inputMesh );
+  else
    outputMesh->DeepCopy( this->IterativeOutput );
 
    return( 1 );
