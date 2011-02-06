@@ -14,6 +14,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkThickTubeFilter.cxx
                   ../Filters/vtkSmoothPolyDataVectors.cxx
                   ../Filters/vtkFrenetSerretFrame.cxx
+                  ../Filters/vtkSplineDrivenImageReslice.cxx
                   
 )
 
@@ -30,6 +31,7 @@ SET( PLUGINS_SRCS
                       ThickTubeFilter.xml
                       SmoothPolyDataVectors.xml
                       FrenetSerretFrame.xml
+                      SplineDrivenImageReslice.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )
