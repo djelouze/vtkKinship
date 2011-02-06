@@ -10,6 +10,7 @@
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
+#include "vtkSmartPointer.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
 
@@ -197,7 +198,7 @@ int vtkStraightenedCurvedPlanarReformation::RequestData(
     pathInfo->Get(vtkDataObject::DATA_OBJECT()));
 //  vtkPolyData *pathCopy = vtkPolyData::New( );
 //  pathCopy->ShallowCopy( inputPath );
-   vtkPolyData *output = vtkImageData::SafeDownCast(
+   vtkImageData *output = vtkImageData::SafeDownCast(
    outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
    // Compute the local normal and tangent to the path
@@ -315,16 +316,16 @@ int vtkStraightenedCurvedPlanarReformation::RequestData(
 		 this->reslicers[reslicerId]->SetOutputSpacing(this->XYSpacing, this->XYSpacing, this->ZSpacing);
          this->reslicers[reslicerId]->Update( );
 
-         append->AddInputConnection( 0, this->reslicers[reslicerId]->GetOutputPort( 0 ) );
+         //append->AddInputConnection( 0, this->reslicers[reslicerId]->GetOutputPort( 0 ) );
 
          resliceAxes->Delete( );
          this->reslicers[reslicerId]->Delete( );
       }
    }
-   append->Update( );
-   output->DeepCopy( append->GetOutputDataObject( 0 ) );
+   //append->Update( );
+   //output->DeepCopy( append->GetOutputDataObject( 0 ) );
    output->GetPointData( )->GetScalars( )->SetName( "StraightenedCPR" );
-   append->Delete( );
+   //append->Delete( );
    delete this->reslicers;
 
    return 1;
