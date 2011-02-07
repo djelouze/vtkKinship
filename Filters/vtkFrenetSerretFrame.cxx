@@ -69,12 +69,12 @@ int vtkFrenetSerretFrame::RequestData(
     vtkDoubleArray* tangents = vtkDoubleArray::New( );
     tangents->SetNumberOfComponents( 3 );
     tangents->SetNumberOfTuples( input->GetNumberOfPoints( ) );
-    tangents->SetName("Tangents");
+    tangents->SetName("FSTangents");
 
     vtkDoubleArray* normals = vtkDoubleArray::New( );
     normals->SetNumberOfComponents( 3 );
     normals->SetNumberOfTuples( input->GetNumberOfPoints( ) );
-    normals->SetName("Normals");
+    normals->SetName("FSNormals");
 
     vtkCellArray* lines = output->GetLines( );
     lines->InitTraversal();
@@ -180,6 +180,13 @@ void vtkFrenetSerretFrame::ComputeNormalVectors( double* tgNext,
     int comp;
     for( comp = 0; comp < 3; comp++ )
         normal[comp] = ( tgNext[comp] - tgLast[comp] );
+    
+    if( vtkMath::Norm(normal) == 0 ) // tgNext == tgLast
+    {
+     double unit[3] = {1,0,0};
+     vtkMath::Cross( tgLast, unit, normal );
+    }
+       
 }
 
 void vtkFrenetSerretFrame::RotateVector( double* vector, const double* axis, double angle )
