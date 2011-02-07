@@ -61,7 +61,13 @@
                               default_values="0">
            <IntRangeDomain name="range" min="0"/>
         </IntVectorProperty>
-         <DoubleVectorProperty name="SliceSpacing"
+        <IntVectorProperty name="OffsetLine"
+                              command="SetOffsetLine"
+                              number_of_elements="1"
+                              default_values="0">
+           <IntRangeDomain name="range" min="0"/>
+        </IntVectorProperty>
+	<DoubleVectorProperty name="SliceSpacing"
                               command="SetSliceSpacing"
                               number_of_elements="1"
                               default_values="1">
@@ -75,7 +81,8 @@
          <DoubleVectorProperty name="Incidence"
                               command="SetIncidence"
                               number_of_elements="1"
-                              default_values="1">
+                              default_values="0">
+				<DoubleRangeDomain name="range" min="0" max="6.28"/>
         </DoubleVectorProperty>
       </SourceProxy>
       <!-- End DeformableMesh -->

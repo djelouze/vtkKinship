@@ -48,6 +48,9 @@ public:
    vtkSetMacro( OffsetPoint, vtkIdType );
    vtkGetMacro( OffsetPoint, vtkIdType );
 
+   vtkSetMacro( OffsetLine, vtkIdType );
+   vtkGetMacro( OffsetLine, vtkIdType );
+
    vtkSetMacro( Incidence, double );
    vtkGetMacro( Incidence, double );
 
@@ -74,6 +77,7 @@ private:
    double Incidence; //!< Rotation of the initial normal vector.
    
    vtkIdType OffsetPoint; //!< Id of the point where the reslicer proceed
+   vtkIdType OffsetLine; //!< Id of the line cell where to get the reslice center
 };
 
 #endif //__vtkSplineDrivenImageReslice_h__

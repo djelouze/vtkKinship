@@ -30,6 +30,7 @@ vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
    this->SliceSize = 15;
    this->SliceSpacing = 1;
    this->OffsetPoint = 0;
+   this->OffsetLine = 0;
    
    this->SetNumberOfInputPorts( 2 );
 }
@@ -107,7 +108,6 @@ int vtkSplineDrivenImageReslice::RequestData(
   vtkInformationVector **inputVector,
   vtkInformationVector *outputVector)
 {
-  vtkDebugMacro( <<"RequestData"<<endl);
   // get the info objects
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
   vtkInformation *pathInfo = inputVector[1]->GetInformationObject(0);
@@ -127,7 +127,6 @@ int vtkSplineDrivenImageReslice::RequestData(
 
    // Compute the local normal and tangent to the path
    this->localFrenetFrames->SetInput( pathCopy );
-   this->localFrenetFrames->SetInputConnection( this->GetPathConnection( ) );
    this->localFrenetFrames->SetViewUp( this->Incidence );
    this->localFrenetFrames->Update( );
 
@@ -140,20 +139,20 @@ int vtkSplineDrivenImageReslice::RequestData(
    vtkCellArray* lines = path->GetLines( );
    lines->InitTraversal( );
    int numberOfPoints = 0;
-   for( int cellIdx = 0; cellIdx < lines->GetNumberOfCells( ); cellIdx++ )
-   {
       vtkIdType nbCellPoints;
       vtkIdType* points;
+
+   vtkIdType cellId = -1;
+   do{
       lines->GetNextCell( nbCellPoints, points);
-      numberOfPoints += nbCellPoints;
+      cellId++;
    }
-
-      vtkIdType nbCellPoints;
-      vtkIdType* points;
-
-      lines->GetNextCell( nbCellPoints, points);
+   while( cellId != this->OffsetLine );
 
          int ptId = this->OffsetPoint;
+         if( ptId >= nbCellPoints )
+	   ptId = nbCellPoints - 1;
+	 
          // Build a new reslicer with image input as input too.
          this->reslicer->SetInput( inputCopy ); 
 
@@ -164,12 +163,12 @@ int vtkSplineDrivenImageReslice::RequestData(
          double center[3];
          path->GetPoints( )->GetPoint( ptId, center );
          vtkDoubleArray* pathTangents = static_cast<vtkDoubleArray*>
-                                  (path->GetPointData( )->GetArray( "Tangents" ));
+                                  (path->GetPointData( )->GetArray( "FSTangents" ));
          double tangent[3];
          pathTangents->GetTuple( ptId, tangent );
  
          vtkDoubleArray* pathNormals = static_cast<vtkDoubleArray*>
-                                  (path->GetPointData( )->GetArray( "Normals" ));
+                                  (path->GetPointData( )->GetArray( "FSNormals" ));
          double normal[3];
          pathNormals->GetTuple( ptId, normal );
 
