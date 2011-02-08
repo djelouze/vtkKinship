@@ -82,14 +82,22 @@ protected:
   //! VTK Pipeline function
   int FillInputPortInformation(int port, vtkInformation *info);
 
-  //! Pure virtual implementing one iteration
+  //! Implementation of one iteration. Children should override.
   virtual void IterativeRequestData( vtkInformationVector** ){};
 
-  //! 
+  //! Description of the initial state (before first iteration).
+  //! Children should override.
   virtual void Reset( vtkInformationVector** ){};
 
+  //! Get the cached input that can be modified.
   vtkPolyData* GetCachedInput( ){return this->CachedInput; };
+
+  //! The IterativeOutput will be copied to the filter's output after
+  //! last iteration. Children have to use it accordingly.
   void SetIterativeOutput( vtkPolyData* io){this->IterativeOutput = io;};
+
+  //! The IterativeOutput will be copied to the filter's output after
+  //! last iteration. Children have to use it accordingly.
   vtkPolyData* GetIterativeOutput( ){return this->IterativeOutput;};
 
 private:

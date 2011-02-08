@@ -38,6 +38,7 @@ vtkIterativePolyDataAlgorithm::vtkIterativePolyDataAlgorithm()
    this->CurrentIteration = 0;
 
    this->CachedInput = vtkSmartPointer<vtkPolyData>::New( );
+
    // Default behaviour: iterating on itself.
    this->SetIterativeOutput( this->CachedInput );
 }

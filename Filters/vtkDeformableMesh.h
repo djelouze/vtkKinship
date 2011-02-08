@@ -27,7 +27,7 @@
 //! This filter takes two inputs: 
 //! - a PolyData (port 0) that will be iterated and copied to output after
 //!   last iteration
-//! - an ImageData (port 1) that contains vector data. The polydata is warp
+//! - an ImageData (port 1) that contains vector data. The polydata is warped
 //!   according to these vectors.
 //!
 //! The iterative process is a combination of vtkProbeFilter->vtkWarpVector.
@@ -62,8 +62,13 @@ protected:
   vtkDeformableMesh();
   ~vtkDeformableMesh() {};
 
+  //! Effective implementation of an iteration
   virtual void IterativeRequestData( vtkInformationVector** );
+
+  //! Effective implementation of the initial state
   virtual void Reset( vtkInformationVector** );
+
+  //! VTK pipelining function
   virtual int FillInputPortInformation(int port, vtkInformation *info);
 
 private:
