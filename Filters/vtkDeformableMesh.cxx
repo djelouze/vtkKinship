@@ -76,8 +76,8 @@ void vtkDeformableMesh::Reset( vtkInformationVector** inputVector )
    this->ProbeFilter->SetInput( this->GetCachedInput() );
    this->ProbeFilter->SetSource( cachedImage );
 
-   this->WarpFilter->SetInputArrayToProcess( 0,
-                              this->ProbeFilter->GetOutputPortInformation( 0 ) );
+   vtkDataArray* inputArray = this->GetInputArrayToProcess( 0,inputImage );
+   this->WarpFilter->SetInputArrayToProcess( 0, 0, 0,vtkDataObject::FIELD_ASSOCIATION_POINTS,inputArray->GetName() );
    this->SetIterativeOutput( static_cast<vtkPolyData*>(this->WarpFilter->GetOutput( )) );
 }
 
