@@ -33,11 +33,13 @@ vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
    this->OffsetLine = 0;
    
    this->SetNumberOfInputPorts( 2 );
+   this->SetNumberOfOutputPorts( 2 );
 }
 
 vtkSplineDrivenImageReslice::~vtkSplineDrivenImageReslice( )
 {
 	this->localFrenetFrames->Delete( );
+	this->reslicer->Delete( );
 }
 
 //----------------------------------------------------------------------------
@@ -78,6 +80,17 @@ int vtkSplineDrivenImageReslice::FillInputPortInformation(int port, vtkInformati
   return 1;
 }
 
+//----------------------------------------------------------------------------
+int vtkSplineDrivenImageReslice::FillOutputPortInformation(
+                                              int port, vtkInformation* info)
+{
+   if (port == 0)
+      info->Set(vtkDataObject::DATA_TYPE_NAME(), "vtkImageData");
+   if (port == 1)
+      info->Set(vtkDataObject::DATA_TYPE_NAME(), "vtkPolyData");
+   return 1;
+}
+
 
 int vtkSplineDrivenImageReslice::RequestInformation (
   vtkInformation * vtkNotUsed(request),
@@ -85,7 +98,6 @@ int vtkSplineDrivenImageReslice::RequestInformation (
   vtkInformationVector *outputVector)
 {
 
-  vtkDebugMacro( <<"RequestInformation"<<endl);
   // get the info objects
   vtkInformation* outInfo = outputVector->GetInformationObject(0);
 
@@ -111,7 +123,8 @@ int vtkSplineDrivenImageReslice::RequestData(
   // get the info objects
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
   vtkInformation *pathInfo = inputVector[1]->GetInformationObject(0);
-  vtkInformation *outInfo = outputVector->GetInformationObject(0);
+  vtkInformation *outImageInfo = outputVector->GetInformationObject(0);
+  vtkInformation *outPlaneInfo = outputVector->GetInformationObject(1);
 
   // get the input and ouptut
   vtkImageData *input = vtkImageData::SafeDownCast(
@@ -120,11 +133,16 @@ int vtkSplineDrivenImageReslice::RequestData(
   inputCopy->ShallowCopy( input );
   vtkPolyData *inputPath = vtkPolyData::SafeDownCast(
     pathInfo->Get(vtkDataObject::DATA_OBJECT()));
-  vtkPolyData *pathCopy = vtkPolyData::New( );
-  pathCopy->ShallowCopy( inputPath );
-   vtkImageData *output = vtkImageData::SafeDownCast(
-   outInfo->Get(vtkDataObject::DATA_OBJECT()));
+  
+   vtkImageData *outputImage = vtkImageData::SafeDownCast(
+   outImageInfo->Get(vtkDataObject::DATA_OBJECT()));
+   vtkPolyData *outputPlane = vtkPolyData::SafeDownCast(
+   outPlaneInfo->Get(vtkDataObject::DATA_OBJECT()));
 
+  vtkSmartPointer<vtkPolyData> pathCopy = vtkSmartPointer<vtkPolyData>::New( );
+  pathCopy->ShallowCopy( inputPath );
+   
+   
    // Compute the local normal and tangent to the path
    this->localFrenetFrames->SetInput( pathCopy );
    this->localFrenetFrames->SetViewUp( this->Incidence );
@@ -172,10 +190,32 @@ int vtkSplineDrivenImageReslice::RequestData(
          double normal[3];
          pathNormals->GetTuple( ptId, normal );
 
+	 
+	 
          // the Frenet-Serret chart is made of T, N and B = T ^ N
          double crossProduct[3];
          vtkMath::Cross( tangent, normal, crossProduct );
 
+	 // Build the plane output that will represent the slice location in 3D view
+	 vtkSmartPointer<vtkPlaneSource> plane = vtkSmartPointer<vtkPlaneSource>::New( );
+	 
+	 double planeOrigin[3];
+	 double planePoint1[3];
+	 double planePoint2[3];
+	 for( int comp = 0; comp < 3; comp ++)
+	 {
+	   planeOrigin[comp] = center[comp] - (normal[comp] + crossProduct[comp])*this->SliceSize/2;
+	   planePoint1[comp] = planeOrigin[comp] + crossProduct[comp]*this->SliceSize;
+	   planePoint2[comp] = planeOrigin[comp] + normal[comp]*this->SliceSize;
+	 }
+	 plane->SetOrigin(planeOrigin);
+	 plane->SetPoint1(planePoint1);
+	 plane->SetPoint2(planePoint2);
+	 plane->SetResolution(this->SliceSize/this->SliceSpacing,this->SliceSize/this->SliceSpacing);
+	 plane->Update();
+	 outputPlane->DeepCopy(plane->GetOutputDataObject(0));
+	 
+	 
          // Build the transformation matrix (inspired from vtkImagePlaneWidget)
          vtkMatrix4x4* resliceAxes = vtkMatrix4x4::New( );
          resliceAxes->Identity();
@@ -213,6 +253,7 @@ int vtkSplineDrivenImageReslice::RequestData(
          resliceAxes->SetElement(1,3,neworiginXYZW[1]);
          resliceAxes->SetElement(2,3,neworiginXYZW[2]);
  
+	 
          this->reslicer->SetResliceAxes( resliceAxes );
          this->reslicer->SetInformationInput( input );
          this->reslicer->SetInterpolationModeToCubic( );
@@ -226,8 +267,8 @@ int vtkSplineDrivenImageReslice::RequestData(
          this->reslicer->Update( );
 
          resliceAxes->Delete( );
-   output->DeepCopy( this->reslicer->GetOutputDataObject( 0 ) );
-   output->GetPointData( )->GetScalars( )->SetName( "ReslicedImage" );
+   outputImage->DeepCopy( this->reslicer->GetOutputDataObject( 0 ) );
+   outputImage->GetPointData( )->GetScalars( )->SetName( "ReslicedImage" );
 
    return 1;
 

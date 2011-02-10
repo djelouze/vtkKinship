@@ -63,6 +63,7 @@ protected:
 	                                         vtkInformationVector *);
 
    virtual int FillInputPortInformation(int port, vtkInformation *info);
+   virtual int FillOutputPortInformation( int, vtkInformation*);
    virtual int RequestInformation(vtkInformation*, vtkInformationVector**, 
 	                                                vtkInformationVector*);
 private:

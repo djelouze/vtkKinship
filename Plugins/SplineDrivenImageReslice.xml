@@ -54,6 +54,8 @@
                <DataType value="vtkPolyData"/>
             </DataTypeDomain>
          </InputProperty>
+         <OutputPort name="ImageOutput" index="0" />
+         <OutputPort name="PlaneOutput" index="1" />
 
         <IntVectorProperty name="OffsetPoint"
                               command="SetOffsetPoint"
