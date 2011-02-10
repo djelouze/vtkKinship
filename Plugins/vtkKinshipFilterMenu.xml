@@ -10,5 +10,6 @@
     <Filter name="ImageCropVOI" />
     <Filter name="DeformableMesh" />
     <Filter name="RegularizedDeformableMesh" />
+    <Filter name="SplineDrivenImageReslice" />
   </Category>
 </ParaViewFilters>
