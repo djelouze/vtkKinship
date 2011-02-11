@@ -27,6 +27,11 @@
 
 int main( int argc, char** argv )
 {
+   if( argc != 2 )
+   {
+      cout << "usage: testDeformableMesh [output_BMP_filename] " << endl;
+      return( 0 );
+   }
 
    // Build data processing pipeline
    vtkSmartPointer<vtkSphereSource> sphereSource;
@@ -111,7 +116,7 @@ int main( int argc, char** argv )
    writer->SetFileName( argv[1] );
    writer->Write( );
 
-   return( 0 );
+   return( 1 );
 }
 
 
