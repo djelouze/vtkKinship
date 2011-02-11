@@ -41,7 +41,7 @@ OPTION( BUILD_PARAVIEW_PLUGINS
 
 OPTION( BUILD_TESTS
         "Build tests (filters and sources)"
-        OFF )
+        ON )
 
 OPTION( BUILD_EXAMPLES
         "Build examples"
