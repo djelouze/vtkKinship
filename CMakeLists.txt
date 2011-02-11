@@ -8,6 +8,10 @@ cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 #####################################################################
 
+#The following lines are required to use Dart
+ENABLE_TESTING()
+INCLUDE(Dart)
+
 SET (LIBRARY_OUTPUT_PATH ${vtkExplicitDeformableModel_BINARY_DIR}/bin
      CACHE 
      PATH
