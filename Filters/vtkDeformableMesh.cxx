@@ -27,6 +27,8 @@
 #include "vtkObjectFactory.h"
 #include "vtkSmartPointer.h"
 
+#include "vtkStructuredGrid.h"
+
 vtkCxxRevisionMacro(vtkDeformableMesh, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkDeformableMesh);
 
@@ -54,7 +56,7 @@ int vtkDeformableMesh::FillInputPortInformation(int port, vtkInformation *info)
   if( port == 0 ) // input mesh port
      info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPolyData");
   else if( port == 1 ) // image port
-     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkImageData");
+     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkDataSet");
   return 1;
 }
 
@@ -67,17 +69,26 @@ void vtkDeformableMesh::Reset( vtkInformationVector** inputVector )
 
    vtkPolyData* inputMesh = vtkPolyData::SafeDownCast(
     inMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
-   vtkImageData* inputImage = vtkImageData::SafeDownCast(
+   vtkDataSet* inputImage = vtkDataSet::SafeDownCast(
     inImageInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-   vtkSmartPointer<vtkImageData> cachedImage = vtkSmartPointer<vtkImageData>::New( );
+   vtkDataSet* cachedImage;
+   if( inputImage->IsA("vtkStructuredGrid") )
+      cachedImage = vtkStructuredGrid::New( );
+   else if( inputImage->IsA("vtkPolyData") )
+      cachedImage = vtkPolyData::New( );
+   else if( inputImage->IsA("vtkImageData") )
+      cachedImage = vtkImageData::New( );
+   
    cachedImage->ShallowCopy( inputImage );
    
    this->ProbeFilter->SetInput( this->GetCachedInput() );
    this->ProbeFilter->SetSource( cachedImage );
 
-   this->WarpFilter->SetInputArrayToProcess( 0,
-                              this->ProbeFilter->GetOutputPortInformation( 0 ) );
+   cachedImage->Delete( );
+   
+   vtkDataArray* inputArray = this->GetInputArrayToProcess( 0,inputImage );
+   this->WarpFilter->SetInputArrayToProcess( 0, 0, 0,vtkDataObject::FIELD_ASSOCIATION_POINTS,inputArray->GetName() );
    this->SetIterativeOutput( static_cast<vtkPolyData*>(this->WarpFilter->GetOutput( )) );
 }
 
