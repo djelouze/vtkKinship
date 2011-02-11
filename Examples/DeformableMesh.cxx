@@ -68,6 +68,8 @@ int main( int argc, char** argv )
    deformableMesh->SetInputConnection(0, sphereSource->GetOutputPort());
    // Deformation forces
    deformableMesh->SetInputConnection(1, sobel2->GetOutputPort( ));
+   deformableMesh->SetInputArrayToProcess( 
+      0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_POINTS, "Magnitude" );
    
    // Visualisation pipeline
    vtkSmartPointer<vtkPolyDataMapper> mapper;
@@ -94,9 +96,10 @@ int main( int argc, char** argv )
    // Iterative loop: 
    // - Increment the number of iteration
    // - Render -> it will trigger only one iteration in the DeformableMesh.
-   while( 1 )
+   while( 1 ) 
    {
-     deformableMesh->SetNumberOfIterations(deformableMesh->GetNumberOfIterations()+1);
+     deformableMesh->SetNumberOfIterations(
+              deformableMesh->GetNumberOfIterations()+1);
      renWin->Render();
    }
 
