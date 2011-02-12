@@ -34,6 +34,10 @@ vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
    
    this->SetNumberOfInputPorts( 2 );
    this->SetNumberOfOutputPorts( 2 );
+   
+  // by default process active point scalars
+  this->SetInputArrayToProcess(0,0,0,vtkDataObject::FIELD_ASSOCIATION_POINTS,
+                               vtkDataSetAttributes::SCALARS);   
 }
 
 vtkSplineDrivenImageReslice::~vtkSplineDrivenImageReslice( )
