@@ -9,3 +9,9 @@ TARGET_LINK_LIBRARIES( IterativeWarp vtkKinshipFilters vtkCommon vtkGraphics vtk
 
 ADD_EXECUTABLE( DeformableMesh DeformableMesh.cxx )
 TARGET_LINK_LIBRARIES( DeformableMesh vtkKinshipFilters vtkCommon vtkGraphics vtkRendering)
+
+ADD_EXECUTABLE( StraightenedCurvedPlanarReformation StraightenedCurvedPlanarReformation.cxx )
+TARGET_LINK_LIBRARIES( StraightenedCurvedPlanarReformation vtkKinshipFilters vtkCommon vtkIO )
+
+ADD_EXECUTABLE( SplineDrivenImageReslice SplineDrivenImageReslice.cxx )
+TARGET_LINK_LIBRARIES( SplineDrivenImageReslice vtkKinshipFilters vtkCommon vtkIO )

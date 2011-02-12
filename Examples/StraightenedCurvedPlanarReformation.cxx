@@ -1,0 +1,68 @@
+//! \file StraightenedCurvedPlanarReformation.cxx
+//!
+//! \author Jerome Velut
+//! \date February 2011
+
+#include "vtkSplineDrivenImageReslice.h"
+#include "vtkImageAppend.h"
+
+#include "vtkSmartPointer.h"
+#include "vtkPolyData.h"
+#include "vtkImageData.h"
+
+#include "vtkXMLPolyDataReader.h"
+#include "vtkXMLImageDataReader.h"
+#include "vtkXMLImageDataWriter.h"
+
+int main( int argc, char** argv )
+{
+   vtkSmartPointer<vtkXMLImageDataReader> imgReader;
+   imgReader = vtkSmartPointer<vtkXMLImageDataReader>::New();
+
+   vtkSmartPointer<vtkXMLPolyDataReader> pathReader;
+   pathReader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
+   
+   vtkSmartPointer<vtkSplineDrivenImageReslice> reslicer;
+   reslicer = vtkSmartPointer<vtkSplineDrivenImageReslice>::New();
+   
+   vtkSmartPointer<vtkImageAppend> append;
+   append = vtkSmartPointer<vtkImageAppend>::New();
+   
+   vtkSmartPointer<vtkXMLImageDataWriter> imgWriter;
+   imgWriter = vtkSmartPointer<vtkXMLImageDataWriter>::New();
+   
+   imgReader->SetFileName(argv[1]);
+   imgReader->Update();
+   pathReader->SetFileName(argv[2]);
+   pathReader->Update();
+   
+   reslicer->SetInputConnection(imgReader->GetOutputPort() );
+   reslicer->SetPathConnection(pathReader->GetOutputPort());
+   
+   // Get number of input points
+   int nbPoints = pathReader->GetOutput( )->GetNumberOfPoints();
+   for( int ptId = 0; ptId < nbPoints; ptId++ )
+   {
+     reslicer->SetOffsetPoint( ptId );
+     reslicer->Update();
+     
+     vtkSmartPointer<vtkImageData> tempSlice;
+     tempSlice = vtkSmartPointer<vtkImageData>::New();
+     tempSlice->DeepCopy( reslicer->GetOutput( 0 ));
+     
+     append->AddInput( tempSlice );
+   }
+   append->SetAppendAxis(2);
+   append->Update( );
+   append->GetOutput()->SetSpacing(reslicer->GetSliceSpacing(),
+                                   reslicer->GetSliceSpacing(),
+				   1);
+   
+   imgWriter->SetFileName(argv[3]);
+   imgWriter->SetInputConnection(append->GetOutputPort());
+   imgWriter->Write( );
+   
+   return( 0 );
+}
+
+
