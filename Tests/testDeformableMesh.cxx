@@ -30,7 +30,8 @@ int main( int argc, char** argv )
    if( argc != 2 )
    {
       cout << "usage: testDeformableMesh [output_BMP_filename] " << endl;
-      return( 0 );
+      cerr << "Wrong number of arguments" << endl;
+      return( EXIT_FAILURE );
    }
 
    // Build data processing pipeline
@@ -116,7 +117,7 @@ int main( int argc, char** argv )
    writer->SetFileName( argv[1] );
    writer->Write( );
 
-   return( 1 );
+   return( EXIT_SUCCESS );
 }
 
 
