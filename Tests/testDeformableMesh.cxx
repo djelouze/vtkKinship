@@ -53,10 +53,12 @@ int main( int argc, char** argv )
    vtkSmartPointer<vtkImageSobel3D> sobel2;
    sobel2 = vtkSmartPointer<vtkImageSobel3D>::New();
 
+   double center[3] = {31,31,31};
+   double radii[3] = {18,14,18};
    // Configure PointSource
    ellipsoidSource->SetWholeExtent(0,63,0,63,0,63);
-   ellipsoidSource->SetCenter(31,31,31);
-   ellipsoidSource->SetRadius(18, 14, 18);
+   ellipsoidSource->SetCenter(center);
+   ellipsoidSource->SetRadius(radii);
 
    // External forces computation
    sobel1->SetInputConnection(ellipsoidSource->GetOutputPort( ));
@@ -71,13 +73,13 @@ int main( int argc, char** argv )
    
    // Configure deformableMesh
    deformableMesh->SetScaleFactor(.0003);
-   deformableMesh->SetNumberOfIterations( 100 );
+   deformableMesh->SetNumberOfIterations( 150 );
 
    // Model
-   deformableMesh->SetInputConnection(0, sphereSource->GetOutputPort());
+   deformableMesh->SetInputConnection(0, sphereSource->GetOutputPort( 0 ));
 
    // Deformation forces
-   deformableMesh->SetInputConnection(1, sobel2->GetOutputPort( ));
+   deformableMesh->SetInputConnection(1, sobel2->GetOutputPort( 0 ));
    deformableMesh->SetInputArrayToProcess( 
       0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_POINTS, "Magnitude" );
    
@@ -85,44 +87,21 @@ int main( int argc, char** argv )
    deformableMesh->Update();
    cerr << "Done." << endl;
    
-   // Visualisation pipeline
-   vtkSmartPointer<vtkPolyDataMapper> mapper;
-   mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+   double bounds[6];
+   vtkPolyData::SafeDownCast(deformableMesh->GetOutputDataObject(0))->GetBounds( bounds );
    
-   vtkSmartPointer<vtkActor> actor;
-   actor = vtkSmartPointer<vtkActor>::New();
+   // Check if the bounds of the deformable mesh are closed to
+   // the ellipsoid border (less than 1 voxel is SUCCESS)
+   if( fabs((center[0]-radii[0])-bounds[0]) < 1 
+     && fabs((center[0]+radii[0])-bounds[1]) < 1 
+     && fabs((center[1]-radii[1])-bounds[2]) < 1 
+     && fabs((center[1]+radii[1])-bounds[3]) < 1 
+     && fabs((center[2]-radii[2])-bounds[4]) < 1 
+     && fabs((center[2]+radii[2])-bounds[5]) < 1 ) 
+     
+     return( EXIT_SUCCESS );
    
-   vtkSmartPointer<vtkRenderer> renderer;
-   renderer = vtkSmartPointer<vtkRenderer>::New();
-   
-   vtkSmartPointer<vtkRenderWindow> renWin;
-   renWin = vtkSmartPointer<vtkRenderWindow>::New();
-   
-   mapper->SetInputConnection(deformableMesh->GetOutputPort());
-   mapper->SetScalarVisibility(0);
-
-   actor->SetMapper(mapper);
-   actor->GetProperty()->SetRepresentationToWireframe();
-   renderer->AddActor(actor);
-   
-   renWin->AddRenderer(renderer);
-   renWin->OffScreenRenderingOn();
-   
-   renWin->Render();
-
-   vtkSmartPointer<vtkWindowToImageFilter> winToImage;
-   winToImage = vtkSmartPointer<vtkWindowToImageFilter>::New();
-
-   winToImage->SetInput( renWin );
-   
-   vtkSmartPointer<vtkBMPWriter> writer;
-   writer = vtkSmartPointer<vtkBMPWriter>::New();
-
-   writer->SetInputConnection( winToImage->GetOutputPort( ) );
-   writer->SetFileName( argv[1] );
-   writer->Write( );
-
-   return( EXIT_SUCCESS );
+   return( EXIT_FAILURE );
 }
 
 
