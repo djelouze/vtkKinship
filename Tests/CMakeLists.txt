@@ -8,8 +8,4 @@ ADD_EXECUTABLE( testDeformableMesh testDeformableMesh.cxx )
 TARGET_LINK_LIBRARIES( testDeformableMesh vtkExplicitDeformableModel vtkCommon vtkGraphics vtkRendering)
 
 ADD_TEST( DeformableMesh ${EXECUTABLE_OUTPUT_PATH}/testDeformableMesh deformableMeshTest.bmp )
-ADD_TEST( CompareDeformableMesh 
-          ImageCompare 
-          deformableMeshTest.bmp 
-          ${vtkExplicitDeformableModel_SOURCE_DIR}/Tests/testDeformableMeshReference.bmp )
 
