@@ -15,25 +15,9 @@
 #include "vtkImageSobel3D.h"
 #include "vtkImageMagnitude.h"
 
-#include "vtkPolyDataMapper.h"
-#include "vtkActor.h"
-#include "vtkProperty.h"
-#include "vtkRenderer.h"
-#include "vtkRenderWindow.h"
-#include "vtkRenderWindowInteractor.h"
-
-#include "vtkWindowToImageFilter.h"
-#include "vtkBMPWriter.h"
 
 int main( int argc, char** argv )
 {
-   if( argc != 2 )
-   {
-      cout << "usage: testDeformableMesh [output_BMP_filename] " << endl;
-      cerr << "Wrong number of arguments" << endl;
-      return( EXIT_FAILURE );
-   }
-
    // Build data processing pipeline
    vtkSmartPointer<vtkSphereSource> sphereSource;
    sphereSource = vtkSmartPointer<vtkSphereSource>::New( );

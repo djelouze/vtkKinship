@@ -45,4 +45,4 @@ TARGET_LINK_LIBRARIES( testDeformableMesh
                        vtkGraphics 
                        vtkRendering)
 
-ADD_TEST( DeformableMesh ${EXECUTABLE_OUTPUT_PATH}/testDeformableMesh deformableMeshTest.bmp )
+ADD_TEST( DeformableMesh ${EXECUTABLE_OUTPUT_PATH}/testDeformableMesh )
