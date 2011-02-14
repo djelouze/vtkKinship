@@ -81,6 +81,10 @@ int main( int argc, char** argv )
    deformableMesh->SetInputArrayToProcess( 
       0, 0, 0, vtkDataObject::FIELD_ASSOCIATION_POINTS, "Magnitude" );
    
+   cerr << "Updating deformableMesh..." << endl;
+   deformableMesh->Update();
+   cerr << "Done." << endl;
+   
    // Visualisation pipeline
    vtkSmartPointer<vtkPolyDataMapper> mapper;
    mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -102,6 +106,7 @@ int main( int argc, char** argv )
    renderer->AddActor(actor);
    
    renWin->AddRenderer(renderer);
+   renWin->OffScreenRenderingOn();
    
    renWin->Render();
 
