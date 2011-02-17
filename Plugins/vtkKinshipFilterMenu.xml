@@ -11,5 +11,6 @@
     <Filter name="DeformableMesh" />
     <Filter name="RegularizedDeformableMesh" />
     <Filter name="SplineDrivenImageReslice" />
+    <Filter name="PolyDataToBinaryImage" />
   </Category>
 </ParaViewFilters>
