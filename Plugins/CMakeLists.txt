@@ -16,6 +16,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkFrenetSerretFrame.cxx
                   ../Filters/vtkSplineDrivenImageReslice.cxx
                   ../Filters/vtkPolyDataToBinaryImage.cxx
+                  ../Filters/vtkImageEigenElements.cxx
                   
 )
 
@@ -34,6 +35,7 @@ SET( PLUGINS_SRCS
                       FrenetSerretFrame.xml
                       SplineDrivenImageReslice.xml
                       PolyDataToBinaryImage.xml
+                      ImageEigenElements.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )

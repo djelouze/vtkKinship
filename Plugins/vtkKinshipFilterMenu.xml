@@ -1,6 +1,7 @@
 <ParaViewFilters>
   <Category name="Image" menu_label="&amp;Image">
     <Filter name="ImageConvolution" />
+    <Filter name="ImageEigenElements" />
   </Category>
   <Category name="PolyData" menu_label="&amp;PolyData">
     <Filter name="FrenetSerretFrame" />
