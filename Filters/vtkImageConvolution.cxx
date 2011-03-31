@@ -292,7 +292,6 @@ void vtkImageConvolutionExecute(vtkImageConvolution *self,
       outPtr2 += outInc2;
       }
     ++outPtr;
-    ++inPtr;
     }
 }
 
