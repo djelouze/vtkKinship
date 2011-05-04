@@ -42,7 +42,36 @@
                <DataType value="vtkImageData"/>
             </DataTypeDomain>
          </InputProperty>
-         
+         <IntVectorProperty
+	 name="MapInputComponentsToTensor"
+	 command="MapInputComponentsToTensor"
+	 number_of_elements="6"
+	   default_values="0 1 2 3 4 5">
+	               <Documentation>
+
+            </Documentation>
+         </IntVectorProperty>
+         <IntVectorProperty
+                           name="UseMask"
+                           command="SetUseMask"
+                           number_of_elements="1"
+                           default_values="0"
+                           animateable="0">
+            <BooleanDomain name="boolean"/>
+            <Documentation>
+
+            </Documentation>
+         </IntVectorProperty>
+         <IntVectorProperty
+                           name="InMask"
+                           command="SetInMask"
+                           number_of_elements="1"
+                           default_values="0"
+                           animateable="0">
+            <Documentation>
+
+            </Documentation>
+         </IntVectorProperty>	
      </SourceProxy>
       <!-- End ImageEigenElements -->
    </ProxyGroup>

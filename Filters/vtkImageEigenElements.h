@@ -30,9 +30,6 @@
 //!    M12 M22 M23
 //!    M13 M23 M33
 //!
-//! Input image must have a scalar array with 7 components:
-//! comp1: maskvalue (0 or 1)
-//! comp2->7: M11, M12, M13, M22, M23, M33
 //!
 //! The output will provide 6 arrays containing the eigen elements of the
 //! input tensor. The vectors and eigen values are multiplied with mask values
@@ -54,6 +51,17 @@ public:
   static vtkImageEigenElements *New();
   vtkTypeRevisionMacro(vtkImageEigenElements,vtkThreadedImageAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
+  
+  //! map the input component to the tensor index
+  void MapInputComponentsToTensor( int M11, int M12, int M13, int M22, int M23, int M33 );
+  void GetInputComponentsToTensorMap( int& M11, int& M12, int& M13, int& M22, int& M23, int& M33 );
+  //!
+  vtkSetMacro( UseMask, int );
+  vtkGetMacro( UseMask, int );
+  vtkBooleanMacro( UseMask, int );
+  
+  vtkSetMacro( InMask, int );
+  vtkGetMacro( InMask, int );
 
 protected:
   vtkImageEigenElements();
@@ -77,6 +85,15 @@ protected:
 private:
   vtkImageEigenElements(const vtkImageEigenElements&);  // Not implemented.
   void operator=(const vtkImageEigenElements&);  // Not implemented.
+  
+  int inM11; //!< input component corresponding to tensor index
+  int inM12; //!< input component corresponding to tensor index
+  int inM13; //!< input component corresponding to tensor index
+  int inM22; //!< input component corresponding to tensor index
+  int inM23; //!< input component corresponding to tensor index
+  int inM33; //!< input component corresponding to tensor index
+  int UseMask; //!< if 1, the eigen elements are multiplied with the mask defined in InMask
+  int InMask; //!< tell which input component to use as a output multiplier
 };
 
 #endif //__vtkImageEigenElements_h

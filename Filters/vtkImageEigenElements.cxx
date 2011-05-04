@@ -38,7 +38,14 @@ vtkStandardNewMacro(vtkImageEigenElements);
 // Construct an instance of vtkImageEigenElements filter.
 vtkImageEigenElements::vtkImageEigenElements()
 {
-
+  this->UseMask = 0;
+  this->InMask = 0;
+  this->inM11 = 0;
+  this->inM12 = 0;
+  this->inM13 = 0;
+  this->inM22 = 0;
+  this->inM23 = 0;
+  this->inM33 = 0;
   this->SetNumberOfInputPorts( 1 );
 }
 
@@ -85,6 +92,27 @@ int vtkImageEigenElements::RequestInformation(vtkInformation*,
   return 1;
 }
 
+void vtkImageEigenElements::MapInputComponentsToTensor(int M11, int M12, int M13, int M22, int M23, int M33)
+{
+   this->inM11 = M11;
+   this->inM12 = M12;
+   this->inM13 = M13;
+   this->inM22 = M22;
+   this->inM23 = M23;
+   this->inM33 = M33;
+   this->Modified( );  
+}
+
+void vtkImageEigenElements::GetInputComponentsToTensorMap(int& M11, int& M12, int& M13, int& M22, int& M23, int& M33)
+{
+  M11 = this->inM11;
+  M12 = this->inM12;
+  M13 = this->inM13;
+  M22 = this->inM22;
+  M23 = this->inM23;
+  M33 = this->inM33;
+}
+
 //----------------------------------------------------------------------------
 // This templated function executes the filter on any region,
 // whether it needs boundary checking or not.
@@ -125,6 +153,11 @@ void vtkImageEigenElementsExecute(vtkImageEigenElements *self,
 
   outData->GetPointData()->GetScalars()->SetName("MaxEigenVector");
     
+  int inM11, inM12, inM13, inM22, inM23, inM33;
+  self->GetInputComponentsToTensorMap(inM11, inM12, inM13, inM22, inM23, inM33);
+  
+
+  
     vtkDoubleArray* maxEval = vtkDoubleArray::New( );
     maxEval->SetName( "MaxEigenValue" );
     maxEval->SetNumberOfComponents( 1 );
@@ -214,34 +247,38 @@ void vtkImageEigenElementsExecute(vtkImageEigenElements *self,
         for (outIdx0 = outMin0; outIdx0 <= outMax0; ++outIdx0)
           {
 	    
-	    matrix[0][0] = *(inPtr0+1);
-	    matrix[0][1] = *(inPtr0+2);
-	    matrix[0][2] = *(inPtr0+3);
-	    matrix[1][0] = *(inPtr0+2);
-	    matrix[1][1] = *(inPtr0+4);
-	    matrix[1][2] = *(inPtr0+5);
-	    matrix[2][0] = *(inPtr0+3);
-	    matrix[2][1] = *(inPtr0+5);
-	    matrix[2][2] = *(inPtr0+6);
+	    matrix[0][0] = *(inPtr0+inM11);
+	    matrix[0][1] = *(inPtr0+inM12);
+	    matrix[0][2] = *(inPtr0+inM13);
+	    matrix[1][0] = *(inPtr0+inM12);
+	    matrix[1][1] = *(inPtr0+inM22);
+	    matrix[1][2] = *(inPtr0+inM23);
+	    matrix[2][0] = *(inPtr0+inM13);
+	    matrix[2][1] = *(inPtr0+inM23);
+	    matrix[2][2] = *(inPtr0+inM33);
 
+  	    T multiplier = 1;
+  if( self->GetUseMask() )
+    multiplier = *(inPtr0+self->GetInMask());
+	    
           vtkMath::Jacobi(matrix, eval,evect );
           // Set the output pixel to the correct value
 	  for( int comp = 0; comp < 3;comp ++)
 	  {
 	    
-          maxEvecPtr[comp] = evect[comp][0]*(*inPtr0);
-          medEvecPtr[comp] = evect[comp][1]*(*inPtr0);
-          minEvecPtr[comp] = evect[comp][2]*(*inPtr0);
+          maxEvecPtr[comp] = evect[comp][0]*multiplier;
+          medEvecPtr[comp] = evect[comp][1]*multiplier;
+          minEvecPtr[comp] = evect[comp][2]*multiplier;
 	  }
 	  maxEvecPtr += 3;
 	  medEvecPtr += 3;
 	  minEvecPtr += 3;
 	  
-	  *maxEvalPtr = eval[0]*(*inPtr0);
+	  *maxEvalPtr = eval[0]*multiplier;
 	  maxEvalPtr++;
-	  *medEvalPtr = eval[1]*(*inPtr0);
+	  *medEvalPtr = eval[1]*multiplier;
 	  medEvalPtr++;
-	  *minEvalPtr = eval[2]*(*inPtr0);
+	  *minEvalPtr = eval[2]*multiplier;
 	  minEvalPtr++;
  
           inPtr0 += inInc0;
