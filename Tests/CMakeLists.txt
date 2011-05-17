@@ -46,3 +46,10 @@ TARGET_LINK_LIBRARIES( testDeformableMesh
                        vtkRendering)
 
 ADD_TEST( DeformableMesh ${EXECUTABLE_OUTPUT_PATH}/testDeformableMesh )
+
+ADD_EXECUTABLE( testOFFReader testOFFReader.cxx )
+TARGET_LINK_LIBRARIES( testOFFReader 
+                       vtkKinshipFilters 
+                       vtkCommon 
+                       vtkIO 
+                       )
