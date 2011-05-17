@@ -41,6 +41,16 @@ SET( PLUGINS_SRCS
  )
 
 TARGET_LINK_LIBRARIES( vtkPVKinship vtkKinshipFilters )
+
+  # GIPL Image File Reader
+ ADD_PARAVIEW_PLUGIN(
+   OFFReader          #<--Name for the plugin
+  "1.0"                        #<--Version string
+   SERVER_MANAGER_SOURCES ../Filters/vtkOFFReader.cxx
+   SERVER_MANAGER_XML OFFReader.xml  #<-- server manager xml
+   GUI_RESOURCE_FILES OFFReaderGUI.xml
+ )
+TARGET_LINK_LIBRARIES( OFFReader vtkKinshipFilters )
 #------------------------------------------------------------------
 
 

@@ -1,0 +1,21 @@
+<ServerManagerConfiguration>
+  
+<ProxyGroup name="sources">
+   <!-- ================================================================== -->
+   <SourceProxy name="OFFReader" class="vtkOFFReader"
+                label="OFF Reader">
+     <StringVectorProperty
+                           name="FileName"
+                           number_of_elements="1"
+                           command="SetFileName"
+                           immediate_update="1">
+         <FileListDomain name="files"/>
+         <Documentation>
+            This property specifies the directory name for the vtk Dicom reader.
+         </Documentation>
+      </StringVectorProperty>
+
+   </SourceProxy>
+    <!-- End GIPL Reader -->
+</ProxyGroup>
+</ServerManagerConfiguration>

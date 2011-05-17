@@ -1,0 +1,5 @@
+<ParaViewReaders>
+  <Reader name="OFFReader" extensions="off"
+          file_description="OFF Files (Mesh)">
+  </Reader>
+</ParaViewReaders>
