@@ -54,9 +54,6 @@ int main( int argc, char** argv )
    }
    append->SetAppendAxis(2);
    append->Update( );
-   append->GetOutput()->SetSpacing(reslicer->GetSliceSpacing(),
-                                   reslicer->GetSliceSpacing(),
-				   1);
    
    imgWriter->SetFileName(argv[3]);
    imgWriter->SetInputConnection(append->GetOutputPort());

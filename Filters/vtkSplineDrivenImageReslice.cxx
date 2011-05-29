@@ -107,8 +107,8 @@ int vtkSplineDrivenImageReslice::RequestInformation (
 
   int extent[6] = {0, this->SliceSize / this->SliceSpacing - 1,
                    0, this->SliceSize / this->SliceSpacing - 1, 
-                   0, 0};
-  double spacing[3] = {this->SliceSpacing,this->SliceSpacing,0};
+                   0, 1};
+  double spacing[3] = {this->SliceSpacing,this->SliceSpacing,1};
 
 
   outInfo->Set(vtkDataObject::SPACING(), spacing, 3);
@@ -266,8 +266,8 @@ int vtkSplineDrivenImageReslice::RequestData(
          this->reslicer->SetOutputOrigin(0,0,0);
          this->reslicer->SetOutputExtent( 0, this->SliceSize / this->SliceSpacing - 1, 
                                               0, this->SliceSize / this->SliceSpacing - 1, 
-                                              0, 0);
-         this->reslicer->SetOutputSpacing(this->SliceSpacing, this->SliceSpacing, 0);
+                                              0, 1);
+         this->reslicer->SetOutputSpacing(this->SliceSpacing, this->SliceSpacing, 1);
          this->reslicer->Update( );
 
          resliceAxes->Delete( );
