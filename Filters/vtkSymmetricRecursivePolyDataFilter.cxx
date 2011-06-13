@@ -180,7 +180,7 @@ int vtkSymmetricRecursivePolyDataFilter::RequestData(
 
     this->sphericHelper->Reset();
     
-    // For each polyline cellId, filter the corresponding signal.
+    // For each polyline/polyvertex cellId, filter the corresponding signal.
     inPolyLines->InitTraversal( );
     int cellPosition = 0;
     for( int cellId = 0; cellId < inPolyLines->GetNumberOfCells( ); cellId ++ )
@@ -354,7 +354,7 @@ double vtkSymmetricRecursivePolyDataFilter::GetMeanSampling( vtkPolyData* mesh, 
     return(meanSampling);
 }
 
-void vtkSymmetricRecursivePolyDataFilter::GetSignalComponents( vtkPolyData* mesh, int cellLocation, int curveCoord, double* pointCoord )
+void vtkSymmetricRecursivePolyDataFilter::GetSignalComponents( vtkPolyData* mesh, int cellLocation, int curveCoord, double* signalComp )
 {
     vtkCellArray* lines = this->GetSignals( mesh );
 
@@ -403,9 +403,9 @@ void vtkSymmetricRecursivePolyDataFilter::GetSignalComponents( vtkPolyData* mesh
     }
 
     if( this->SignalSource == 0 )
-        mesh->GetPoints( )->GetPoint( points[newCurveCoord], pointCoord );
+        mesh->GetPoints( )->GetPoint( points[newCurveCoord], signalComp );
     else
-        mesh->GetPointData( )->GetVectors( )->GetTuple( points[newCurveCoord], pointCoord );
+        mesh->GetPointData( )->GetVectors( )->GetTuple( points[newCurveCoord], signalComp );
 }
 
 void vtkSymmetricRecursivePolyDataFilter::SetSymmetricCell( vtkIdType orgCellId )
