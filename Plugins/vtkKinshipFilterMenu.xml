@@ -5,6 +5,7 @@
   </Category>
   <Category name="PolyData" menu_label="&amp;PolyData">
     <Filter name="FrenetSerretFrame" />
+    <Filter name="ICPPolyDataFilter" />
   </Category>
   <Category name="Hybrid" menu_label="&amp;Hybrid">
     <Filter name="ImageLocalConvolution" />

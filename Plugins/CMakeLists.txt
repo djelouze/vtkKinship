@@ -19,6 +19,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkImageEigenElements.cxx
                   ../Filters/vtkSymmetricRecursivePolyDataFilter.cxx
                   ../Filters/vtkUVSphereSource.cxx
+                  ../Filters/vtkICPPolyDataFilter.cxx
                   
 )
 
@@ -39,6 +40,7 @@ SET( PLUGINS_SRCS
                       PolyDataToBinaryImage.xml
                       ImageEigenElements.xml
                       UVSphereSource.xml
+                      ICPPolyDataFilter.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )

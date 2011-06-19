@@ -52,4 +52,14 @@ TARGET_LINK_LIBRARIES( testOFFReader
                        vtkKinshipFilters 
                        vtkCommon 
                        vtkIO 
-                       )
+                      )
+
+ADD_EXECUTABLE( testICPPolyDataFilter testICPPolyDataFilter.cxx )
+TARGET_LINK_LIBRARIES( testICPPolyDataFilter 
+                       vtkKinshipFilters 
+                       vtkCommon 
+                       vtkGraphics 
+                       vtkRendering)
+
+ADD_TEST( ICPPolyDataFilter ${EXECUTABLE_OUTPUT_PATH}/testICPPolyDataFilter )
+
