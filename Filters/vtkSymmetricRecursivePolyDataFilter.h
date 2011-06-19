@@ -71,6 +71,10 @@ public:
     vtkSetMacro(Causality,int);
     vtkGetMacro(Causality,int);
 
+    vtkSetMacro(KeepSignals,int);
+    vtkGetMacro(KeepSignals,int);
+    vtkBooleanMacro( KeepSignals, int );
+    
     void SetA( double, double, double );
     void SetB( double, double, double );
     
@@ -137,6 +141,8 @@ private:
     int SignalContainer; //!< Where to find the cells? 0 is Vertices, 1 is Lines.
     int SignalSource;//!< Signal may be feed by point geometry (0) or vector data (1)
     int ExtrapolationMode;//!< 0: pole (find the best existing continuing cell), 1: closed spline, 2: mirror (not implemented)
+
+    int KeepSignals; //!< if 1, polyvertices and polyines are kept in the output
 
     SphericSymmetryHelper* sphericHelper; //!< contains poles information
     int meanSouthPoleValence;

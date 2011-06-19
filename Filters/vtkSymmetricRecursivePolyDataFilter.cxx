@@ -126,6 +126,7 @@ vtkSymmetricRecursivePolyDataFilter::vtkSymmetricRecursivePolyDataFilter()
     this->causalMesh = vtkPolyData::New( );
     this->SignalSource = 0;
     this->Causality = 0;
+    this->KeepSignals = 0;
 
     for( int i = 0; i < 3 ; i++ )
     {
@@ -196,8 +197,8 @@ int vtkSymmetricRecursivePolyDataFilter::RequestData(
             this->SetSymmetricCell( cellPosition );
 
         int isPole = this->DefinePointRole( points[0] );
-        if( this->ExtrapolationMode == 1 && isPole <= 2
-                || this->ExtrapolationMode == 0 && isPole > 2 )
+//         if( this->ExtrapolationMode == 1 && isPole <= 2
+//                 || this->ExtrapolationMode == 0 && isPole > 2 )
         {
             for( this->Causality = 0; this->Causality < 2; this->Causality++)
             {
@@ -282,7 +283,7 @@ int vtkSymmetricRecursivePolyDataFilter::RequestData(
                 }
             }
         }
-    }
+    } // end for each cell
 
     if( this->ExtrapolationMode == 0 )
     {
@@ -296,6 +297,14 @@ int vtkSymmetricRecursivePolyDataFilter::RequestData(
 	this->SetData( out, pointId, point );
 	poleId++;
       }
+    }
+    
+    if( !this->KeepSignals )
+    {
+      if( this->SignalContainer == 1 )
+         out->SetLines( 0x0 );
+      else 
+	out->SetVerts( 0x0 );
     }
 
     return( 1 );
@@ -363,7 +372,8 @@ void vtkSymmetricRecursivePolyDataFilter::GetSignalComponents( vtkPolyData* mesh
     lines->GetCell( cellLocation , nbPoints , points );
 
     int newCurveCoord;
-    if( (points[0] == points[nbPoints-1]) || (lines->GetNumberOfCells( )==1)) // closed curve
+    if( this->ExtrapolationMode == 1 )
+    //if( (points[0] == points[nbPoints-1]) || (lines->GetNumberOfCells( )==1)) // closed curve
     {
         // closed curve, last point is the same as first
         nbPoints = nbPoints - 1;
@@ -372,7 +382,7 @@ void vtkSymmetricRecursivePolyDataFilter::GetSignalComponents( vtkPolyData* mesh
         else
             newCurveCoord = curveCoord%nbPoints;
     }
-    else // behaviour to be defined (sphere? open surface?)
+    else if( this->ExtrapolationMode == 0 )// behaviour to be defined (sphere? open surface?)
     {
         if( curveCoord >= 0 )
         {
