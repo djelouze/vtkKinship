@@ -1,0 +1,46 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="sources">
+      <!-- ================================================================== -->
+      <SourceProxy name="UVSphereSource" class="vtkUVSphereSource"
+                   label="Sphere (UV)">
+         <Documentation
+                       long_help="U coordinates are supported in vertices and V are in lines"
+                       short_help="Sphere (UV)">
+         </Documentation>
+         
+         <DoubleVectorProperty
+                              name="Radius"
+                              label="Radius"
+                              number_of_elements="1"
+                              command="SetRadius"
+                              default_values="30" >
+         </DoubleVectorProperty>
+
+        <IntVectorProperty
+                             name="MeridianResolution"
+                             label="MeridianResolution"
+                             number_of_elements="1"
+                             command="SetMeridianResolution"
+                             default_values="8" >
+        </IntVectorProperty>
+	<IntVectorProperty
+                             name="ParallelResolution"
+                             label="ParallelResolution"
+                             number_of_elements="1"
+                             command="SetParallelResolution"
+                             default_values="8" >
+        </IntVectorProperty>
+         <DoubleVectorProperty
+                              name="NoiseLevel"
+                              label="NoiseLevel"
+                              number_of_elements="1"
+                              command="SetNoiseLevel"
+                              default_values="0" >
+         </DoubleVectorProperty>
+
+
+
+      </SourceProxy>
+      <!-- End ImageCylinder -->
+      </ProxyGroup>
+    </ServerManagerConfiguration>

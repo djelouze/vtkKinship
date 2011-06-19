@@ -17,6 +17,8 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkSplineDrivenImageReslice.cxx
                   ../Filters/vtkPolyDataToBinaryImage.cxx
                   ../Filters/vtkImageEigenElements.cxx
+                  ../Filters/vtkSymmetricRecursivePolyDataFilter.cxx
+                  ../Filters/vtkUVSphereSource.cxx
                   
 )
 
@@ -36,6 +38,7 @@ SET( PLUGINS_SRCS
                       SplineDrivenImageReslice.xml
                       PolyDataToBinaryImage.xml
                       ImageEigenElements.xml
+                      UVSphereSource.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
    GUI_RESOURCE_FILES vtkKinshipFilterMenu.xml
  )
