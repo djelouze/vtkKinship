@@ -1,0 +1,52 @@
+<ServerManagerConfiguration>
+   <ProxyGroup name="filters">
+      <SourceProxy name="RubOffDataSetFilter"
+                   class="vtkRubOffDataSetFilter"
+                  label="Rub Off">
+         <Documentation
+                      long_help="" 
+                      short_help=""> 
+         </Documentation>
+       <InputProperty
+                     name="Input"
+                     command="SetInputConnection">
+         <ProxyGroupDomain name="groups">
+           <Group name="sources"/>
+           <Group name="filters"/>
+         </ProxyGroupDomain>
+         <DataTypeDomain name="input_type">
+           <DataType value="vtkDataSet"/>
+         </DataTypeDomain>
+         <Documentation>
+           The image you want to probe.
+         </Documentation>
+       </InputProperty>
+
+       <InputProperty
+                     name="Source"
+                     command="SetSourceConnection">
+         <ProxyGroupDomain name="groups">
+           <Group name="sources"/>
+           <Group name="filters"/>
+         </ProxyGroupDomain>
+         <DataTypeDomain name="input_type">
+           <DataType value="vtkDataSet"/>
+         </DataTypeDomain>
+         <Documentation>
+           The DataSet that will define the point locations to probe.
+         </Documentation>
+       </InputProperty>
+        <IntVectorProperty
+                          name="ReleaseDataFlag"
+                          command="SetReleaseDataFlag"
+                          number_of_elements="1"
+                          default_values="0"
+                          animateable="0">
+           <BooleanDomain name="boolean"/>
+           <Documentation>
+		  Turn release data flag on or off for all output ports.                  
+           </Documentation>
+         </IntVectorProperty>
+      </SourceProxy>
+   </ProxyGroup> 
+</ServerManagerConfiguration>
