@@ -26,10 +26,6 @@
 //! This filter iterates over input cells/points and finds the closest 
 //! cell/point in source. Output contains cell and point data from those
 //! closest target elements.
-//! 
-//! \warning Proof of concept class: it simply set on celldata the id of the
-//! closest source point from the input cell centers.
-//! \bug vtkCellLocator::FindClosestPoint(...) crashes on GetBucketNeighbors
 
 #ifndef __vtkRubOffDataSetFilter_h
 #define __vtkRubOffDataSetFilter_h
@@ -44,6 +40,20 @@ public:
   void PrintSelf(ostream& os, vtkIndent indent);
 
   void SetSourceConnection(vtkAlgorithmOutput* algOutput);
+
+  //! If On, Cell data rub off on the output
+  vtkSetMacro( RubOffCellData, int );
+  //! If On, Cell data rub off on the output
+  vtkGetMacro( RubOffCellData, int );
+  //! If On, Cell data rub off on the output
+  vtkBooleanMacro( RubOffCellData, int );
+
+  //! If On, Point data rub off on the output
+  vtkSetMacro( RubOffPointData, int );
+  //! If On, Point data rub off on the output
+  vtkGetMacro( RubOffPointData, int );
+  //! If On, Point data rub off on the output
+  vtkBooleanMacro( RubOffPointData, int );
 
 protected:
   vtkRubOffDataSetFilter();
@@ -60,7 +70,11 @@ private:
   vtkRubOffDataSetFilter(const vtkRubOffDataSetFilter&);  // Not implemented.
   void operator=(const vtkRubOffDataSetFilter&);  // Not implemented.
 
+  //! Computes the center of mass of a given cell in the given dataset
   void GetCellCenter( vtkDataSet* container, vtkIdType cellId, double center[3] );
+  
+  int RubOffCellData; //!< Specify if CellData arrays rub off on the output
+  int RubOffPointData; //!< Specify if PointData arrays rub off on the output
 
 };
 

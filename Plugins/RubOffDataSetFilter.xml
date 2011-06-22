@@ -37,6 +37,28 @@
          </Documentation>
        </InputProperty>
         <IntVectorProperty
+                          name="RubOffCellData"
+                          command="SetRubOffCellData"
+                          number_of_elements="1"
+                          default_values="0"
+                          animateable="0">
+           <BooleanDomain name="boolean"/>
+           <Documentation>
+		  Controls if CellData from source rub off on output.                  
+           </Documentation>
+         </IntVectorProperty>
+        <IntVectorProperty
+                          name="RubOffPointData"
+                          command="SetRubOffPointData"
+                          number_of_elements="1"
+                          default_values="0"
+                          animateable="0">
+           <BooleanDomain name="boolean"/>
+           <Documentation>
+		  Controls if PointData from source rub off on output.                  
+           </Documentation>
+         </IntVectorProperty>
+       <IntVectorProperty
                           name="ReleaseDataFlag"
                           command="SetReleaseDataFlag"
                           number_of_elements="1"

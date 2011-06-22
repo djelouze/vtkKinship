@@ -41,6 +41,8 @@ vtkStandardNewMacro(vtkRubOffDataSetFilter);
 
 vtkRubOffDataSetFilter::vtkRubOffDataSetFilter()
 {
+  this->RubOffCellData = 1;
+  this->RubOffPointData = 1;
   this->SetNumberOfInputPorts(2);
 }
 
@@ -52,7 +54,8 @@ void vtkRubOffDataSetFilter::SetSourceConnection(vtkAlgorithmOutput* algOutput)
 {
   this->SetInputConnection(1, algOutput);
 }
- 
+
+
 //----------------------------------------------------------------------------
 int vtkRubOffDataSetFilter::RequestData(
   vtkInformation *vtkNotUsed(request),
@@ -69,40 +72,119 @@ int vtkRubOffDataSetFilter::RequestData(
     inInfo->Get(vtkDataObject::DATA_OBJECT()));
   vtkDataSet *source = vtkDataSet::SafeDownCast(
     sourceInfo->Get(vtkDataObject::DATA_OBJECT()));
+  
   vtkDataSet *output = vtkDataSet::SafeDownCast(
     outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-  vtkCellData* sourceCellData = source->GetCellData();
-  vtkPointData* sourcePointData = source->GetPointData();
-  
-  vtkSmartPointer<vtkDoubleArray> distArray = vtkSmartPointer<vtkDoubleArray>::New();
-  distArray->SetName("Copy");
-  distArray->SetNumberOfComponents(1);
-  
-  vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
-  cellLocator->SetDataSet( source );
+  // First copy the input on the output Geometry, Topology and attributes
+  output->DeepCopy( input );
 
-  vtkSmartPointer<vtkPointLocator> pointLocator = vtkSmartPointer<vtkPointLocator>::New();
-  pointLocator->SetDataSet( source );  
-  
-  vtkSmartPointer<vtkGenericCell> sourceCell = vtkSmartPointer<vtkGenericCell>::New();
-
-  vtkIdType nbOfTargetedCells = input->GetNumberOfCells();
-  for( vtkIdType cellId = 0; cellId < nbOfTargetedCells ; cellId++ )
+  // If RubOffPointData is On, 
+  vtkSmartPointer<vtkPointLocator> pointLocator = vtkSmartPointer<vtkPointLocator>::New();  
+  if( this->RubOffPointData != 0 )
   {
-      double cellCenter[3], closestTargetPoint[3], distance;
-      this->GetCellCenter(input, cellId, cellCenter );
-      vtkIdType sourceCellId;
-      int subId;
-      //cellLocator->FindClosestPoint(cellCenter,closestTargetPoint,sourceCell,sourceCellId,subId,distance);
-      vtkIdType ptId = pointLocator->FindClosestPoint(cellCenter);
-      
-      distArray->InsertNextValue(sourcePointData->GetArray(0)->GetComponent(ptId,0));      
+     // First put the point data arrays existing in the source in the output
+     vtkPointData* sourcePointData = 0;
+     sourcePointData = source->GetPointData();
+     for( int i = 0; i < sourcePointData->GetNumberOfArrays();i++)
+     {
+       vtkDataArray* sourceArray = sourcePointData->GetArray(i);
+       if( sourceArray != 0x0 )
+       {
+	 // Create a new instance without a knowledge of the type
+	 vtkDataArray* array = sourceArray->NewInstance(); 
+	 // Simple reset
+         array->SetNumberOfTuples(0);
+	 array->SetNumberOfComponents(sourceArray->GetNumberOfComponents());
+	 // Name seems to not be set by NewInstance (that makes sense)
+	 array->SetName(sourceArray->GetName());
+	 // FInally add the new array to the output point data.
+	 output->GetPointData()->AddArray( array );
+       }
+     }
+
+     // Initialize a PointLocator on the source
+     pointLocator->SetDataSet( source ); 
+     pointLocator->BuildLocator();
+     
+     // For each output points ...
+     vtkIdType nbOfTargetedPoints = output->GetNumberOfPoints();
+     double point[3], closestSourcePoint[3];
+     vtkIdType sourcePointId;
+     for( vtkIdType pointId = 0; pointId < nbOfTargetedPoints ; pointId++ )
+     {
+        // ... find the closest point in the source
+        input->GetPoint(pointId, point);
+        sourcePointId = pointLocator->FindClosestPoint(point);
+	
+	// and set the output arrays to the corresponding value
+	for( int i = 0; i < source->GetPointData()->GetNumberOfArrays(); i++ )
+	{
+	  vtkDataArray* sourceArray = source->GetPointData()->GetArray(i);
+	  vtkDataArray* targetArray = output->GetPointData()->GetArray( sourceArray->GetName() );
+	  if( targetArray != 0x0 )
+	  {
+	    targetArray->InsertNextTuple( sourcePointId, sourceArray );
+	  }
+	      
+	    
+	}
+     }     
   }
 
-  output->DeepCopy(input);
-  output->GetCellData()->AddArray(distArray);
-  
+  // If RubOffCellData is On, 
+  vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
+  if( this->RubOffCellData != 0 )
+  {
+     // First put the cell data arrays existing in the source in the output
+     vtkCellData* sourceCellData = 0;
+     sourceCellData = source->GetCellData();
+     for( int i = 0; i < sourceCellData->GetNumberOfArrays();i++)
+     {
+       vtkDataArray* sourceArray = sourceCellData->GetArray(i);
+       if( sourceArray != 0x0 )
+       {
+	 // Create a new instance without a knowledge of the type
+	 vtkDataArray* array = sourceArray->NewInstance();
+	 // Simple reset
+         array->SetNumberOfTuples(0);
+	 array->SetNumberOfComponents(sourceArray->GetNumberOfComponents());
+	 // Name seems to not be set by NewInstance (that makes sense)
+	 array->SetName(sourceArray->GetName());
+	 // Finally add the new array to the output cell data.
+	 output->GetCellData()->AddArray( array );
+       }
+     }
+
+     // Initialize a PointLocator on the source
+     cellLocator->SetDataSet( source );
+     cellLocator->BuildLocator();
+     
+     // For each output cells ...
+     vtkSmartPointer<vtkGenericCell> sourceCell = vtkSmartPointer<vtkGenericCell>::New();
+     vtkIdType nbOfTargetedCells = input->GetNumberOfCells();
+     double cellCenter[3], closestTargetPoint[3], distance;
+     vtkIdType sourceCellId;
+     int subId;
+     for( vtkIdType cellId = 0; cellId < nbOfTargetedCells ; cellId++ )
+     {
+
+        // ... find the closest cell in the source
+        // Maybe a check of the type of the cell would be better...
+        this->GetCellCenter(input, cellId, cellCenter );
+        cellLocator->FindClosestPoint(cellCenter,closestTargetPoint,sourceCell,sourceCellId,subId,distance);
+	
+	// and set the output arrays to the corresponding value
+	for( int i = 0; i < source->GetCellData()->GetNumberOfArrays(); i++ )
+	{
+	  vtkDataArray* sourceArray = source->GetCellData()->GetArray(i);
+	  vtkDataArray* targetArray = output->GetCellData()->GetArray( sourceArray->GetName() );
+	  if( targetArray != 0x0 )
+	      targetArray->InsertNextTuple( sourceCellId, sourceArray );
+	}
+     }
+  }
+
   return 1;
 }
 
