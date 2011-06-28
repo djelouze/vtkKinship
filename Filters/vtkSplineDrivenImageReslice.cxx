@@ -8,6 +8,7 @@
 #include "vtkFrenetSerretFrame.h"
 #include "vtkPlaneSource.h"
 #include "vtkImageData.h"
+#include "vtkProbeFilter.h"
 #include "vtkMatrix4x4.h"
 #include "vtkImageAppend.h"
 #include "vtkDoubleArray.h"
@@ -27,10 +28,14 @@ vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
 {
    this->localFrenetFrames = vtkFrenetSerretFrame::New( );
    this->reslicer = vtkImageReslice::New();
-   this->SliceSize = 15;
-   this->SliceSpacing = 1;
+   this->SliceExtent[0] = 15;
+   this->SliceExtent[1] = 15;
+   this->SliceSpacing[0] = 1;
+   this->SliceSpacing[1] = 1;
+   this->SliceThickness = 1;
    this->OffsetPoint = 0;
    this->OffsetLine = 0;
+   this->ProbeInput = 0;
    
    this->SetNumberOfInputPorts( 2 );
    this->SetNumberOfOutputPorts( 2 );
@@ -105,10 +110,10 @@ int vtkSplineDrivenImageReslice::RequestInformation (
   // get the info objects
   vtkInformation* outInfo = outputVector->GetInformationObject(0);
 
-  int extent[6] = {0, this->SliceSize / this->SliceSpacing - 1,
-                   0, this->SliceSize / this->SliceSpacing - 1, 
+  int extent[6] = {0, this->SliceExtent[0] - 1,
+                   0, this->SliceExtent[1] - 1, 
                    0, 1};
-  double spacing[3] = {this->SliceSpacing,this->SliceSpacing,1};
+  double spacing[3] = {this->SliceSpacing[0],this->SliceSpacing[1],this->SliceThickness};
 
 
   outInfo->Set(vtkDataObject::SPACING(), spacing, 3);
@@ -208,16 +213,28 @@ int vtkSplineDrivenImageReslice::RequestData(
 	 double planePoint2[3];
 	 for( int comp = 0; comp < 3; comp ++)
 	 {
-	   planeOrigin[comp] = center[comp] - (normal[comp] + crossProduct[comp])*this->SliceSize/2;
-	   planePoint1[comp] = planeOrigin[comp] + crossProduct[comp]*this->SliceSize;
-	   planePoint2[comp] = planeOrigin[comp] + normal[comp]*this->SliceSize;
+	   planeOrigin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0 
+                                            - crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
+	   planePoint1[comp] = planeOrigin[comp] + crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0];
+	   planePoint2[comp] = planeOrigin[comp] + normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1];
 	 }
 	 plane->SetOrigin(planeOrigin);
 	 plane->SetPoint1(planePoint1);
 	 plane->SetPoint2(planePoint2);
-	 plane->SetResolution(this->SliceSize/this->SliceSpacing,this->SliceSize/this->SliceSpacing);
+	 plane->SetResolution(this->SliceExtent[0],
+                              this->SliceExtent[1]);
 	 plane->Update();
-	 outputPlane->DeepCopy(plane->GetOutputDataObject(0));
+	 
+         if( this->ProbeInput == 1 )
+         {
+            vtkSmartPointer<vtkProbeFilter> probe = vtkSmartPointer<vtkProbeFilter>::New( );
+            probe->SetInputConnection( plane->GetOutputPort( ) );
+            probe->SetSource( inputCopy );
+            probe->Update( );
+            outputPlane->DeepCopy(probe->GetOutputDataObject(0));
+         } 
+         else
+            outputPlane->DeepCopy(plane->GetOutputDataObject(0));
 	 
 	 
          // Build the transformation matrix (inspired from vtkImagePlaneWidget)
@@ -237,8 +254,8 @@ int vtkSplineDrivenImageReslice::RequestData(
             resliceAxes->SetElement(1,comp,crossProduct[comp]);
             resliceAxes->SetElement(2,comp,tangent[comp]);
 
-            origin[comp] = center[comp] - normal[comp]*this->SliceSize/2.
-                               - crossProduct[comp]*this->SliceSize/2.;
+            origin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0
+                               - crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
          }
 
          //! Transform the origin in the homogeneous coordinate space. 
@@ -264,13 +281,17 @@ int vtkSplineDrivenImageReslice::RequestData(
 
          this->reslicer->SetOutputDimensionality( 2 );
          this->reslicer->SetOutputOrigin(0,0,0);
-         this->reslicer->SetOutputExtent( 0, this->SliceSize / this->SliceSpacing - 1, 
-                                              0, this->SliceSize / this->SliceSpacing - 1, 
+         this->reslicer->SetOutputExtent( 0, this->SliceExtent[0] - 1, 
+                                              0, this->SliceExtent[1] - 1, 
                                               0, 1);
-         this->reslicer->SetOutputSpacing(this->SliceSpacing, this->SliceSpacing, 1);
+         this->reslicer->SetOutputSpacing(this->SliceSpacing[0], 
+                                          this->SliceSpacing[1], 
+                                          this->SliceThickness);
          this->reslicer->Update( );
 
          resliceAxes->Delete( );
+
+
    outputImage->DeepCopy( this->reslicer->GetOutputDataObject( 0 ) );
    outputImage->GetPointData( )->GetScalars( )->SetName( "ReslicedImage" );
 

@@ -39,17 +39,24 @@ public:
   vtkAlgorithmOutput* GetPathConnection( )
                                  {return( this->GetInputConnection( 1, 0 ) );};
 
-   vtkSetMacro( SliceSize, double );
-   vtkGetMacro( SliceSize, double );
+   vtkSetVector2Macro( SliceExtent, vtkIdType );
+   vtkGetVector2Macro( SliceExtent, vtkIdType );
 
-   vtkSetMacro( SliceSpacing, double );
-   vtkGetMacro( SliceSpacing, double );
+   vtkSetVector2Macro( SliceSpacing, double );
+   vtkGetVector2Macro( SliceSpacing, double );
+
+   vtkSetMacro( SliceThickness, double );
+   vtkGetMacro( SliceThickness, double );
 
    vtkSetMacro( OffsetPoint, vtkIdType );
    vtkGetMacro( OffsetPoint, vtkIdType );
 
    vtkSetMacro( OffsetLine, vtkIdType );
    vtkGetMacro( OffsetLine, vtkIdType );
+
+   vtkSetMacro( ProbeInput, vtkIdType );
+   vtkGetMacro( ProbeInput, vtkIdType );
+   vtkBooleanMacro( ProbeInput, vtkIdType );
 
    vtkSetMacro( Incidence, double );
    vtkGetMacro( Incidence, double );
@@ -73,12 +80,14 @@ private:
    vtkFrenetSerretFrame* localFrenetFrames; //!< computes local tangent along path input
    vtkImageReslice* reslicer; //!< Reslicers array
 
-   vtkIdType SliceSize; //!< Number of pixels around the center points
-   double SliceSpacing; //!< Pixel size
+   vtkIdType SliceExtent[2]; //!< Number of pixels nx, ny in the slice space around the center points
+   double SliceSpacing[2]; //!< Pixel size sx, sy of the output slice
+   double SliceThickness; //!< Slice thickness (useful for volumic reconstruction) 
    double Incidence; //!< Rotation of the initial normal vector.
    
    vtkIdType OffsetPoint; //!< Id of the point where the reslicer proceed
    vtkIdType OffsetLine; //!< Id of the line cell where to get the reslice center
+   vtkIdType ProbeInput; //!< If true, the output plane (2nd output probes the input image)
 };
 
 #endif //__vtkSplineDrivenImageReslice_h__

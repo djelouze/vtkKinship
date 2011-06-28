@@ -71,13 +71,25 @@
         </IntVectorProperty>
 	<DoubleVectorProperty name="SliceSpacing"
                               command="SetSliceSpacing"
+                              number_of_elements="2"
+                              default_values="1 1">
+        </DoubleVectorProperty>
+       	<DoubleVectorProperty name="SliceThickness"
+                              command="SetSliceThickness"
                               number_of_elements="1"
                               default_values="1">
         </DoubleVectorProperty>
-          <IntVectorProperty name="SliceSize"
-                              command="SetSliceSize"
+   <IntVectorProperty name="SliceExtent"
+                              command="SetSliceExtent"
+                              number_of_elements="2"
+                              default_values="15 15">
+           
+        </IntVectorProperty>
+    <IntVectorProperty name="ProbeInput"
+                              command="SetProbeInput"
                               number_of_elements="1"
-                              default_values="15">
+                              default_values="0">
+        <BooleanDomain name="bool"/>
            
         </IntVectorProperty>
          <DoubleVectorProperty name="Incidence"
