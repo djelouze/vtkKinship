@@ -12,7 +12,7 @@
     <Filter name="ImageCropVOI" />
     <Filter name="DeformableMesh" />
     <Filter name="RegularizedDeformableMesh" />
-    <Filter name="SplineDrivenImageReslice" />
+    <Filter name="SplineDrivenImageSlicer" />
     <Filter name="PolyDataToBinaryImage" />
   </Category>
 </ParaViewFilters>

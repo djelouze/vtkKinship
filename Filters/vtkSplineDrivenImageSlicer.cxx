@@ -1,4 +1,4 @@
-#include "vtkSplineDrivenImageReslice.h"
+#include "vtkSplineDrivenImageSlicer.h"
 
 #include"vtkPoints.h"
 #include"vtkPolyData.h"
@@ -21,10 +21,10 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 
 
-vtkCxxRevisionMacro(vtkSplineDrivenImageReslice, "$Revision: 1.31 $");
-vtkStandardNewMacro(vtkSplineDrivenImageReslice);
+vtkCxxRevisionMacro(vtkSplineDrivenImageSlicer, "$Revision: 1.31 $");
+vtkStandardNewMacro(vtkSplineDrivenImageSlicer);
 
-vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
+vtkSplineDrivenImageSlicer::vtkSplineDrivenImageSlicer( )
 {
    this->localFrenetFrames = vtkFrenetSerretFrame::New( );
    this->reslicer = vtkImageReslice::New();
@@ -45,7 +45,7 @@ vtkSplineDrivenImageReslice::vtkSplineDrivenImageReslice( )
                                vtkDataSetAttributes::SCALARS);   
 }
 
-vtkSplineDrivenImageReslice::~vtkSplineDrivenImageReslice( )
+vtkSplineDrivenImageSlicer::~vtkSplineDrivenImageSlicer( )
 {
 	this->localFrenetFrames->Delete( );
 	this->reslicer->Delete( );
@@ -53,7 +53,7 @@ vtkSplineDrivenImageReslice::~vtkSplineDrivenImageReslice( )
 
 //----------------------------------------------------------------------------
 // Specify a source object at a specified table location.
-void vtkSplineDrivenImageReslice::SetPathConnection(int id, vtkAlgorithmOutput* algOutput)
+void vtkSplineDrivenImageSlicer::SetPathConnection(int id, vtkAlgorithmOutput* algOutput)
 {
   if (id < 0)
     {
@@ -79,7 +79,7 @@ void vtkSplineDrivenImageReslice::SetPathConnection(int id, vtkAlgorithmOutput* 
 }
 
 //---------------------------------------------------------------------------
-int vtkSplineDrivenImageReslice::FillInputPortInformation(int port, vtkInformation *info)
+int vtkSplineDrivenImageSlicer::FillInputPortInformation(int port, vtkInformation *info)
 {
   if( port == 0 )
      info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkImageData");
@@ -90,7 +90,7 @@ int vtkSplineDrivenImageReslice::FillInputPortInformation(int port, vtkInformati
 }
 
 //----------------------------------------------------------------------------
-int vtkSplineDrivenImageReslice::FillOutputPortInformation(
+int vtkSplineDrivenImageSlicer::FillOutputPortInformation(
                                               int port, vtkInformation* info)
 {
    if (port == 0)
@@ -101,7 +101,7 @@ int vtkSplineDrivenImageReslice::FillOutputPortInformation(
 }
 
 
-int vtkSplineDrivenImageReslice::RequestInformation (
+int vtkSplineDrivenImageSlicer::RequestInformation (
   vtkInformation * vtkNotUsed(request),
   vtkInformationVector** inputVector,
   vtkInformationVector *outputVector)
@@ -124,7 +124,7 @@ int vtkSplineDrivenImageReslice::RequestInformation (
 }
 
 //! RequestData is called by the pipeline process. 
-int vtkSplineDrivenImageReslice::RequestData(
+int vtkSplineDrivenImageSlicer::RequestData(
   vtkInformation *vtkNotUsed(request),
   vtkInformationVector **inputVector,
   vtkInformationVector *outputVector)
@@ -250,8 +250,8 @@ int vtkSplineDrivenImageReslice::RequestData(
          // -> 2nd column is B = T^N
          for ( int comp = 0; comp < 3; comp++ )
          {
-            resliceAxes->SetElement(0,comp,normal[comp]);
-            resliceAxes->SetElement(1,comp,crossProduct[comp]);
+            resliceAxes->SetElement(0,comp,crossProduct[comp]);
+            resliceAxes->SetElement(1,comp,normal[comp]);
             resliceAxes->SetElement(2,comp,tangent[comp]);
 
             origin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0

@@ -14,7 +14,7 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkThickTubeFilter.cxx
                   ../Filters/vtkSmoothPolyDataVectors.cxx
                   ../Filters/vtkFrenetSerretFrame.cxx
-                  ../Filters/vtkSplineDrivenImageReslice.cxx
+                  ../Filters/vtkSplineDrivenImageSlicer.cxx
                   ../Filters/vtkPolyDataToBinaryImage.cxx
                   ../Filters/vtkImageEigenElements.cxx
                   ../Filters/vtkSymmetricRecursivePolyDataFilter.cxx
@@ -37,7 +37,7 @@ SET( PLUGINS_SRCS
                       ThickTubeFilter.xml
                       SmoothPolyDataVectors.xml
                       FrenetSerretFrame.xml
-                      SplineDrivenImageReslice.xml
+                      SplineDrivenImageSlicer.xml
                       PolyDataToBinaryImage.xml
                       ImageEigenElements.xml
                       UVSphereSource.xml

@@ -1,4 +1,4 @@
-//! \class vtkSplineDrivenImageReslice
+//! \class vtkSplineDrivenImageSlicer
 //! \brief Reslicing of a volume along a path
 //!
 //! Straightened Curved Planar Reformation (Stretched-CPR) builds a 2D image 
@@ -16,19 +16,19 @@
 //! \author Jerome Velut
 //! \date 6 february 2011
 
-#ifndef __vtkSplineDrivenImageReslice_h__
-#define __vtkSplineDrivenImageReslice_h__
+#ifndef __vtkSplineDrivenImageSlicer_h__
+#define __vtkSplineDrivenImageSlicer_h__
 
 #include"vtkImageAlgorithm.h"
 
 class vtkFrenetSerretFrame;
 class vtkImageReslice;
 
-class VTK_EXPORT vtkSplineDrivenImageReslice : public vtkImageAlgorithm
+class VTK_EXPORT vtkSplineDrivenImageSlicer : public vtkImageAlgorithm
 {
 public:
-   vtkTypeRevisionMacro(vtkSplineDrivenImageReslice,vtkImageAlgorithm);
-   static vtkSplineDrivenImageReslice* New();
+   vtkTypeRevisionMacro(vtkSplineDrivenImageSlicer,vtkImageAlgorithm);
+   static vtkSplineDrivenImageSlicer* New();
 
   //! Specify the path represented by a vtkPolyData wich contains PolyLines
   void SetPathConnection(int id, vtkAlgorithmOutput* algOutput);
@@ -63,8 +63,8 @@ public:
 
 
 protected:
-   vtkSplineDrivenImageReslice();
-   ~vtkSplineDrivenImageReslice();
+   vtkSplineDrivenImageSlicer();
+   ~vtkSplineDrivenImageSlicer();
 
    virtual int RequestData(vtkInformation *, vtkInformationVector **, 
 	                                         vtkInformationVector *);
@@ -74,8 +74,8 @@ protected:
    virtual int RequestInformation(vtkInformation*, vtkInformationVector**, 
 	                                                vtkInformationVector*);
 private:
-   vtkSplineDrivenImageReslice(const vtkSplineDrivenImageReslice&);  // Not implemented.
-   void operator=(const vtkSplineDrivenImageReslice&);  // Not implemented.
+   vtkSplineDrivenImageSlicer(const vtkSplineDrivenImageSlicer&);  // Not implemented.
+   void operator=(const vtkSplineDrivenImageSlicer&);  // Not implemented.
 
    vtkFrenetSerretFrame* localFrenetFrames; //!< computes local tangent along path input
    vtkImageReslice* reslicer; //!< Reslicers array
@@ -90,4 +90,4 @@ private:
    vtkIdType ProbeInput; //!< If true, the output plane (2nd output probes the input image)
 };
 
-#endif //__vtkSplineDrivenImageReslice_h__
+#endif //__vtkSplineDrivenImageSlicer_h__
