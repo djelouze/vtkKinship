@@ -29,7 +29,7 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 % The title should be descriptive enough for people to be able to find
 % the relevant document. 
-\title{Spline Driven Image Reslice}
+\title{A Spline-Driven Image Slicer}
 
 % 
 % NOTE: This is the last number of the "handle" URL that 
@@ -85,17 +85,39 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \begin{abstract}
 \noindent
 In this article, a spline driven image slicer algorithm is presented. It is
-concretize through a vtkAlgorithm inherited class that takes two inputs and
-gives two outputs. The first input is the
-volume from which the slice should reconstructed while the second one is the spline which tangent
-vector is used as slicing plane normal. The first output is a 2D image resliced from the volume. The second input gives the geometric information of the reslice plane location in the volume space.
-An example of use is given through a simulation of a dental panoramic view from a MDCT volume. a straightened curved planar reformation is also possible and discussed.
+concretized through a vtkAlgorithm-inherited class that takes two inputs and
+gives two outputs. The first input is the volume from which the slice should
+reconstructed while the second one is the spline which tangent vector is used as
+slicing plane normal. The first output is a 2D image resliced from the volume.
+The second input gives the geometric information of the slice plane location in
+the volume space. An example of use is given through a simulation of a dental
+panoramic view from a MDCT volume. A straightened curved planar reformation is
+also applied on vascular images.
 \end{abstract}
 
 \IJhandlenote{\IJhandlerIDnumber}
 
 \tableofcontents
-[INTRODUCTION]
+%
+Slicing through volume data is a common task in scientific visualization. Lots
+of existing image processing tools provide this necessary functionality as soon
+as the visualization of 3D (or more) data has to be performed on a 2D screen.
+
+In VTK, different ways are possible, depending on the particular slicing needed
+by the end-user. The simplest is vtkExtractVOI if the desired slice is parallel
+to the input image axes. This method is used in ParaView in the Slice 
+Representation. The most sophisticated is the vtkImageReslice filter in which
+the cutting plane may be oriented arbitraly in the volume space. Though these
+filter are able to resample from 3D to 3D, this work focus on 2D slicing from
+3D images.
+
+The algorithm presented here aims at computing the slicing orientation of a
+vtkImageReslice filter directly from an input spline curve. This orientation
+is defined as the Frenet-Serret frame at each point of the spline. In the 
+following, a Frenet-Serret variant is proposed in order for the spline tangents
+to be used as slice plane normals. An application on mandibule panoramic 
+visualisation is presented, as well as an implementation of the Straightened
+Curved Planar Reformation \cite{} in vascular imaging.
 %
 \section{Frenet-Serret frame along a curve}
 %
@@ -111,11 +133,11 @@ An example of use is given through a simulation of a dental panoramic view from 
 %
 \subsection{Parameters}
 %
-\section{Straightened Curved Planar Reformation}
+\section{Applications}
 %
-\subsection{Application to dental panoramic visualisation}
+\subsection{Dental panoramic visualisation}
 %
-\subsection{More applications}
+\subsection{Straightened Curved Planar Reformation}
 %
 \section{Software Requirements}
 %
