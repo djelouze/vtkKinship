@@ -3,7 +3,7 @@
 //! \author Jerome Velut
 //! \date February 2011
 
-#include "vtkSplineDrivenImageReslice.h"
+#include "vtkSplineDrivenImageSlicer.h"
 #include "vtkImageAppend.h"
 
 #include "vtkSmartPointer.h"
@@ -22,8 +22,8 @@ int main( int argc, char** argv )
    vtkSmartPointer<vtkXMLPolyDataReader> pathReader;
    pathReader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
    
-   vtkSmartPointer<vtkSplineDrivenImageReslice> reslicer;
-   reslicer = vtkSmartPointer<vtkSplineDrivenImageReslice>::New();
+   vtkSmartPointer<vtkSplineDrivenImageSlicer> reslicer;
+   reslicer = vtkSmartPointer<vtkSplineDrivenImageSlicer>::New();
    
    vtkSmartPointer<vtkImageAppend> append;
    append = vtkSmartPointer<vtkImageAppend>::New();

@@ -25,7 +25,7 @@
 <ServerManagerConfiguration>
    <ProxyGroup name="filters">
       <!-- ==================================================================== -->
-      <SourceProxy name="SplineDrivenImageReslice" class="vtkSplineDrivenImageReslice" label="Spline Driven Image Reslice">
+      <SourceProxy name="SplineDrivenImageSlicer" class="vtkSplineDrivenImageSlicer" label="Spline Driven Image Slicer">
          <Documentation
                        long_help=""
                        short_help="">

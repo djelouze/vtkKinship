@@ -5,7 +5,7 @@ IF (USE_VTK_FILE)
 ENDIF (USE_VTK_FILE)
 
 ADD_EXECUTABLE( StraightenedCurvedPlanarReformation StraightenedCurvedPlanarReformation.cxx )
-TARGET_LINK_LIBRARIES( StraightenedCurvedPlanarReformation vtkKinshipFilters vtkCommon vtkIO )
+TARGET_LINK_LIBRARIES( StraightenedCurvedPlanarReformation vtkSDIS vtkCommon vtkIO )
 
-ADD_EXECUTABLE( SplineDrivenImageReslice SplineDrivenImageReslice.cxx )
-TARGET_LINK_LIBRARIES( SplineDrivenImageReslice vtkKinshipFilters vtkCommon vtkIO )
+ADD_EXECUTABLE( SplineDrivenImageSlicer SplineDrivenImageSlicer.cxx )
+TARGET_LINK_LIBRARIES( SplineDrivenImageSlicer vtkSDIS vtkCommon vtkIO )
