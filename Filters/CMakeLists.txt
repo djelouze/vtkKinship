@@ -4,12 +4,12 @@ IF (VTK_FOUND)
   INCLUDE(${USE_VTK_FILE})
 ENDIF (VTK_FOUND)
 
-FILE(GLOB SRC_VTKSDIR_FILTERS *.cxx *.h)
+FILE(GLOB SRC_VTKSDIS_FILTERS *.cxx *.h)
 
-ADD_LIBRARY( vtkKinshipFilters SHARED ${SRC_VTKSDIR_FILTERS} )
+ADD_LIBRARY( vtkSDIS SHARED ${SRC_VTKSDIS_FILTERS} )
 
 TARGET_LINK_LIBRARIES( 
-                       vtkSDIR
+                       vtkSDIS
                        vtkFiltering 
                        vtkRendering 
                        vtkGraphics 

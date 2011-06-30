@@ -9,14 +9,14 @@ SET( PLUGINS_SRCS
 
   # Use the ADD_PARAVIEW_PLUGIN macro to build a plugin
  ADD_PARAVIEW_PLUGIN(
-   pvSDIR          #<--Name for the plugin
+   pvSDIS          #<--Name for the plugin
   "1.0"                        #<--Version string
    SERVER_MANAGER_XML FrenetSerretFrame.xml
                       SplineDrivenImageSlicer.xml
    SERVER_MANAGER_SOURCES ${PLUGINS_SRCS}
  )
 
-TARGET_LINK_LIBRARIES( pvSDIR vtkSDIR )
+TARGET_LINK_LIBRARIES( pvSDIS vtkSDIS )
 
 #------------------------------------------------------------------
 
