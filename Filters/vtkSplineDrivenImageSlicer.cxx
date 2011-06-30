@@ -250,8 +250,8 @@ int vtkSplineDrivenImageSlicer::RequestData(
          // -> 2nd column is B = T^N
          for ( int comp = 0; comp < 3; comp++ )
          {
-            resliceAxes->SetElement(0,comp,normal[comp]);
-            resliceAxes->SetElement(1,comp,crossProduct[comp]);
+            resliceAxes->SetElement(0,comp,crossProduct[comp]);
+            resliceAxes->SetElement(1,comp,normal[comp]);
             resliceAxes->SetElement(2,comp,tangent[comp]);
 
             origin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0
