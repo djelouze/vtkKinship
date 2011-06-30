@@ -1,4 +1,4 @@
-PROJECT (vtkKinship)
+PROJECT (VTKSDIR)
 
 ### The following are needed to avoid warnings. See CMake doc. ######
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
@@ -8,26 +8,26 @@ cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 #####################################################################
 
-SET (LIBRARY_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+SET (LIBRARY_OUTPUT_PATH ${VTKSDIR_BINARY_DIR}/bin
      CACHE 
      PATH
      "Single output directory for building all libraries.")
 
-SET (EXECUTABLE_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+SET (EXECUTABLE_OUTPUT_PATH ${VTKSDIR_BINARY_DIR}/bin
      CACHE
      PATH
      "Single output directory for building all executables.")
      
 INCLUDE_DIRECTORIES (${LIBRARY_OUTPUT_PATH})
 INCLUDE_DIRECTORIES (${EXECUTABLE_OUTPUT_PATH})
-INCLUDE_DIRECTORIES (${vtkKinship_SOURCE_DIR}/Filters)
+INCLUDE_DIRECTORIES (${VTKSDIR_SOURCE_DIR}/Filters)
 
 MARK_AS_ADVANCED(
    LIBRARY_OUTPUT_PATH
    EXECUTABLE_OUTPUT_PATH
 )
 
-SUBDIRS(
+ADD_SUBDIRECTORY(
   Filters 
 )
 
@@ -36,7 +36,7 @@ OPTION( BUILD_DOCUMENTATION
         OFF )
 
 OPTION( BUILD_PARAVIEW_PLUGINS
-        "Build paraview plugin (filters and sources)"
+        "Build paraview plugin"
         OFF )
 
 OPTION( BUILD_TESTS
@@ -49,20 +49,20 @@ OPTION( BUILD_EXAMPLES
 
 
 IF( BUILD_DOCUMENTATION )
-   SUBDIRS(Documentation)
+   ADD_SUBDIRECTORY(Documentation)
 ENDIF( BUILD_DOCUMENTATION )
 
 IF( BUILD_PARAVIEW_PLUGINS)
-   SUBDIRS(Plugins)
+   ADD_SUBDIRECTORY(Plugins)
 ENDIF( BUILD_PARAVIEW_PLUGINS)
 
 IF( BUILD_TESTS)
    ENABLE_TESTING()
    INCLUDE(Dart)
-   SUBDIRS(Tests)
+   ADD_SUBDIRECTORY(Tests)
 ENDIF( BUILD_TESTS )
 
 IF( BUILD_EXAMPLES )
-   SUBDIRS(Examples)
+   ADD_SUBDIRECTORY(Examples)
 ENDIF( BUILD_EXAMPLES )
 
