@@ -40,6 +40,7 @@ int main( int argc, char** argv )
    reslicer->SetPathConnection(pathReader->GetOutputPort());
    reslicer->SetSliceExtent( 250,200 );
    reslicer->SetSliceSpacing( 0.2,0.1 );
+   reslicer->SetSliceThickness( 0.4 );
    
    // Get number of input points
    int nbPoints = pathReader->GetOutput( )->GetNumberOfPoints();
