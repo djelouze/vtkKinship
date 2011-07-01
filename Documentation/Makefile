@@ -25,9 +25,11 @@ ${NAME}.ps: ${NAME}.dvi
 	dvips -o ${NAME}.ps ${NAME}.dvi
 
 
-${NAME}.pdf: ${NAME}.ps
-	ps2pdf ${NAME}.ps
-
+${NAME}.pdf: ${NAME}.tex
+	pdflatex ${NAME}.tex
+	bibtex ${NAME}
+	pdflatex ${NAME}.tex
+	pdflatex ${NAME}.tex
 
 ${NAME}.bbl: ${BIBTEXDATABASENAME}.bib ${NAME}.aux
 	bibtex ${NAME}
