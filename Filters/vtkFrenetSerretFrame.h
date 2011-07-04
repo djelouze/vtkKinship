@@ -61,7 +61,13 @@ public:
     vtkSetMacro( ConsistentNormals, int );
     vtkGetMacro( ConsistentNormals, int );
 
-    //! Define the inclination of the consistent normals. Radian value.
+    //! If yes, computes the cross product between Tangent and Normal to get
+    //! the binormal vector.
+    vtkBooleanMacro( ComputeBinormal, int );
+    vtkSetMacro( ComputeBinormal, int );
+    vtkGetMacro( ComputeBinormal, int );
+
+   //! Define the inclination of the consistent normals. Radian value.
     vtkSetMacro( ViewUp, double );
     vtkGetMacro( ViewUp, double );
 
@@ -110,6 +116,7 @@ private:
     vtkFrenetSerretFrame(const vtkFrenetSerretFrame&);  // Not implemented.
     void operator=(const vtkFrenetSerretFrame&);  // Not implemented.
 
+    int ComputeBinormal; //!< If 1, a Binormal array is added to the output
     int ConsistentNormals; //!< Boolean. If 1, successive normals are computed
     //!< in smooth manner.
     //!< \see ComputeConsistentNormalVectors

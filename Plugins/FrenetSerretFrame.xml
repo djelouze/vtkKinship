@@ -29,6 +29,18 @@
 
             </Documentation>
          </IntVectorProperty>
+         <IntVectorProperty
+                           name="ComputeBinormal"
+                           command="SetComputeBinormal"
+                           number_of_elements="1"
+                           default_values="1"
+                           animateable="0">
+            <BooleanDomain name="boolean"/>
+            <Documentation>
+
+            </Documentation>
+         </IntVectorProperty>
+
 
          <DoubleVectorProperty
                               name="ViewUp"

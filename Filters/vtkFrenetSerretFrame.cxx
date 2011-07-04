@@ -34,6 +34,7 @@ vtkStandardNewMacro(vtkFrenetSerretFrame);
 vtkFrenetSerretFrame::vtkFrenetSerretFrame( )
 {
     this->ConsistentNormals = 1;
+    this->ComputeBinormal = 1;
     this->ViewUp = 0;
 }
 
@@ -76,6 +77,12 @@ int vtkFrenetSerretFrame::RequestData(
     normals->SetNumberOfTuples( input->GetNumberOfPoints( ) );
     normals->SetName("FSNormals");
 
+    vtkDoubleArray* binormals = vtkDoubleArray::New( );
+    binormals->SetNumberOfComponents( 3 );
+    binormals->SetNumberOfTuples( input->GetNumberOfPoints( ) );
+    binormals->SetName("FSBinormals");
+
+
     vtkCellArray* lines = output->GetLines( );
     lines->InitTraversal();
     vtkIdType nbPoints;
@@ -102,9 +109,10 @@ int vtkFrenetSerretFrame::RequestData(
 
         for( int i = 0 ; i<nbPoints; i++)
         {
+            double normal[3];
             if( !this->ConsistentNormals || i == 0)
             {
-                double tangentLast[3], tangentNext[3], normal[3];
+                double tangentLast[3], tangentNext[3];
                 if( i == 0 )
                     tangents->GetTuple( points[i], tangentLast);
                 else
@@ -119,14 +127,12 @@ int vtkFrenetSerretFrame::RequestData(
                 if( this->ConsistentNormals )
                     this->RotateVector( normal, tangentLast, this->ViewUp );
 
-                vtkMath::Normalize( normal );
-                normals->SetTuple(points[i],normal);
             }
 
             if( this->ConsistentNormals && i != 0)
             {
 
-                double tangent[3], lastNormal[3], normal[3];
+                double tangent[3], lastNormal[3];
                 normals->GetTuple(points[i-1],lastNormal);
                 tangents->GetTuple(points[i],tangent);
 
@@ -134,17 +140,28 @@ int vtkFrenetSerretFrame::RequestData(
                                                       lastNormal,
                                                       normal );
 
-                vtkMath::Normalize( normal );
-                normals->SetTuple(points[i],normal);
+            }
+            vtkMath::Normalize( normal );
+            normals->SetTuple(points[i],normal);
+
+            if( this->ComputeBinormal == 1 )
+            {
+               double tangent[3], binormal[3];
+               tangents->GetTuple( points[i], tangent );
+               vtkMath::Cross( tangent, normal, binormal );
+               binormals->SetTuple( points[i], binormal );
             }
         }
     }
 
     output->GetPointData( )->AddArray( normals );
     output->GetPointData( )->AddArray( tangents );
+    if( this->ComputeBinormal == 1 )
+       output->GetPointData( )->AddArray( binormals );
+
     normals->Delete( );
     tangents->Delete( );
-
+    binormals->Delete( );
     return 1;
 }
 
