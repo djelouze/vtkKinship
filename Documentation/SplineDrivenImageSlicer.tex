@@ -10,6 +10,7 @@
 
 \usepackage[dvips]{graphicx}
 \usepackage{subfigure}
+\usepackage{amssymb}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -107,9 +108,7 @@ In VTK, different ways are possible, depending on the particular slicing needed
 by the end-user. The simplest is vtkExtractVOI if the desired slice is parallel
 to the input image axes. This method is used in ParaView in the Slice 
 Representation. The most sophisticated is the vtkImageReslice filter in which
-the cutting plane may be oriented arbitraly in the volume space. Though these
-filter are able to resample from 3D to 3D, this work focus on 2D slicing from
-3D images.
+the cutting plane may be oriented arbitraly in the volume space. 
 
 The algorithm presented here aims at computing the slicing orientation of a
 vtkImageReslice filter directly from an input spline curve. This orientation
@@ -120,11 +119,51 @@ visualisation is presented, as well as an implementation of the Straightened
 Curved Planar Reformation in vascular imaging.
 %
 \section{Frenet-Serret frame along a curve}
-\cite{FRE52, SER51}
+Frenet \cite{FRE52} and Serret \cite{SER51} defined independently several
+properties on non degenerate curves from the euclidean space. Though the 
+Frenet--Serret formulas aim to describe moving particles, they may be of
+interest for defining local charts in a 3D space. 
 %
 \subsection{Initial definition}
 %
+Let $\mathcal{C}$ be a continuous differentiable curve in the euclidean space
+$\mathbb{R}^3$ parameterized by $t$. Each point of $\mathcal{C}$ has $(x,y,z)$
+coordinates. The Frenet--Serret frame of $\mathcal{C}$ at $t$ is made of the 
+tangent $T$, normal $N$ and binormal $B$ unit vectors with:
+\begin{eqnarray}
+T(t) &=& \frac{d\mathcal{C}(t)}{dt}\label{eq:tangent}\\
+N(t) &=& \frac{dT(t)}{dt}\label{eq:normal}\\
+B(t) &=& T(t)\times N(t)\label{eq:binormal}
+\end{eqnarray}
+%
+Figure~\ref{fig:frenet-serret_frames} shows such frames along a closed curve
+in $3D$-space. It is important to note that equations~\eqref{eq:tangent}--\eqref{eq:binormal}
+define a set of charts without taking into account the curvature and torsion of
+the curve. 
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{Images/frenet-serret_frames}
+\caption{Frenet-Serret frames along a curve: Tangents $T$ are green arrows,
+Normals $N$ are red and Binormals $B$ are yellow.}
+\label{fig:frenet-serret_frames}
+\end{figure}
+%
 \subsection{Coherent consecutive normals computation}
+%
+The normals of a curve have the property to be directed according to the 
+center of curvature. A corollary is that at each change of the sign of 
+curvature, the normal will flip. Figure~\ref{fig:sin_normals:fs} illustrates
+this behaviour.
+%
+\begin{figure}
+\subfigure[Frenet--Serret frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{fig:sin_normals:fs}}
+\subfigure[Enforcing consistent direction of normals]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_consistent}\label{fig:sin_normals:consistent}}
+\caption{Normals of a curve. (a) The mathematical definition of normal induces
+a change of orientation of the normal. The point where curvature is $0$ has 
+null normal. (b) Arbitrary enforcing normals orientation brings consistency
+along the curve.}
+\end{figure}
 %
 \section{Image slicing}
 %
@@ -134,7 +173,9 @@ Curved Planar Reformation in vascular imaging.
 %
 \subsection{Parameters}
 %
-\section{Applications}
+\section{Straightened Curved Planar Reformation}
+%
+\cite{KAN01}
 %
 \subsection{Dental panoramic visualisation}
 \begin{figure}
@@ -147,8 +188,7 @@ Curved Planar Reformation in vascular imaging.
 \includegraphics[width=0.8\textwidth]{Images/pano_paraview.png}
 \end{figure}
 %
-\subsection{Straightened Curved Planar Reformation}
-\cite{KAN01}
+\subsection{}
 
 %
 \section{Software Requirements}
