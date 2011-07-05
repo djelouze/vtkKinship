@@ -139,7 +139,9 @@ B(t) &=& T(t)\times N(t)\label{eq:binormal}
 Figure~\ref{fig:frenet-serret_frames} shows such frames along a closed curve
 in $3D$-space. It is important to note that equations~\eqref{eq:tangent}--\eqref{eq:binormal}
 define a set of charts without taking into account the curvature and torsion of
-the curve. 
+the curve. In the following, only discrete curves are concerned. Central
+differences are used to compute derivatives, constant padding is used at
+boundaries and curvilinear abscissae $t$ becomes a discrete point index $k$.
 %
 \begin{figure}
 \centering
@@ -152,9 +154,9 @@ Normals $N$ are red and Binormals $B$ are yellow.}
 \subsection{Coherent consecutive normals computation}
 %
 The normals of a curve have the property to be directed according to the 
-center of curvature. A corollary is that at each change of the sign of 
-curvature, the normal will flip. Figure~\ref{fig:sin_normals:fs} illustrates
-this behaviour.
+center of curvature. A corollary is that when the curvature changes its sign,
+the normal will flip. Figure~\ref{fig:sin_normals:fs} illustrates this 
+behaviour.
 %
 \begin{figure}
 \subfigure[Frenet--Serret frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{fig:sin_normals:fs}}
@@ -164,6 +166,46 @@ a change of orientation of the normal. The point where curvature is $0$ has
 null normal. (b) Arbitrary enforcing normals orientation brings consistency
 along the curve.}
 \end{figure}
+%
+As the purpose of this paper is to propose a volume slicer along a spline, the
+consequence will be an annoying flip of two consecutive image slices at 
+inflection points. In order to avoid that, the previous normal $N_{k-1}$ is
+used to determine the current one $N_k$. The main idea is to find a projection 
+of $N_{k-1}$ in the plane orthogonal to $\mathcal{C}$ at $k$. This projection
+is obtained thanks to the cascaded cross product:
+%
+\begin{eqnarray}
+B_k &=& N_{k-1} \times T_k \label{eq:consistent_binormal}\\ 
+N_k &=& T_k \times B_k \label{eq:consistent_normal}
+\end{eqnarray}
+%
+where $T_k$ is the tangent at point $k$. In 
+equation~\eqref{eq:consistent_binormal}, $B_k$ represents a consistent binormal
+regarding the previous one. It is not the binormal \textit{stricto sensus} as
+it is computed from the previous consistent normal $N_{k-1}$, which is in turn
+not the derivative of $T$ but defined in equation~\eqref{eq:consistent_normal}.
+
+Figure~\ref{fig:sin_normals:consistent} shows that the consistent normals are
+not changing their orientation at inflection points. Moreover, at the exact
+inflection point, the consistent normal is not null as opposed to the 
+conventional computation (figure~\ref{fig:sin_normals:fs}).
+%
+\subsection{VTK implementation}
+%
+The Frenet-Serret frame computation along a spline is implemented in a class
+\verb!vtkFrenetSerretFrame! that inherits from \verb!vtkPolyDataAlgorithm!.
+The input has to be a \verb!vtkPolyData! containing at least one polyline. The 
+output is a deep copy of the input plus two (optionnaly three) vector arrays, 
+\verb!FSTangents! and \verb!FSNormals! (optionnally \verb!FSBinormals!). The
+consistent computation is an option \verb!ConsistentNormalsOn/Off!.
+
+According to the formulation of consistent normal vectors, they are not related
+to curvature anymore. It also implies that the initial direction will be used
+as a reference for the next normals. This initial direction can be arbitrary
+set through the \verb!ViewUp! option.
+
+This filter is available in ParaView by setting \verb!BUILD_PARAVIEW_PLUGIN! to
+\verb!ON! during the CMake process.
 %
 \section{Image slicing}
 %
