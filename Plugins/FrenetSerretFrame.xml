@@ -47,6 +47,7 @@
                               command="SetViewUp"
                               number_of_elements="1"
                               default_values="0">
+               <DoubleRangeDomain name="range" min="0" max="6.28"/> 
                <Documentation>
 
             </Documentation>
