@@ -155,6 +155,7 @@ int vtkSplineDrivenImageSlicer::RequestData(
    // Compute the local normal and tangent to the path
    this->localFrenetFrames->SetInput( pathCopy );
    this->localFrenetFrames->SetViewUp( this->Incidence );
+   this->localFrenetFrames->ComputeBinormalOn();
    this->localFrenetFrames->Update( );
 
    // path will contain PointData array "Tangents" and "Vectors"
@@ -199,11 +200,10 @@ int vtkSplineDrivenImageSlicer::RequestData(
          double normal[3];
          pathNormals->GetTuple( ptId, normal );
 
-	 
-	 
-         // the Frenet-Serret chart is made of T, N and B = T ^ N
-         double crossProduct[3];
-         vtkMath::Cross( tangent, normal, crossProduct );
+         vtkDoubleArray* pathBinormals = static_cast<vtkDoubleArray*>
+                                  (path->GetPointData( )->GetArray( "FSBinormals" ));
+         double binormal[3];
+         pathBinormals->GetTuple( ptId, binormal );
 
 	 // Build the plane output that will represent the slice location in 3D view
 	 vtkSmartPointer<vtkPlaneSource> plane = vtkSmartPointer<vtkPlaneSource>::New( );
@@ -214,8 +214,8 @@ int vtkSplineDrivenImageSlicer::RequestData(
 	 for( int comp = 0; comp < 3; comp ++)
 	 {
 	   planeOrigin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0 
-                                            - crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
-	   planePoint1[comp] = planeOrigin[comp] + crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0];
+                                            - binormal[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
+	   planePoint1[comp] = planeOrigin[comp] + binormal[comp]*this->SliceExtent[0]*this->SliceSpacing[0];
 	   planePoint2[comp] = planeOrigin[comp] + normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1];
 	 }
 	 plane->SetOrigin(planeOrigin);
@@ -250,12 +250,12 @@ int vtkSplineDrivenImageSlicer::RequestData(
          // -> 2nd column is B = T^N
          for ( int comp = 0; comp < 3; comp++ )
          {
-            resliceAxes->SetElement(0,comp,crossProduct[comp]);
+            resliceAxes->SetElement(0,comp,binormal[comp]);
             resliceAxes->SetElement(1,comp,normal[comp]);
             resliceAxes->SetElement(2,comp,tangent[comp]);
 
             origin[comp] = center[comp] - normal[comp]*this->SliceExtent[1]*this->SliceSpacing[1]/2.0
-                               - crossProduct[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
+                               - binormal[comp]*this->SliceExtent[0]*this->SliceSpacing[0]/2.0;
          }
 
          //! Transform the origin in the homogeneous coordinate space. 
