@@ -159,6 +159,7 @@ the normal will flip. Figure~\ref{fig:sin_normals:fs} illustrates this
 behaviour.
 %
 \begin{figure}
+\centering
 \subfigure[Frenet--Serret frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{fig:sin_normals:fs}}
 \subfigure[Enforcing consistent direction of normals]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_consistent}\label{fig:sin_normals:consistent}}
 \caption{Normals of a curve. (a) The mathematical definition of normal induces
@@ -209,11 +210,85 @@ This filter is available in ParaView by setting \verb!BUILD_PARAVIEW_PLUGIN! to
 %
 \section{Image slicing}
 %
+The algorithm that extracts a 2D slice from a volume harnesses the previous
+\verb!vtkFrenetSerretFrame! filter and the native VTK filter 
+\verb!vtkImageReslice!. Both are connected and embedded in 
+\verb!vtkSplineDrivenImageSlicer!, the latter offering an interface for the
+formers' parameters.
+%
 \subsection{Inputs}
+%
+Port 0 of \verb!vtkSplineDrivenImageSlicer! is a vtkImageData port. It will be
+processed by the internal \verb!vtkImageReslice! filter.
+
+Port 1 is vtkPolyData port. The polydata must contain one or more polylines and
+will serve the input of the internal \verb!vtkFrenetSerretFrame! filter.
+%
+\subsection{Parameters}
+%
+The parameters of \verb!vtkSplineDrivenImageSlicer! are related to the two main
+algorithms. Table~\ref{tab:parameters} summarizes these parameters.
+%
+\begin{table}
+\centering
+ \begin{tabular}{lp{10cm}}
+Name & Description \\
+\hline
+SliceExtent & Number of pixels in $x$ and $y$ of the output slice \\
+SliceSpacing & Size of pixels in $x$ and $y$ of the output slice \\
+SliceThickness & z-Spacing of the output slice, useful if appending the output to other slices \\
+\hline
+OffsetLine & Index of the cell in the \verb!Lines! input along which to extract the slice \\
+OffsetPoint & Index of the point in the selected spline input that will represent the center of the output slice \\
+Incidence & Correspond to the \verb!ViewUp! parameter of the \verb!vtkFrenetSerretFrame! filter \\
+\hline
+ProbeInput & Specify if the filter should or not probe the input data on the output plane 
+ \end{tabular}
+\caption{List of parameters of vtkSplineDrivenImageSlicer }
+\label{tab:parameters}
+\end{table}
 %
 \subsection{Outputs}
 %
-\subsection{Parameters}
+This algorithm provides two output ports. Output port 0 is a 
+\verb!vtkImageData! representing a slice of the input volume, orthogonal to the
+input spline at the specified location (OffsetLine and OffsetPoint). Image 
+extent is $[0, SliceExtent[0], 0, SliceExtent[1], 0, 1]$. Image spacing is 
+$[SliceSpacing[0], SliceSpacing[1], SliceThickness]$. An additional output
+is provided on output port 1 with the geometry of the slice plane.
+It is a \verb!vtkPolyData! representing a grid with same resolution and size as
+the output slice but oriented and centered in $\mathbb{R}^3$ according to the 
+parameters,the spline and the Frenet-Serret frame. The option 
+\verb!ProbeInput! allows for probing the input volume with this grid.
+%
+\subsection{ParaView plugin}
+%
+A ParaView plugin is possibly built to enable the 
+\verb!vtkSplineDrivenImageSlicer!. The \verb!OffsetPoint! parameter is
+animateable as well as the \verb!Incidence! parameter. For illustration, the
+DICOM data INCISIX from Osirix website \cite{OSIRIX,INCISIX} are sliced along
+a manually traced spline. The data represent a mandibule, the spline is chosen
+to go through the teeth (figure~\ref{fig:mandibule_spline}). 
+Figure~\ref{fig:mandibule_slices} have been obtained by connecting two 
+spline-driven slicers to the volume and the spline (\verb!spline2.vtp!).
+%
+\begin{figure}
+\centering
+\subfigure[Volume rendering]{\includegraphics[width=0.45\textwidth]{Images/mandibule_spline-3d}}
+\subfigure[Axial slice]{\includegraphics[width=0.45\textwidth]{Images/mandibule_spline-2d}}
+\caption{Visualization from ParaView of a mandibule CT scan and a spline}
+\label{fig:mandibule_spline}
+\end{figure}
+%
+\begin{figure}
+\centering
+\subfigure[Volume rendering]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset150}}
+\subfigure[Volume rendering]{\includegraphics[width=0.5\textwidth]{Images/mandibule_2_slicers-3d}}
+\subfigure[Axial slice]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset350}}
+\caption{Visualization from ParaView of a mandibule CT scan and a spline}
+\label{fig:mandibule_slices}
+\end{figure}
+%
 %
 \section{Straightened Curved Planar Reformation}
 %
