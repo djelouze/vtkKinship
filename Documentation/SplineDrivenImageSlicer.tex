@@ -253,13 +253,16 @@ ProbeInput & Specify if the filter should or not probe the input data on the out
 %
 This algorithm provides two output ports. Output port 0 is a 
 \verb!vtkImageData! representing a slice of the input volume, orthogonal to the
-input spline at the specified location (OffsetLine and OffsetPoint). Image 
-extent is $[0, SliceExtent[0], 0, SliceExtent[1], 0, 1]$. Image spacing is 
-$[SliceSpacing[0], SliceSpacing[1], SliceThickness]$. An additional output
+input spline at the specified location (\verb!OffsetLine! and 
+\verb!OffsetPoint!). Image 
+extent is $[0, \verb!SliceExtent![0], 0, \verb!SliceExtent![1], 0, 1]$. 
+Image spacing is 
+$[\verb!SliceSpacing![0], \verb!SliceSpacing![1], \verb!SliceThickness!]$. 
+An additional output
 is provided on output port 1 with the geometry of the slice plane.
 It is a \verb!vtkPolyData! representing a grid with same resolution and size as
 the output slice but oriented and centered in $\mathbb{R}^3$ according to the 
-parameters,the spline and the Frenet-Serret frame. The option 
+parameters, the spline and the Frenet-Serret frame. The option 
 \verb!ProbeInput! allows for probing the input volume with this grid.
 %
 \subsection{ParaView plugin}
@@ -275,18 +278,19 @@ spline-driven slicers to the volume and the spline (\verb!spline2.vtp!).
 %
 \begin{figure}
 \centering
-\subfigure[Volume rendering]{\includegraphics[width=0.45\textwidth]{Images/mandibule_spline-3d}}
-\subfigure[Axial slice]{\includegraphics[width=0.45\textwidth]{Images/mandibule_spline-2d}}
+\subfigure[Volume rendering]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-3d}}
+\subfigure[Axial slice]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-2d}}
 \caption{Visualization from ParaView of a mandibule CT scan and a spline}
 \label{fig:mandibule_spline}
 \end{figure}
 %
 \begin{figure}
 \centering
-\subfigure[Volume rendering]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset150}}
-\subfigure[Volume rendering]{\includegraphics[width=0.5\textwidth]{Images/mandibule_2_slicers-3d}}
-\subfigure[Axial slice]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset350}}
-\caption{Visualization from ParaView of a mandibule CT scan and a spline}
+\subfigure[Slice at 150th point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset150}}
+\subfigure[Volume rendering with slice planes]{\includegraphics[width=0.5\textwidth]{Images/mandibule_2_slicers-3d}}
+\subfigure[Slice at 350th point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset350}}
+\caption{Two slices of dimension $200\times200$, spacing $0.1\times0.1$ and
+incidence $2\pi/3$}
 \label{fig:mandibule_slices}
 \end{figure}
 %
