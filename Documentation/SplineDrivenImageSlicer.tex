@@ -137,7 +137,8 @@ B(t) &=& T(t)\times N(t)\label{eq:binormal}
 \end{eqnarray}
 %
 Figure~\ref{fig:frenet-serret_frames} shows such frames along a closed curve
-in $3D$-space. It is important to note that equations~\eqref{eq:tangent}--\eqref{eq:binormal}
+in $3D$-space. It is important to note that
+equations~\eqref{eq:tangent}--\eqref{eq:binormal}
 define a set of charts without taking into account the curvature and torsion of
 the curve. In the following, only discrete curves are concerned. Central
 differences are used to compute derivatives, constant padding is used at
@@ -160,8 +161,12 @@ behaviour.
 %
 \begin{figure}
 \centering
-\subfigure[Frenet--Serret frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{fig:sin_normals:fs}}
-\subfigure[Enforcing consistent direction of normals]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_consistent}\label{fig:sin_normals:consistent}}
+\subfigure[Frenet--Serret
+frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{
+fig:sin_normals:fs}}
+\subfigure[Enforcing consistent direction of
+normals]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_consistent}
+\label{fig:sin_normals:consistent}}
 \caption{Normals of a curve. (a) The mathematical definition of normal induces
 a change of orientation of the normal. The point where curvature is $0$ has 
 null normal. (b) Arbitrary enforcing normals orientation brings consistency
@@ -237,13 +242,18 @@ Name & Description \\
 \hline
 SliceExtent & Number of pixels in $x$ and $y$ of the output slice \\
 SliceSpacing & Size of pixels in $x$ and $y$ of the output slice \\
-SliceThickness & z-Spacing of the output slice, useful if appending the output to other slices \\
+SliceThickness & z-Spacing of the output slice, useful if appending the output
+to other slices \\
 \hline
-OffsetLine & Index of the cell in the \verb!Lines! input along which to extract the slice \\
-OffsetPoint & Index of the point in the selected spline input that will represent the center of the output slice \\
-Incidence & Correspond to the \verb!ViewUp! parameter of the \verb!vtkFrenetSerretFrame! filter \\
+OffsetLine & Index of the cell in the \verb!Lines! input along which to extract
+the slice \\
+OffsetPoint & Index of the point in the selected spline input that will
+represent the center of the output slice \\
+Incidence & Correspond to the \verb!ViewUp! parameter of the
+\verb!vtkFrenetSerretFrame! filter \\
 \hline
-ProbeInput & Specify if the filter should or not probe the input data on the output plane 
+ProbeInput & Specify if the filter should or not probe the input data on the
+output plane 
  \end{tabular}
 \caption{List of parameters of vtkSplineDrivenImageSlicer }
 \label{tab:parameters}
@@ -253,11 +263,12 @@ ProbeInput & Specify if the filter should or not probe the input data on the out
 %
 This algorithm provides two output ports. Output port~0 is a 
 \verb!vtkImageData! representing a slice of the input volume, orthogonal to the
-input spline at the specified location (\verb!OffsetLine! and 
+input spline at the specified location $p$ (\verb!OffsetLine! and 
 \verb!OffsetPoint!). Image 
 extent is $[0, \verb!SliceExtent![0], 0, \verb!SliceExtent![1], 0, 1]$. 
 Image spacing is 
-$[\verb!SliceSpacing![0], \verb!SliceSpacing![1], \verb!SliceThickness!]$. 
+$[\verb!SliceSpacing![0], \verb!SliceSpacing![1], \verb!SliceThickness!]$. The
+image is centered on $p$.
 An additional output
 is provided on output port~1 with the geometry of the slice plane.
 It is a \verb!vtkPolyData! representing a grid with same resolution and size as
@@ -278,17 +289,22 @@ spline-driven slicers to the volume and the spline (\verb!spline2.vtp!).
 %
 \begin{figure}
 \centering
-\subfigure[Volume rendering]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-3d}}
-\subfigure[Axial slice]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-2d}}
+\subfigure[Volume
+rendering]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-3d}}
+\subfigure[Axial
+slice]{\includegraphics[width=0.35\textwidth]{Images/mandibule_spline-2d}}
 \caption{Visualization from ParaView of a mandibule CT scan and a spline}
 \label{fig:mandibule_spline}
 \end{figure}
 %
 \begin{figure}
 \centering
-\subfigure[Slice at 150th point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset150}}
-\subfigure[Volume rendering with slice planes]{\includegraphics[width=0.5\textwidth]{Images/mandibule_2_slicers-3d}}
-\subfigure[Slice at 350th point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset350}}
+\subfigure[Slice at 150th
+point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset150}}
+\subfigure[Volume rendering with slice
+planes]{\includegraphics[width=0.5\textwidth]{Images/mandibule_2_slicers-3d}}
+\subfigure[Slice at 350th
+point]{\includegraphics[width=0.24\textwidth]{Images/mandibule_slicer_offset350}}
 \caption{Two slices of dimension $200\times200$, spacing $0.1\times0.1$ and
 incidence $2\pi/3$}
 \label{fig:mandibule_slices}
@@ -296,29 +312,68 @@ incidence $2\pi/3$}
 %
 \section{Straightened Reformatted Volume}
 %
+The previous spline-driven volume slicer outputs $2D$ images that share the same
+geometric properties (dimensions and pixel size) despite the position of the
+slice planes along the curve. It allows a concatenation of successive images
+into a single, reformatted volume. This new volume will have $X$ and $Y$
+dimensions equal to the slice extent, whereas the $Z$ dimension is the number of
+points of the curve. Though the voxel $x$ and $y$ spacings are automatically
+deducted from the slicer parameters, the $z$-spacing has to be specified. It
+makes sense to give a $z$-spacing equal to the sampling size of the spline. 
+
+This process tends to unfold the input volume along the spline. It is strongly
+related to the Straightened Curved Planar Reformation presented in
+\cite{KAN02.1}. Indeed, the latter is a subset of the reformatted volume that
+we will called Straightened Reformatted Volume (SRV) in the following.
+
 
 %
 \subsection{Dental panoramic visualisation}
+%
+A common practice in dental care is the dental panoramic X-ray exploration. It
+is a 2D projection of the mooth tissue and teeth modulated by their
+radio-opacity. Another practice takes advantage of the computed tomography from
+which a volume of the head can be obtained. However, the naturally carved aspect
+of the mandible makes it difficult to explore the dataset in 3D. The proposed 
+SRV is able to keep the 3D information while virtually deploying the teeth in a
+unique plane.
+%
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{Images/pano_blender.png}
-\caption{3D rendering with \textit{Blender} of a volume obtained after appending all the orthogonal slices of dataset INCISIX.}
+\caption{Surface rendering of an SRV extracted from the dataset INCISIX.}
 \label{fig:pano_blender}
 \end{figure}
 %
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{Images/pano_paraview.png}
-\caption{Visualization of a X--Z slice from a stack of X--Y spline--driven image slices}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{Images/pano_paraview_MIP.png}
-\caption{MIP of the Straightened Reformatted Volume}
-\end{figure}
+
+In figure~\ref{fig:pano_blender}, the INCISIX dataset is sliced orthogonally to
+the spline showed in figure~\ref{fig:mandibule_spline} at each point. The slices
+are appended on the $Z$-axis, thus building a Straightened Reformatted Volume.
+For visualisation purposes, the SRV is thresholded and a contour filter is
+applied. Finally, this surface is rendered in Blender.
 %
 \subsection{Straightened Curved Planar Reformation}
-\cite{KAN01}
+%
+In the proposed implementation, the slices are centered on the spline points. A
+direct consequence is that the $X$--$Z$ slice taken at $Y=dimension_Y/2$ from a
+Straightened Reformatted Volume is strictly equivalent to the Straightened
+Curved Planar Reformation used in \cite{KAN02.1} for vessels visualisation.
+Moreover, slicing in the SRV on $Y$ adds the possibility to explore boundary
+structures \ref{fig:sacpr:pano_paraview}.
+
+Finally, the SRV can be represented as MIP (Maximum Intensity Projection), 
+giving a visualisation close to the usual X-ray dental panoramic.
+%
+\begin{figure}
+\centering
+\subfigure[X--Z middle slice of an
+SRV]{\includegraphics[width=0.8\textwidth]{Images/pano_paraview.png}\label{fig:sacpr:pano_paraview}}\\
+\subfigure[MIP rendering of an
+SRV]{\includegraphics[width=0.8\textwidth]{Images/pano_paraview_MIP.png}\label{fig:sacpr:pano_paraview_MIP}}
+\caption{Different visualisations of a Straightened Reformatted Volume in a
+Straightened Curved Planar Reformation manner}
+\label{fig:sacpr}
+\end{figure}
 %
 \section{Software Requirements}
 %
