@@ -92,26 +92,30 @@ reconstructed while the second one is the spline which tangent vector is used as
 slicing plane normal. The first output is a 2D image resliced from the volume.
 The second input gives the geometric information of the slice plane location in
 the volume space. An example of use is given through a simulation of a dental
-panoramic view from a MDCT volume. A straightened curved planar reformation is
-also applied on vascular images.
+panoramic view from a MDCT volume.
 \end{abstract}
 
 \IJhandlenote{\IJhandlerIDnumber}
 
 \tableofcontents
 %
+\section*{Introduction}
+%
 Slicing through volume data is a common task in scientific visualization. Lots
 of existing image processing tools provide this necessary functionality as soon
 as the visualization of 3D (or more) data has to be performed on a 2D screen.
 
 In VTK, different ways are possible, depending on the particular slicing needed
-by the end-user. The simplest is vtkExtractVOI if the desired slice is parallel
+by the end-user. The simplest is \verb|vtkExtractVOI| if the desired slice is
+parallel
 to the input image axes. This method is used in ParaView in the Slice 
-Representation. The most sophisticated is the vtkImageReslice filter in which
+Representation. The most sophisticated is the \verb|vtkImageReslice| filter in
+which
 the cutting plane may be oriented arbitraly in the volume space. 
 
 The algorithm presented here aims at computing the slicing orientation of a
-vtkImageReslice filter directly from an input spline curve. This orientation
+\verb|vtkImageReslice| filter directly from an input spline curve. This
+orientation
 is defined as the Frenet-Serret frame at each point of the spline. In the 
 following, a Frenet-Serret variant is proposed in order for the spline tangents
 to be used as slice plane normals. An application on mandibule panoramic 
@@ -162,10 +166,10 @@ behaviour.
 \begin{figure}
 \centering
 \subfigure[Frenet--Serret
-frames]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_fs}\label{
-fig:sin_normals:fs}}
+frames]{\includegraphics[width=0.49\textwidth]{Images/sin_normals_fs}
+\label{fig:sin_normals:fs}}
 \subfigure[Enforcing consistent direction of
-normals]{\includegraphics[width=0.5\textwidth]{Images/sin_normals_consistent}
+normals]{\includegraphics[width=0.49\textwidth]{Images/sin_normals_consistent}
 \label{fig:sin_normals:consistent}}
 \caption{Normals of a curve. (a) The mathematical definition of normal induces
 a change of orientation of the normal. The point where curvature is $0$ has 
@@ -222,16 +226,16 @@ The algorithm that extracts a 2D slice from a volume harnesses the previous
 \verb!vtkSplineDrivenImageSlicer!, the latter offering an interface for the
 formers' parameters.
 %
-\subsection{Inputs}
+\subsection{Inputs and parameters}
 %
-Port 0 of \verb!vtkSplineDrivenImageSlicer! is a vtkImageData port. It will be
+Input port 0 of \verb!vtkSplineDrivenImageSlicer! is a \verb|vtkImageData| port.
+It will be
 processed by the internal \verb!vtkImageReslice! filter.
 
-Port 1 is vtkPolyData port. The polydata must contain one or more polylines and
+Input port 1 is a \verb|vtkPolyData| port. The polydata must contain one or more
+polylines and
 will serve the input of the internal \verb!vtkFrenetSerretFrame! filter.
-%
-\subsection{Parameters}
-%
+
 The parameters of \verb!vtkSplineDrivenImageSlicer! are related to the two main
 algorithms. Table~\ref{tab:parameters} summarizes these parameters.
 %
@@ -255,7 +259,7 @@ Incidence & Correspond to the \verb!ViewUp! parameter of the
 ProbeInput & Specify if the filter should or not probe the input data on the
 output plane 
  \end{tabular}
-\caption{List of parameters of vtkSplineDrivenImageSlicer }
+\caption{List of parameters of \texttt{vtkSplineDrivenImageSlicer} }
 \label{tab:parameters}
 \end{table}
 %
@@ -281,8 +285,9 @@ parameters, the spline and the Frenet-Serret frame. The option
 A ParaView plugin is possibly built to enable the 
 \verb!vtkSplineDrivenImageSlicer!. The \verb!OffsetPoint! parameter is
 animateable as well as the \verb!Incidence! parameter. For illustration, the
-DICOM data INCISIX from Osirix website \cite{OSIRIX,INCISIX} are sliced along
-a manually traced spline. The data represent a mandibule, the spline is chosen
+DICOM dataset INCISIX from Osirix website \cite{OSIRIX,INCISIX} is sliced along
+a manually traced spline. As the data represent a mandibule, the spline is
+chosen
 to go through the teeth (figure~\ref{fig:mandibule_spline}). 
 Figure~\ref{fig:mandibule_slices} have been obtained by connecting two 
 spline-driven slicers to the volume and the spline (\verb!spline2.vtp!).
@@ -350,7 +355,11 @@ In figure~\ref{fig:pano_blender}, the INCISIX dataset is sliced orthogonally to
 the spline showed in figure~\ref{fig:mandibule_spline} at each point. The slices
 are appended on the $Z$-axis, thus building a Straightened Reformatted Volume.
 For visualisation purposes, the SRV is thresholded and a contour filter is
-applied. Finally, this surface is rendered in Blender.
+applied. Finally, this surface is rendered in Blender. The provided code
+includes
+an example ``StraightenedReformattedVolume.cxx'' that computes an SRV from an
+input volume (format \verb!vti!) and an input spline (format \verb!vtp!).
+
 %
 \subsection{Straightened Curved Planar Reformation}
 %
@@ -359,10 +368,11 @@ direct consequence is that the $X$--$Z$ slice taken at $Y=dimension_Y/2$ from a
 Straightened Reformatted Volume is strictly equivalent to the Straightened
 Curved Planar Reformation used in \cite{KAN02.1} for vessels visualisation.
 Moreover, slicing in the SRV on $Y$ adds the possibility to explore boundary
-structures \ref{fig:sacpr:pano_paraview}.
+structures (figure \ref{fig:sacpr:pano_paraview}).
 
 Finally, the SRV can be represented as MIP (Maximum Intensity Projection), 
-giving a visualisation close to the usual X-ray dental panoramic.
+giving a visualisation close to the usual X-ray dental panoramic
+(figure \ref{fig:sacpr:pano_paraview_MIP}).
 %
 \begin{figure}
 \centering
@@ -377,20 +387,39 @@ Straightened Curved Planar Reformation manner}
 %
 \section{Software Requirements}
 %
+The provided code has been successfully built with ParaView git master branch
+and the corresponding version of VTK at the time of submission. System was
+Linux, Fedora-14-x86\_64.
+%
 \section{Conclusion}
 %
+In this paper, a new VTK class that computes Frenet-Serret frames along curves
+was proposed. A deviation from the strict mathematical definition was performed
+in order to avoid a curvature sign-dependent orientation of the normals. This
+constraint was defined as ``consistent normals computation''.
+
+These consistent Frenet-Serret frames were then used to slice an input volume
+along a given spline, yielding a spline-driven image reslice algorithm. It was
+applied on a CT of a mandibule in the ParaView GUI. It was shown that appending
+successive 2D slices along a spline produce a new volume called ``Straightened
+Reformatted Volume'' (SRV). This SRV includes the straightened curved planar
+reformation found in the literature.
+
+Despite the dental-exclusive application shown here, the vascular visualisation
+softwares should benefit from this algorithm. The transformation of each slice
+could be memorized in the output volume, so that a user could explore the SRV
+while having the localisation information in the original volume.
 %
 \appendix
-
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %  Insert the bibliography using BibTeX
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%
 \bibliographystyle{plain}
 \bibliography{references}
-
-
+%
 \end{document}
 
