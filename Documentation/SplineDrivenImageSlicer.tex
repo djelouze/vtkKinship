@@ -107,20 +107,18 @@ as the visualization of 3D (or more) data has to be performed on a 2D screen.
 
 In VTK, different ways are possible, depending on the particular slicing needed
 by the end-user. The simplest is \verb|vtkExtractVOI| if the desired slice is
-parallel
-to the input image axes. This method is used in ParaView in the Slice 
+parallel to the input image axes. This method is used in ParaView in the Slice
 Representation. The most sophisticated is the \verb|vtkImageReslice| filter in
-which
-the cutting plane may be oriented arbitraly in the volume space. 
+which the cutting plane may be oriented arbitraly in the volume space. It
+enables the well-known Multi-Planar Reconstruction( MPR) visualisation.
 
 The algorithm presented here aims at computing the slicing orientation of a
 \verb|vtkImageReslice| filter directly from an input spline curve. This
-orientation
-is defined as the Frenet-Serret frame at each point of the spline. In the 
-following, a Frenet-Serret variant is proposed in order for the spline tangents
-to be used as slice plane normals. An application on mandibule panoramic 
-visualisation is presented, as well as an implementation of the Straightened
-Curved Planar Reformation in vascular imaging.
+orientation is defined as the Frenet-Serret frame at each point of the spline.
+In the following, a Frenet-Serret variant is proposed in order for the spline
+tangents to be used as slice plane normals. An application on mandibule
+panoramic visualisation is presented, along with an extension to a Straightened
+Reformatted Volume rendering.
 %
 \section{Frenet-Serret frame along a curve}
 Frenet \cite{FRE52} and Serret \cite{SER51} defined independently several
@@ -131,8 +129,8 @@ interest for defining local charts in a 3D space.
 \subsection{Initial definition}
 %
 Let $\mathcal{C}$ be a continuous differentiable curve in the euclidean space
-$\mathbb{R}^3$ parameterized by $t$. Each point of $\mathcal{C}$ has $(x,y,z)$
-coordinates. The Frenet--Serret frame of $\mathcal{C}$ at $t$ is made of the 
+$\mathbb{R}^3$ parameterized by $t$. The Frenet--Serret frame of $\mathcal{C}$
+at $t$ is made of the 
 tangent $T$, normal $N$ and binormal $B$ unit vectors with:
 \begin{eqnarray}
 T(t) &=& \frac{d\mathcal{C}(t)}{dt}\label{eq:tangent}\\
@@ -396,13 +394,13 @@ constraint was defined as ``consistent normals computation''.
 These consistent Frenet-Serret frames were then used to slice an input volume
 along a given spline, yielding a spline-driven image reslice algorithm. It was
 applied on a CT of a mandibule in the ParaView GUI. It was shown that appending
-successive 2D slices along a spline produce a new volume called ``Straightened
+successive 2D slices along a spline produces a new volume called ``Straightened
 Reformatted Volume'' (SRV). This SRV includes the straightened curved planar
 reformation found in the literature.
 
 Despite the dental-exclusive application shown here, the vascular visualisation
-softwares should benefit from this algorithm. The transformation of each slice
-could be memorized in the output volume, so that a user could explore the SRV
+softwares should benefit from this algorithm. Another improvement could be to 
+memorized the transformation of each slice, so that a user could explore the SRV
 while having the localisation information in the original volume.
 %
 \appendix
