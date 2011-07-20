@@ -20,37 +20,59 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "vtkFrenetSerretFrame.h"
+#include <vtkFrenetSerretFrame.h>
 
-#include "vtkXMLPolyDataReader.h"
-#include "vtkMetaImageReader.h"
-#include "vtkXMLPolyDataWriter.h"
-#include "vtkSmartPointer.h"
+#include <vtkDoubleArray.h>
+#include <vtkPointData.h>
+#include <vtkPoints.h>
+#include <vtkCellArray.h>
+#include <vtkMath.h>
+#include <vtkSmartPointer.h>
+
+int TestArray( vtkPolyDataAlgorithm* algo,const char* name )
+{
+   vtkDoubleArray* array = 0x0;
+   array = static_cast<vtkDoubleArray*>(algo->GetOutput()->GetPointData()->GetArray( name ));
+   if( !array )
+      return( EXIT_FAILURE );
+   if( array->GetValueRange(0)[0] != -1 ) // Range of X component
+      return( EXIT_FAILURE );
+
+   if( array->GetValueRange(0)[1] != 1 )
+      return( EXIT_FAILURE );
+
+   return( EXIT_SUCCESS );
+}
 
 int main(int argc, char** argv )
 {
-    if( argc == 1)
+    // Generate a circle:
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New( );
+    vtkSmartPointer<vtkCellArray> line = vtkSmartPointer<vtkCellArray>::New( );
+    line->InsertNextCell( 360 );
+    vtkIdType ptId;
+    for( int i = 0; i < 360; i++)
     {
-       cout << "\ttestFrenetSerretFrame [spline]"
-            << endl;
-       cout << "[spline] is an xml vtkPolyData file" << endl;
-       return( 0 );
+       ptId = points->InsertNextPoint( cos( i*2*vtkMath::DoublePi()/360.0 ), sin( i*2*vtkMath::DoublePi()/360.0 ), 0 );
+       line->InsertCellPoint( ptId );
     }
 
-    vtkSmartPointer<vtkXMLPolyDataReader> splineReader;
-    splineReader = vtkSmartPointer<vtkXMLPolyDataReader>::New( );
-    splineReader->SetFileName( argv[1] );
- 
+
+    vtkSmartPointer<vtkPolyData> circle = vtkSmartPointer<vtkPolyData>::New( );
+    circle->SetLines( line );
+    circle->SetPoints( points );
+    
+    // tested object
     vtkSmartPointer<vtkFrenetSerretFrame> frenetSerretFilter;
     frenetSerretFilter = vtkSmartPointer<vtkFrenetSerretFrame>::New( );
     
-    frenetSerretFilter->SetInputConnection( splineReader->GetOutputPort( ) );
+    frenetSerretFilter->SetInput( circle );
     frenetSerretFilter->Update( );
 
-    vtkSmartPointer<vtkXMLPolyDataWriter> splineWriter;
-    splineWriter = vtkSmartPointer<vtkXMLPolyDataWriter>::New( );
-    splineWriter->SetFileName( "output.vtp"  );
-    splineWriter->SetInputConnection( frenetSerretFilter->GetOutputPort() );
-    splineWriter->Write( );
-    
+    // Roughly check the result
+    if( TestArray( frenetSerretFilter, "FSTangents" ) == EXIT_FAILURE )
+        return( EXIT_FAILURE );
+
+    return( EXIT_SUCCESS );
 }
+

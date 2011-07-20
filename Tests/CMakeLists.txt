@@ -8,10 +8,28 @@ ADD_EXECUTABLE( testFrenetSerretFrame testFrenetSerretFrame.cxx
               )
 TARGET_LINK_LIBRARIES( 
                        testFrenetSerretFrame
-                       vtkKinshipFilters
+                       vtkSDIS
                        vtkFiltering 
                        vtkRendering 
                        vtkGraphics 
                        vtkImaging 
                        vtkHybrid
                      )
+
+ADD_TEST( testFrenetSerretFrame ${EXECUTABLE_OUTPUT_PATH}/testFrenetSerretFrame )
+
+ADD_EXECUTABLE( testSplineDriveImageSlicer testSplineDriveImageSlicer.cxx
+              )
+TARGET_LINK_LIBRARIES( 
+                       testSplineDriveImageSlicer
+                       vtkSDIS
+                       vtkFiltering 
+                       vtkRendering 
+                       vtkGraphics 
+                       vtkImaging 
+                       vtkHybrid
+                     )
+
+ADD_TEST( testSplineDriveImageSlicer ${EXECUTABLE_OUTPUT_PATH}/testSplineDriveImageSlicer )
+
+
