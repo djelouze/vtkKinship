@@ -132,7 +132,7 @@ void vtkImageEigenElementsExecute(vtkImageEigenElements *self,
     vtkIdType outInc0, outInc1, outInc2;
     T *inPtr0, *inPtr1, *inPtr2;
     double *outPtr0, *outPtr1, *outPtr2;
-    int numComps, outIdxC;
+    int numComps;
 
 
     // The extent of the whole input image

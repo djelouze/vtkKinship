@@ -84,7 +84,7 @@ int vtkImageMomentKernelSource::RequestInformation (
 
 //----------------------------------------------------------------------------
 int vtkImageMomentKernelSource::RequestData(
-  vtkInformation* vtkNotUsed(request),
+  vtkInformation* request,
   vtkInformationVector** vtkNotUsed(inputVector),
   vtkInformationVector* outputVector)
 {
@@ -133,7 +133,7 @@ int vtkImageMomentKernelSource::RequestData(
   outInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),extent);
   
   data->SetExtent(extent);
-  data->AllocateScalars();
+  data->AllocateScalars(request);
   outPtr = static_cast<double*>(data->GetScalarPointerForExtent(extent));
 
   if (data->GetScalarType() != VTK_DOUBLE)

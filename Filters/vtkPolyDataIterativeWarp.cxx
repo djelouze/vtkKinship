@@ -68,7 +68,7 @@ void vtkPolyDataIterativeWarp::Reset( vtkInformationVector** inputVector )
    inMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
 
    // Prepare the internal pipeline
-   this->BrownianPoints->SetInput( this->GetCachedInput() );
+   this->BrownianPoints->SetInputData( this->GetCachedInput() );
    this->WarpFilter->SetInputConnection( this->BrownianPoints->GetOutputPort( ) );
    // Set the IterativeOutput as the output of the warpfilter. Next iteration
    // will begin by a DeepCopy of this Output to the CachedInput

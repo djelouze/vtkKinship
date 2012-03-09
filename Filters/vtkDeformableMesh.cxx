@@ -82,8 +82,8 @@ void vtkDeformableMesh::Reset( vtkInformationVector** inputVector )
    
    cachedImage->ShallowCopy( inputImage );
    
-   this->ProbeFilter->SetInput( this->GetCachedInput() );
-   this->ProbeFilter->SetSource( cachedImage );
+   this->ProbeFilter->SetInputData( this->GetCachedInput() );
+   this->ProbeFilter->SetSourceData( cachedImage );
 
    cachedImage->Delete( );
    

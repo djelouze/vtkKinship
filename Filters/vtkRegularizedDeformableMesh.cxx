@@ -84,9 +84,9 @@ void vtkRegularizedDeformableMesh::Reset( vtkInformationVector** inputVector )
    vtkSmartPointer<vtkImageData> cachedImage = vtkSmartPointer<vtkImageData>::New( );
    cachedImage->ShallowCopy( inputImage );
    
-   this->ProbeFilter->SetInput( this->GetCachedInput() );
+   this->ProbeFilter->SetInputData( this->GetCachedInput() );
    this->ProbeFilter->SetInputArrayToProcess( 0, inImageInfo ); 
-   this->ProbeFilter->SetSource( cachedImage );
+   this->ProbeFilter->SetSourceData( cachedImage );
 
    this->RegularizationFilter
        ->SetInputArrayToProcess( 0, this->ProbeFilter

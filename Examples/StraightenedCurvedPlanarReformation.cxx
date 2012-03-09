@@ -50,7 +50,7 @@ int main( int argc, char** argv )
      tempSlice = vtkSmartPointer<vtkImageData>::New();
      tempSlice->DeepCopy( reslicer->GetOutput( 0 ));
      
-     append->AddInput( tempSlice );
+     append->AddInputData( tempSlice );
    }
    append->SetAppendAxis(2);
    append->Update( );

@@ -135,7 +135,7 @@ int vtkPolyDataToBinaryImage::RequestData(
     shallowInput->ShallowCopy( input );
 
 
-    this->polyDataToImageStencil->SetInput( shallowInput );
+    this->polyDataToImageStencil->SetInputData( shallowInput );
     this->imageStencilToImage->SetInputConnection(
         this->polyDataToImageStencil->GetOutputPort());
     this->imageStencilToImage->Update( );

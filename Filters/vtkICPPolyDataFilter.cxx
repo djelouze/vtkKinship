@@ -110,7 +110,7 @@ int vtkICPPolyDataFilter::RequestData(vtkInformation *vtkNotUsed(request),
   vtkSmartPointer<vtkTransformPolyDataFilter> TransformFilter;
   TransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
   
-  TransformFilter->SetInput( shallowSource );
+  TransformFilter->SetInputData( shallowSource );
   TransformFilter->SetTransform(this->Transform);
   TransformFilter->Update();
 

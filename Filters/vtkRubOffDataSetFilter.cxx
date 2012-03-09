@@ -109,7 +109,7 @@ int vtkRubOffDataSetFilter::RequestData(
      
      // For each output points ...
      vtkIdType nbOfTargetedPoints = output->GetNumberOfPoints();
-     double point[3], closestSourcePoint[3];
+     double point[3];
      vtkIdType sourcePointId;
      for( vtkIdType pointId = 0; pointId < nbOfTargetedPoints ; pointId++ )
      {
@@ -229,6 +229,7 @@ int vtkRubOffDataSetFilter::RequestInformation(
                inInfo->Get(
                  vtkStreamingDemandDrivenPipeline::MAXIMUM_NUMBER_OF_PIECES()));
 
+return( 1 );
 }
 
 //----------------------------------------------------------------------------

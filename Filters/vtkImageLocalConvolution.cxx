@@ -210,7 +210,7 @@ void vtkImageLocalConvolutionExecute(vtkImageLocalConvolution *self,
      tempExtent[comp*2]= imageExtent[comp*2] + kernelMiddle[comp] + 1;
      tempExtent[comp*2 + 1] = imageExtent[comp*2 + 1] - kernelMiddle[comp] - 1;
   }
-  image->SetUpdateExtent( tempExtent );
+  //image->SetUpdateExtent( tempExtent );
   
   // Prepare output
   vtkPoints *outPoints = vtkPoints::New( );
@@ -343,7 +343,7 @@ void vtkImageLocalConvolutionExecute(vtkImageLocalConvolution *self,
    
    // The image has been temporarily shrinked for handling of boundaries.
    // Now get back to the original extent.
-   image->SetUpdateExtent( imageExtent );
+   //image->SetUpdateExtent( imageExtent );
    
    // output has new points and data.
    output->SetPoints( outPoints );

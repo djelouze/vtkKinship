@@ -68,7 +68,7 @@ int vtkThickTubeFilter::RequestData(
    // Inner tube setup
    vtkSmartPointer<vtkTubeFilter> innerTubeFilter;
    innerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
-   innerTubeFilter->SetInput( shallowInput );
+   innerTubeFilter->SetInputData( shallowInput );
    innerTubeFilter->SetRadius( this->InnerRadius );
    innerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    innerTubeFilter->CappingOff( );
@@ -76,7 +76,7 @@ int vtkThickTubeFilter::RequestData(
    // Outer tube setup
    vtkSmartPointer<vtkTubeFilter> outerTubeFilter;
    outerTubeFilter = vtkSmartPointer<vtkTubeFilter>::New( );
-   outerTubeFilter->SetInput( shallowInput );
+   outerTubeFilter->SetInputData( shallowInput );
    outerTubeFilter->SetRadius( this->OuterRadius );
    outerTubeFilter->SetNumberOfSides( this->NumberOfSides );
    outerTubeFilter->CappingOff( );

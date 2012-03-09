@@ -99,7 +99,7 @@ int vtkSmoothPolyDataVectors::RequestData(
    }
 
    // smooth this temp geometry
-   this->SmoothingFilter->SetInput( vectorsToPoints );
+   this->SmoothingFilter->SetInputData( vectorsToPoints );
    this->SmoothingFilter->Update( );
 
    vtkPolyData* pointsToVectors = this->SmoothingFilter->GetOutput( );

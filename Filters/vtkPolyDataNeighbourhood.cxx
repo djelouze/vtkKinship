@@ -71,8 +71,8 @@ void vtkPolyDataNeighbourhood::BuildNeighbourhood( )
   vtkDebugMacro(<<"Analyzing topology...");
   vtkPolyData* input = vtkPolyData::SafeDownCast( this->GetInput( ) );
 
-  vtkIdType numPts, numCells, i, numPolys, numStrips;
-  int j, k;
+  vtkIdType numPts, i, numPolys, numStrips;
+  int j;
   vtkIdType npts = 0;
   vtkIdType *pts = 0;
   vtkIdType p1, p2;
@@ -163,9 +163,6 @@ void vtkPolyDataNeighbourhood::BuildNeighbourhood( )
     vtkCellArray *polys;
     vtkIdType cellId;
     int numNei, nei, edge;
-    vtkIdType numNeiPts;
-    vtkIdType *neiPts;
-    double normal[3], neiNormal[3];
     vtkIdList *neighbors;
 
     neighbors = vtkIdList::New();
@@ -180,7 +177,7 @@ void vtkPolyDataNeighbourhood::BuildNeighbourhood( )
       { // convert data to triangles
       inMesh->SetStrips(inStrips);
       toTris = vtkTriangleFilter::New();
-      toTris->SetInput(inMesh);
+      toTris->SetInputData(inMesh);
       toTris->Update();
       Mesh = toTris->GetOutput();
       }
