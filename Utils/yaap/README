@@ -1,0 +1,82 @@
+                   #######################################
+                   #     Yet Another Argument Parser     #
+                   #######################################
+
+yaap is an simple command line argument parser in C++. It is released under 
+the simplified BSD licence.
+
+Usage: just include yaap.h - You may want to copy this file where you main 
+function is:
+
+#include <yaap.h>
+
+It defines a namespace 'yaap'. You can then instanciate a Parser by giving 
+posix argument count and argument vector (namely argc, argv):
+
+yaap::Parser parser( argc, argv );
+
+Then build your options layout by adding them to the parser:
+1) Simple options:
+
+yaap::Option* firstOption = parser.AddOption( 'f', "This is the first option");
+
+Where 'f' is the character that defines the option in the command line and "..."
+is a simple description of the effect of this option. You can check the presence
+of the option with:
+firstOption->Exists( );
+It returns true if the option is found somewhere in the argument list.
+These options are introduced by '-' in the command line and can be concatenated
+(Posix specification). For instance, 
+   [shell]$ mycommand -ab -c -xzf
+is equivalent to
+   [shell]$ mycommand -abcxzf
+or
+   [shell]$ mycommand -fzxcba
+or
+   [shell]$ mycommand -f -z -x -c -b -a
+
+2) Options with arguments:
+
+yaap::OptionArg<int> secondOption = parser.AddOptionArg<int>('s', "This is 
+the second option with 2 arguments", 2/*nbsubargs*/, true/*required*/);
+
+Where 's' is the character that defines the option in the command line, "..." is
+a short description of the effect and <int> define the type (integer here) and
+the number (here is 2) of sub-arguments. The Exists() function is available as
+for the simple option, and the argument values are accessible via:
+   int a = secondOption->GetArgument( 0 ); // a = secondOption->GetValue( );
+   int b = secondOption->GetArgument( 1 );
+
+----------------------------------------------------------------------------
+ POSIX Utility Syntax Guidelines
+as found at: http://pubs.opengroup.org/onlinepubs/9699919799/
+
+Guideline 1: # Not a Yaap matter #
+    Utility names should be between two and nine characters, inclusive.
+Guideline 2: # Not a Yaap matter #
+    Utility names should include lowercase letters (the lower character classification) and digits only from the portable character set.
+Guideline 3: # Yaap is compliant #
+    Each option name should be a single alphanumeric character (the alnum character classification) from the portable character set. The -W (capital-W) option shall be reserved for vendor options. Multi-digit options should not be allowed.
+Guideline 4: # Yaap is compliant #
+    All options should be preceded by the '-' delimiter character.
+Guideline 5: # Yaap is compliant #
+    Options without option-arguments should be accepted when grouped behind one '-' delimiter.
+Guideline 6: # Yaap does not allow agregated option and option-argument in the same command line argument #
+    Each option and option-argument should be a separate argument, except as noted in Utility Argument Syntax , item (2).
+Guideline 7: # Yaap is compliant #
+    Option-arguments should not be optional.
+Guideline 8: # Yaap is not compliant : multiple option-arguments are represented as multiple command line arguments #
+    When multiple option-arguments are specified to follow a single option, they should be presented as a single argument, using <comma> characters within that argument or <blank> characters within that argument to separate them.
+Guideline 9: # Yaap is compliant if the '--' is used and allows operand for preceding options #
+    All options should precede operands on the command line.
+Guideline 10: # Yaap is compliant #
+    The first -- argument that is not an option-argument should be accepted as a delimiter indicating the end of options. Any following arguments should be treated as operands, even if they begin with the '-' character.
+Guideline 11: # Yaap allows unordered options, but does not implement repeated and mutual exclusive options behaviour #
+    The order of different options relative to one another should not matter, unless the options are documented as mutually-exclusive and such an option is documented to override any incompatible options preceding it. If an option that has option-arguments is repeated, the option and option-argument combinations should be interpreted in the order specified on the command line.
+Guideline 12: # Yaap is compliant #
+    The order of operands may matter and position-related interpretations should be determined on a utility-specific basis.
+Guideline 13: # Not a Yaap matter #
+    For utilities that use operands to represent files to be opened for either reading or writing, the '-' operand should be used to mean only standard input (or standard output when it is clear from context that an output file is being specified) or a file named -.
+Guideline 14: # Yaap is not compliant #
+    If an argument can be identified according to Guidelines 3 through 10 as an option, or as a group of options without option-arguments behind one '-' delimiter, then it should be treated as such. 
+
