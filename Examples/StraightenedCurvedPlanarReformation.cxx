@@ -3,6 +3,7 @@
 //! \author Jerome Velut
 //! \date February 2011
 
+#include "vtkSplineFilter.h"
 #include "vtkSplineDrivenImageSlicer.h"
 #include "vtkImageAppend.h"
 
@@ -42,6 +43,9 @@ yaap::Option* helpOpt = parser.AddOption('h', "Show this message");
    vtkSmartPointer<vtkXMLPolyDataReader> pathReader;
    pathReader = vtkSmartPointer<vtkXMLPolyDataReader>::New();
    
+   vtkSmartPointer<vtkSplineFilter> splineFilter;
+   splineFilter = vtkSmartPointer<vtkSplineFilter>::New();
+   
    vtkSmartPointer<vtkSplineDrivenImageSlicer> reslicer;
    reslicer = vtkSmartPointer<vtkSplineDrivenImageSlicer>::New();
    
@@ -64,7 +68,10 @@ yaap::Option* helpOpt = parser.AddOption('h', "Show this message");
      spacing[0] = spacingOpt->GetArgument(0);
      spacing[1] = spacingOpt->GetArgument(1);
    }
- 
+   
+  splineFilter->SetSubdivideToLength();
+  splineFilter->SetLength(thickness);
+
    reslicer->SetSliceSpacing( spacing );
    reslicer->SetSliceThickness( thickness );
    reslicer->SetSliceExtent( extent );   
@@ -77,14 +84,18 @@ yaap::Option* helpOpt = parser.AddOption('h', "Show this message");
    
    imgReader->SetFileName(inputImage->GetValue().c_str());
    imgReader->Update();
+   
    pathReader->SetFileName(inputPath->GetValue().c_str());
    pathReader->Update();
    
+   splineFilter->SetInputConnection( pathReader->GetOutputPort());
+   splineFilter->Update();
+
    reslicer->SetInputConnection(imgReader->GetOutputPort() );
-   reslicer->SetPathConnection(pathReader->GetOutputPort());
+   reslicer->SetPathConnection(splineFilter->GetOutputPort());
    
    // Get number of input points
-   int nbPoints = pathReader->GetOutput( )->GetNumberOfPoints();
+   int nbPoints = splineFilter->GetOutput( )->GetNumberOfPoints();
    for( int ptId = 0; ptId < nbPoints; ptId++ )
    {
      reslicer->SetOffsetPoint( ptId );
