@@ -30,7 +30,6 @@
 #include <vtkInformation.h>
 #include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
-#include <lib_proj.h>
 
 vtkCxxRevisionMacro(vtkSymmetricRecursivePolyDataFilter, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkSymmetricRecursivePolyDataFilter);

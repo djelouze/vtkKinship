@@ -15,7 +15,6 @@ SET( PLUGINS_SRCS
                   ../Filters/vtkSmoothPolyDataVectors.cxx
                   ../Filters/vtkFrenetSerretFrame.cxx
                   ../Filters/vtkSplineDrivenImageSlicer.cxx
-                  ../Filters/vtkPolyDataToBinaryImage.cxx
                   ../Filters/vtkImageEigenElements.cxx
                   ../Filters/vtkSymmetricRecursivePolyDataFilter.cxx
                   ../Filters/vtkUVSphereSource.cxx
