@@ -33,7 +33,7 @@ char      type;
 vtkIdList *edges; // connected edges (list of connected point ids)
 } VertexEdge, *VertexEdgePtr;
 
-class VTK_GRAPHICS_EXPORT vtkPolyDataNeighbourhood : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkPolyDataNeighbourhood : public vtkPolyDataAlgorithm
 {
 public:
   vtkTypeRevisionMacro(vtkPolyDataNeighbourhood,vtkPolyDataAlgorithm);

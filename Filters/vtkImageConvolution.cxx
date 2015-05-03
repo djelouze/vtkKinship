@@ -28,7 +28,8 @@
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
-
+#include "vtkDataArray.h"
+	
 vtkCxxRevisionMacro(vtkImageConvolution, "$Revision: 0.1 $");
 vtkStandardNewMacro(vtkImageConvolution);
 

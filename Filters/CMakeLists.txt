@@ -15,9 +15,5 @@ ENDIF( WIN32)
 
 TARGET_LINK_LIBRARIES( 
                        vtkKinshipFilters
-                       vtkFiltering 
-                       vtkRendering 
-                       vtkGraphics 
-                       vtkImaging 
-                       vtkHybrid
+                       ${VTK_LIBRARIES}
                      )
