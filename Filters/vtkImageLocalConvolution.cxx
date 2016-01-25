@@ -33,7 +33,6 @@
 #include "vtkPolyData.h"
 #include "vtkPointSet.h"
 
-vtkCxxRevisionMacro(vtkImageLocalConvolution, "$Revision: 0.1 $");
 vtkStandardNewMacro(vtkImageLocalConvolution);
 
 //----------------------------------------------------------------------------

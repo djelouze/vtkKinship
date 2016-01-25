@@ -31,7 +31,6 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkMath.h"
 
-vtkCxxRevisionMacro(vtkImageEigenElements, "$Revision: 0.1 $");
 vtkStandardNewMacro(vtkImageEigenElements);
 
 //----------------------------------------------------------------------------
@@ -47,6 +46,7 @@ vtkImageEigenElements::vtkImageEigenElements()
     this->inM23 = 0;
     this->inM33 = 0;
     this->SetNumberOfInputPorts( 1 );
+    this->SetNumberOfThreads( 1 );
 }
 
 //----------------------------------------------------------------------------

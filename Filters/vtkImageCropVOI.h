@@ -40,7 +40,7 @@
 class VTK_EXPORT vtkImageCropVOI : public vtkExtractVOI
 {
 public:
-  vtkTypeRevisionMacro(vtkImageCropVOI,vtkExtractVOI);
+  vtkTypeMacro(vtkImageCropVOI,vtkExtractVOI);
   static vtkImageCropVOI* New();
  
   //! Enlarge the VOI 

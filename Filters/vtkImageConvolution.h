@@ -44,7 +44,7 @@ public:
   // Description:
   // Construct an instance of vtkImageConvolution filter.
   static vtkImageConvolution *New();
-  vtkTypeRevisionMacro(vtkImageConvolution,vtkThreadedImageAlgorithm);
+  vtkTypeMacro(vtkImageConvolution,vtkThreadedImageAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   vtkSetStringMacro( OutputDataName );

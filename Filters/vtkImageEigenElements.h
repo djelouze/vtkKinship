@@ -49,7 +49,7 @@ public:
     // Description:
     // Construct an instance of vtkImageEigenElements filter.
     static vtkImageEigenElements *New();
-    vtkTypeRevisionMacro(vtkImageEigenElements,vtkThreadedImageAlgorithm);
+    vtkTypeMacro(vtkImageEigenElements,vtkThreadedImageAlgorithm);
     void PrintSelf(ostream& os, vtkIndent indent);
 
     //! map the input component to the tensor index

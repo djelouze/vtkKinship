@@ -29,7 +29,6 @@
 #include "vtkPolyData.h"
 #include "vtkImageData.h"
 
-vtkCxxRevisionMacro(vtkImageCropVOI, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkImageCropVOI);
 
 vtkImageCropVOI::vtkImageCropVOI()

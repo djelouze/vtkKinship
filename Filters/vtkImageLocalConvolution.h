@@ -45,7 +45,7 @@ class VTK_EXPORT vtkImageLocalConvolution : public vtkPointSetAlgorithm
 public:
   //! Construct an instance of vtkImageLocalConvolution filter.
   static vtkImageLocalConvolution *New();
-  vtkTypeRevisionMacro(vtkImageLocalConvolution,vtkPointSetAlgorithm);
+  vtkTypeMacro(vtkImageLocalConvolution,vtkPointSetAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   //! Get the kernel

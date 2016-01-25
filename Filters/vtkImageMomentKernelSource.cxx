@@ -32,7 +32,6 @@
 #include "vtkDataArray.h"
 #include <math.h>
 
-vtkCxxRevisionMacro(vtkImageMomentKernelSource, "$Revision: 0.1 $");
 vtkStandardNewMacro(vtkImageMomentKernelSource);
 
 //----------------------------------------------------------------------------
@@ -133,7 +132,7 @@ int vtkImageMomentKernelSource::RequestData(
   outInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),extent);
   
   data->SetExtent(extent);
-  data->AllocateScalars(request);
+  data->AllocateScalars(VTK_DOUBLE,10);
   outPtr = static_cast<double*>(data->GetScalarPointerForExtent(extent));
 
   if (data->GetScalarType() != VTK_DOUBLE)

@@ -42,7 +42,7 @@ class VTK_EXPORT vtkImageMomentKernelSource : public vtkImageAlgorithm
 public:
   //! VTK Object factory
   static vtkImageMomentKernelSource *New();
-  vtkTypeRevisionMacro(vtkImageMomentKernelSource,vtkImageAlgorithm);
+  vtkTypeMacro(vtkImageMomentKernelSource,vtkImageAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
   
   //! Set/Get the kernel size. Has to be an odd value
