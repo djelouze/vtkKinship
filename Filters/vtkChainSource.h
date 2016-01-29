@@ -38,7 +38,7 @@ class VTK_EXPORT vtkChainSource : public vtkPolyDataAlgorithm
 {
 public:
     static vtkChainSource *New();
-    vtkTypeRevisionMacro(vtkChainSource,vtkPolyDataAlgorithm);
+    vtkTypeMacro(vtkChainSource,vtkPolyDataAlgorithm);
     void PrintSelf(ostream& os, vtkIndent indent);
 
     // Description:
@@ -56,6 +56,9 @@ public:
         this->SetCellType(1);
     };
 
+    void AddRawPoint( double* pt );
+    void ResetRawPoints();
+
 protected:
     vtkChainSource( );
     ~vtkChainSource() {};
@@ -63,6 +66,7 @@ protected:
     int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
     int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
     vtkPoints* Points;
+    std::vector<double*> rawPoints;
 
 private:
     vtkChainSource(const vtkChainSource&);  // Not implemented.

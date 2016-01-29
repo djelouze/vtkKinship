@@ -32,13 +32,13 @@
 #include "vtkPoints.h"
 #include "vtkPolyData.h"
 
-vtkCxxRevisionMacro(vtkChainSource, "$Revision: 1.48 $");
 vtkStandardNewMacro(vtkChainSource);
 
 vtkChainSource::vtkChainSource()
 {
     this->CellType = 0;
     this->Points = 0;
+    this->rawPoints.clear();
     this->SetNumberOfInputPorts(0);
 }
 
@@ -53,6 +53,22 @@ int vtkChainSource::RequestInformation(
     //             -1);
     return 1;
 }
+
+
+void vtkChainSource::AddRawPoint( double* pt )
+{
+  double* newPt = new double[3];
+  std::memcpy( newPt, pt, 3 * sizeof( double ) );
+  this->rawPoints.push_back( newPt );
+  this->Modified();
+}
+
+void vtkChainSource::ResetRawPoints(  )
+{
+  this->rawPoints.clear();
+  this->Modified();
+}
+
 
 int vtkChainSource::RequestData(
     vtkInformation *vtkNotUsed(request),
@@ -76,14 +92,26 @@ int vtkChainSource::RequestData(
 
     newPoints = vtkPoints::New();
     newLines = vtkCellArray::New();
-    newLines->InsertNextCell( this->Points?this->Points->GetNumberOfPoints():0 );
 
     if( this->Points )
-        for( int id = 0; id < this->Points->GetNumberOfPoints( ); id ++ )//
+    {
+      newLines->InsertNextCell( this->Points->GetNumberOfPoints() );
+      for( int id = 0; id < this->Points->GetNumberOfPoints(); id++ )//
         {
             vtkIdType newId = newPoints->InsertNextPoint(this->Points->GetPoint( id ));
             newLines->InsertCellPoint( newId );
         }
+    }
+
+    if( this->rawPoints.size() > 0 )
+    {
+      newLines->InsertNextCell( static_cast<int>(this->rawPoints.size()) );
+      for( int id = 0; id < this->rawPoints.size(); id++ )//
+      {
+        vtkIdType newId = newPoints->InsertNextPoint( this->rawPoints[id] ) ;
+        newLines->InsertCellPoint( newId );
+      }
+    }
 
     output->SetPoints(newPoints);
     newPoints->Delete();
