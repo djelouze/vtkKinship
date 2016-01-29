@@ -110,10 +110,11 @@ int vtkImageConvolution::RequestInformation(vtkInformation*,
   vtkInformation* kernelInfo = inputVector[1]->GetInformationObject(0);
 
   vtkImageData *inImage = vtkImageData::SafeDownCast( inInfo->Get(vtkDataObject::DATA_OBJECT()));
-  int inNumComps = inImage->GetNumberOfScalarComponents( );
+  int inNumComps = inImage->GetNumberOfScalarComponents(inInfo);
 
   vtkImageData *kernelImage = vtkImageData::SafeDownCast( kernelInfo->Get(vtkDataObject::DATA_OBJECT()));
-  int krnlNumComps = kernelImage->GetNumberOfScalarComponents( );
+  int krnlNumComps = kernelImage->GetNumberOfScalarComponents(kernelInfo);
+
   // Set the number of point data components to the number of
   // components in the convolution kernel times the number of 
   // input components.
