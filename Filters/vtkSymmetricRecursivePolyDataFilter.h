@@ -54,7 +54,7 @@ class SphericSymmetryHelper;
 class VTK_EXPORT vtkSymmetricRecursivePolyDataFilter : public vtkPolyDataAlgorithm
 {
 public:
-    vtkTypeRevisionMacro(vtkSymmetricRecursivePolyDataFilter,vtkPolyDataAlgorithm);
+    vtkTypeMacro(vtkSymmetricRecursivePolyDataFilter,vtkPolyDataAlgorithm);
     //void PrintSelf(ostream& os, vtkIndent indent);
 
     static vtkSymmetricRecursivePolyDataFilter *New();

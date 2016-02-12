@@ -41,7 +41,7 @@ class vtkICPPolyDataFilter : public vtkPolyDataAlgorithm
 {
  public:
   static vtkICPPolyDataFilter *New();
-  vtkTypeRevisionMacro(vtkICPPolyDataFilter, vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkICPPolyDataFilter, vtkPolyDataAlgorithm);
   
   void PrintSelf(ostream &os, vtkIndent indent);
 

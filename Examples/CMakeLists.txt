@@ -1,8 +1,6 @@
 ### Find VTK
-INCLUDE (${CMAKE_ROOT}/Modules/FindVTK.cmake)
-IF (USE_VTK_FILE)
-  INCLUDE(${USE_VTK_FILE})
-ENDIF (USE_VTK_FILE)
+FIND_PACKAGE(VTK)
+INCLUDE(${VTK_USE_FILE})
 
 ADD_EXECUTABLE( IterativeWarp IterativeWarp.cxx )
 TARGET_LINK_LIBRARIES( IterativeWarp vtkKinshipFilters ${VTK_LIBRARIES})

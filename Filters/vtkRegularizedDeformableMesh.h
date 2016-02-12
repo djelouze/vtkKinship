@@ -51,7 +51,7 @@
 class VTK_EXPORT vtkRegularizedDeformableMesh : public vtkIterativePolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkRegularizedDeformableMesh,vtkIterativePolyDataAlgorithm);
+  vtkTypeMacro(vtkRegularizedDeformableMesh,vtkIterativePolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkRegularizedDeformableMesh *New();

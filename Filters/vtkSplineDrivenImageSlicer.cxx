@@ -21,7 +21,6 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 
 
-vtkCxxRevisionMacro(vtkSplineDrivenImageSlicer, "$Revision: 1.31 $");
 vtkStandardNewMacro(vtkSplineDrivenImageSlicer);
 
 vtkSplineDrivenImageSlicer::vtkSplineDrivenImageSlicer( )

@@ -36,7 +36,7 @@ vtkIdList *edges; // connected edges (list of connected point ids)
 class VTK_EXPORT vtkPolyDataNeighbourhood : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkPolyDataNeighbourhood,vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkPolyDataNeighbourhood,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkPolyDataNeighbourhood *New();

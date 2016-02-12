@@ -52,7 +52,7 @@
 class VTK_EXPORT vtkIterativePolyDataAlgorithm : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkIterativePolyDataAlgorithm,vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkIterativePolyDataAlgorithm,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkIterativePolyDataAlgorithm *New();

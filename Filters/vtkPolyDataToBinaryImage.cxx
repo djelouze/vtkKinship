@@ -31,7 +31,6 @@
 #include "vtkAlgorithmOutput.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
-vtkCxxRevisionMacro(vtkPolyDataToBinaryImage, "$Revision: 1.22 $");
 vtkStandardNewMacro(vtkPolyDataToBinaryImage);
 
 vtkPolyDataToBinaryImage::vtkPolyDataToBinaryImage( )

@@ -30,7 +30,6 @@
 #include "vtkObjectFactory.h"
 #include "vtkSmartPointer.h"
 
-vtkCxxRevisionMacro(vtkPolyDataIterativeWarp, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkPolyDataIterativeWarp);
 
 vtkPolyDataIterativeWarp::vtkPolyDataIterativeWarp()

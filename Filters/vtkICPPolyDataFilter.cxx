@@ -32,7 +32,6 @@
 
 
 vtkStandardNewMacro(vtkICPPolyDataFilter);
-vtkCxxRevisionMacro(vtkICPPolyDataFilter, "$Revision$");
 
 
 vtkICPPolyDataFilter::vtkICPPolyDataFilter()

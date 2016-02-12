@@ -29,7 +29,6 @@
 #include "vtkSmartPointer.h"
 #include "vtkPointData.h"
 
-vtkCxxRevisionMacro(vtkSmoothPolyDataVectors, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkSmoothPolyDataVectors);
 
 vtkSmoothPolyDataVectors::vtkSmoothPolyDataVectors()

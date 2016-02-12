@@ -44,7 +44,7 @@ class VTK_EXPORT vtkPolyDataToBinaryImage : public vtkImageAlgorithm
 {
 public:
     static vtkPolyDataToBinaryImage *New();
-    vtkTypeRevisionMacro(vtkPolyDataToBinaryImage, vtkImageAlgorithm);
+    vtkTypeMacro(vtkPolyDataToBinaryImage, vtkImageAlgorithm);
 
 protected:
     vtkPolyDataToBinaryImage();

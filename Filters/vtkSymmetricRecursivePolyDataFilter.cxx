@@ -31,7 +31,6 @@
 #include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
 
-vtkCxxRevisionMacro(vtkSymmetricRecursivePolyDataFilter, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkSymmetricRecursivePolyDataFilter);
 
 class SphericSymmetryHelper

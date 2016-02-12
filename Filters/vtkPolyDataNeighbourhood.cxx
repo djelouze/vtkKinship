@@ -37,7 +37,6 @@
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkTriangleFilter.h"
 
-vtkCxxRevisionMacro(vtkPolyDataNeighbourhood, "$Revision: 1.46 $");
 vtkStandardNewMacro(vtkPolyDataNeighbourhood);
 
 

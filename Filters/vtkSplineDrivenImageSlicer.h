@@ -27,7 +27,7 @@ class vtkImageReslice;
 class VTK_EXPORT vtkSplineDrivenImageSlicer : public vtkImageAlgorithm
 {
 public:
-   vtkTypeRevisionMacro(vtkSplineDrivenImageSlicer,vtkImageAlgorithm);
+   vtkTypeMacro(vtkSplineDrivenImageSlicer,vtkImageAlgorithm);
    static vtkSplineDrivenImageSlicer* New();
 
   //! Specify the path represented by a vtkPolyData wich contains PolyLines

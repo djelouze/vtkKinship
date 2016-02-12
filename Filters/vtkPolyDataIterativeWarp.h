@@ -40,7 +40,7 @@ class vtkBrownianPoints;
 class VTK_EXPORT vtkPolyDataIterativeWarp : public vtkIterativePolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkPolyDataIterativeWarp,vtkIterativePolyDataAlgorithm);
+  vtkTypeMacro(vtkPolyDataIterativeWarp,vtkIterativePolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkPolyDataIterativeWarp *New();

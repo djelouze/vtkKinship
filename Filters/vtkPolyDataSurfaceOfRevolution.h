@@ -37,7 +37,7 @@
 class VTK_EXPORT vtkPolyDataSurfaceOfRevolution : public vtkIterativePolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkPolyDataSurfaceOfRevolution,vtkIterativePolyDataAlgorithm);
+  vtkTypeMacro(vtkPolyDataSurfaceOfRevolution,vtkIterativePolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkPolyDataSurfaceOfRevolution *New();
