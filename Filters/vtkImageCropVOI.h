@@ -37,35 +37,42 @@
 
 #include "vtkExtractVOI.h"
 
+class vtkSphere;
+class vtkCallbackCommand;
+
+
 class VTK_EXPORT vtkImageCropVOI : public vtkExtractVOI
 {
 public:
-  vtkTypeMacro(vtkImageCropVOI,vtkExtractVOI);
+  vtkTypeMacro( vtkImageCropVOI, vtkExtractVOI );
   static vtkImageCropVOI* New();
  
   //! Enlarge the VOI 
   vtkSetMacro( Margin, int );
   vtkGetMacro( Margin, int );
 
-  //! Set the dataset that define the VOI 
-  void SetBoundsConnection(int id, vtkAlgorithmOutput* algOutput);
-  void SetBoundsConnection(vtkAlgorithmOutput* algOutput)
-    {
-      this->SetBoundsConnection(0, algOutput);
-    }
+  //! Set the implicit sphere
+  void SetSphere( vtkSphere* );
 
 protected:
   vtkImageCropVOI();
   ~vtkImageCropVOI();
 
+  vtkSphere* Sphere;
+  int Margin;
+  vtkCallbackCommand* SphereModifiedCommand;
+  static void SphereModifiedCallback(
+    vtkObject *caller, 
+    unsigned long eid, 
+    void *clientdata, 
+    void *calldata);
+
   virtual int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
-  virtual int FillInputPortInformation(int port, vtkInformation *info);
-  
+  virtual int RequestUpdateExtent( vtkInformation *, vtkInformationVector **, vtkInformationVector * );
+ 
 private:
   vtkImageCropVOI(const vtkImageCropVOI&);  // Not implemented.
   void operator=(const vtkImageCropVOI&);  // Not implemented.
-
-  int Margin;
 };
 
 #endif //__VTKIMAGECROPVOI_H__

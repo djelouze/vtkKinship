@@ -119,12 +119,10 @@ int vtkChainSource::RequestData(
     if( this->CellType == 1 )
     {
         output->SetLines(newLines);
-        cout << "Setting topology to line" << endl;
     }
     else
     {
         output->SetVerts(newLines);
-        cout << "Setting topology to vertex" << endl;
     }
 
     newLines->Delete();

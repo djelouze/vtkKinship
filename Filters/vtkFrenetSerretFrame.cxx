@@ -28,7 +28,6 @@
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
 
-vtkCxxRevisionMacro(vtkFrenetSerretFrame, "$Revision: 1.31 $");
 vtkStandardNewMacro(vtkFrenetSerretFrame);
 
 vtkFrenetSerretFrame::vtkFrenetSerretFrame( )

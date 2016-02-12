@@ -26,95 +26,104 @@
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
-#include "vtkPolyData.h"
 #include "vtkImageData.h"
+#include "vtkSphere.h"
+#include "vtkCallbackCommand.h"
+#include "vtkStreamingDemandDrivenPipeline.h"
+
+#include "vtkWin32OutputWindow.h"
 
 vtkStandardNewMacro(vtkImageCropVOI);
 
 vtkImageCropVOI::vtkImageCropVOI()
 {
-   this->SetNumberOfInputPorts( 2 );
    this->Margin = 0;
+   this->Sphere = 0x0;
+   this->SphereModifiedCommand = vtkCallbackCommand::New();
+   this->SphereModifiedCommand->SetClientData( this );
+   this->SphereModifiedCommand->SetCallback( this->SphereModifiedCallback );
+
+   vtkWin32OutputWindow::SafeDownCast( vtkOutputWindow::GetInstance() )->SendToStdErrOn();
 }
 
 
 vtkImageCropVOI::~vtkImageCropVOI()
 {
-
+  this->SphereModifiedCommand->Delete();
 }
 
-
-int vtkImageCropVOI::FillInputPortInformation(int port, vtkInformation *info)
+void vtkImageCropVOI::SetSphere(vtkSphere* s)
 {
-  if( port == 0 )
-     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkImageData");
-  else if( port == 1 )
-     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkDataSet");
-  else
-     return 0;
-  return 1;
+  if( this->Sphere )
+  {
+    this->Sphere->RemoveObservers(vtkCommand::ModifiedEvent, this->SphereModifiedCommand );
+  }
+
+  this->Sphere = s;
+  this->Sphere->AddObserver( vtkCommand::ModifiedEvent, this->SphereModifiedCommand );
+  this->Modified();
 }
 
-void vtkImageCropVOI::SetBoundsConnection(int id, vtkAlgorithmOutput* algOutput)
+void vtkImageCropVOI::SphereModifiedCallback(
+  vtkObject *caller,
+  unsigned long eid,
+  void *clientdata,
+  void *calldata )
 {
-  if (id < 0)
-    {
-    vtkErrorMacro("Bad index " << id << " for source.");
-    return;
-    }
+  vtkImageCropVOI* self = static_cast<vtkImageCropVOI*>(clientdata);
+  self->Modified();
+}
 
-  int numConnections = this->GetNumberOfInputConnections(1);
-  if (id < numConnections)
-    {
-    this->SetNthInputConnection(1, id, algOutput);
-    }
-  else if (id == numConnections && algOutput)
-    {
-    this->AddInputConnection(1, algOutput);
-    }
-  else if (algOutput)
-    {
-    vtkWarningMacro("The source id provided is larger than the maximum "
-                    "source id, using " << numConnections << " instead.");
-    this->AddInputConnection(1, algOutput);
-    }
+int vtkImageCropVOI::RequestUpdateExtent(
+  vtkInformation *request,
+  vtkInformationVector **inputVector,
+  vtkInformationVector *outputVector )
+{
+  vtkInformation *inInfo = inputVector[0]->GetInformationObject( 0 );
+  vtkInformation *outInfo = outputVector->GetInformationObject( 0 );
+  int extent[6];
+  outInfo->Get( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), extent );
+  inInfo->Set( vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), extent, 6 );
+  return(1);
 }
 
 
 int vtkImageCropVOI::RequestInformation(
-  vtkInformation *vtkNotUsed(request),
+  vtkInformation *request,
   vtkInformationVector **inputVector,
   vtkInformationVector *outputVector)
 {
   // get the info objects
   vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
-  vtkInformation *boundsInfo = inputVector[1]->GetInformationObject(0);
+  vtkInformation *outInfo = outputVector->GetInformationObject( 0 );
 
   // get the input and ouptut
-  vtkImageData *input = vtkImageData::SafeDownCast(
-    inInfo->Get(vtkDataObject::DATA_OBJECT()));
-  vtkDataSet *bounds = vtkDataSet::SafeDownCast(
-    boundsInfo->Get(vtkDataObject::DATA_OBJECT()));
+  double spacing[3], origin[3];
+  int wholeExtent[6];
+
+  inInfo->Get( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), wholeExtent );
+  inInfo->Get( vtkDataObject::SPACING(), spacing );
+  inInfo->Get( vtkDataObject::ORIGIN(), origin );
  
   double boundingBox[6];
-  bounds->ComputeBounds( );
-  bounds->GetBounds( boundingBox );
+  double center[3];
+  this->Sphere->GetCenter(center);
+  double radius = this->Sphere->GetRadius();
+  for( int i = 0; i < 3; i++ )
+  {
+    boundingBox[i*2] = center[i] - radius;
+    boundingBox[i*2+1] = center[i] + radius;
+  }
   
-  double spacing[3], origin[3];
-  input->GetSpacing( spacing );
-  input->GetOrigin( origin );
-  
-  int voi[6];
-  for( int comp = 0; comp < 6 ; comp += 2 )
-     voi[comp] = ( boundingBox[comp] - origin[(int)(comp / 2)]  ) / spacing[(int)(comp / 2)] - Margin ;
-  for( int comp = 1; comp < 6 ; comp += 2 )
-     voi[comp] = ( boundingBox[comp] - origin[(int)(comp / 2)] ) / spacing[(int)(comp / 2)] + Margin ;
+  for( int comp = 0; comp < 3; comp++ )
+  {
+    this->VOI[comp * 2] = (boundingBox[comp * 2] - origin[comp]) / spacing[comp] - this->Margin;
+    this->VOI[comp * 2 + 1] = (boundingBox[comp * 2 + 1] - origin[comp]) / spacing[comp] + this->Margin;
+  }
 
-  this->SetVOI( voi );
-
-  vtkInformation* request = 0; // null initialization to avoid warning at build time
-  this->Superclass::RequestInformation( request, inputVector, outputVector );
-  
-  return 1;
+  outInfo->Set( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->VOI,6 );
+  outInfo->Set( vtkDataObject::SPACING(), spacing, 3 );
+  outInfo->Set( vtkDataObject::ORIGIN(), origin, 3 );
+  return(1);
 }
 
