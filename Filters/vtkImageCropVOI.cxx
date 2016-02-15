@@ -31,6 +31,8 @@
 #include "vtkCallbackCommand.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 
+#include <algorithm>
+
 #include "vtkWin32OutputWindow.h"
 
 vtkStandardNewMacro(vtkImageCropVOI);
@@ -81,9 +83,18 @@ int vtkImageCropVOI::RequestUpdateExtent(
 {
   vtkInformation *inInfo = inputVector[0]->GetInformationObject( 0 );
   vtkInformation *outInfo = outputVector->GetInformationObject( 0 );
-  int extent[6];
-  outInfo->Get( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), extent );
-  inInfo->Set( vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), extent, 6 );
+  int inExtent[6], outExtent[6], maxExtent[6];
+  inInfo->Get( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), inExtent );
+  outInfo->Get( vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), outExtent );
+
+  for( int i = 0; i < 3; i++ )
+  {
+    maxExtent[i*2] = std::max( inExtent[i*2], outExtent[i*2] );
+    maxExtent[i*2 + 1] = std::min( inExtent[i*2 + 1], outExtent[i*2 + 1] );
+  }
+
+  inInfo->Set( vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), maxExtent, 6 );
+
   return(1);
 }
 
@@ -112,13 +123,15 @@ int vtkImageCropVOI::RequestInformation(
   for( int i = 0; i < 3; i++ )
   {
     boundingBox[i*2] = center[i] - radius;
-    boundingBox[i*2+1] = center[i] + radius;
+    boundingBox[i*2 + 1] = center[i] + radius;
   }
   
   for( int comp = 0; comp < 3; comp++ )
   {
-    this->VOI[comp * 2] = (boundingBox[comp * 2] - origin[comp]) / spacing[comp] - this->Margin;
-    this->VOI[comp * 2 + 1] = (boundingBox[comp * 2 + 1] - origin[comp]) / spacing[comp] + this->Margin;
+    this->VOI[comp*2] = (boundingBox[comp*2] - origin[comp]) / spacing[comp] - this->Margin;
+    this->VOI[comp*2] = std::max( this->VOI[comp*2], wholeExtent[comp*2] );
+    this->VOI[comp*2 + 1] = (boundingBox[comp*2 + 1] - origin[comp]) / spacing[comp] + this->Margin;
+    this->VOI[comp*2 + 1] = std::min( this->VOI[comp*2 + 1], wholeExtent[comp*2 + 1] );
   }
 
   outInfo->Set( vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->VOI,6 );
