@@ -32,6 +32,8 @@
 #include "vtkPoints.h"
 #include "vtkPolyData.h"
 
+#include <cstring>
+
 vtkStandardNewMacro(vtkChainSource);
 
 vtkChainSource::vtkChainSource()

@@ -30,7 +30,6 @@
 #include "vtkSmartPointer.h"
 #include <vtkMath.h>
 
-vtkCxxRevisionMacro(vtkPolyDataSurfaceOfRevolution, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkPolyDataSurfaceOfRevolution);
 
 vtkPolyDataSurfaceOfRevolution::vtkPolyDataSurfaceOfRevolution()

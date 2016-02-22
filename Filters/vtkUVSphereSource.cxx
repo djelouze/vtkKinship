@@ -15,7 +15,6 @@
 #include <vtkInformationVector.h>
 #include <vtkObjectFactory.h>
 
-vtkCxxRevisionMacro(vtkUVSphereSource, "$Revision: 1.18 $");
 vtkStandardNewMacro(vtkUVSphereSource);
 
 #define PI vtkMath::Pi( )

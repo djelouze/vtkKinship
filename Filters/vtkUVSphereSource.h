@@ -15,7 +15,7 @@ class VTK_EXPORT vtkUVSphereSource : public vtkPolyDataAlgorithm
 {
 public:
   void PrintSelf(ostream& os, vtkIndent indent);
-  vtkTypeRevisionMacro(vtkUVSphereSource,vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkUVSphereSource,vtkPolyDataAlgorithm);
 
  static vtkUVSphereSource *New();
 

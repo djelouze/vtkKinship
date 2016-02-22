@@ -1,8 +1,6 @@
 ### Find VTK
-INCLUDE (${CMAKE_ROOT}/Modules/FindVTK.cmake)
-IF (USE_VTK_FILE)
-  INCLUDE(${USE_VTK_FILE})
-ENDIF (USE_VTK_FILE)
+FIND_PACKAGE(VTK)
+INCLUDE(${VTK_USE_FILE})
 
 ADD_EXECUTABLE( IterativeWarp IterativeWarp.cxx )
 TARGET_LINK_LIBRARIES( IterativeWarp vtkKinshipFilters ${VTK_LIBRARIES})
@@ -15,3 +13,7 @@ TARGET_LINK_LIBRARIES( StraightenedCurvedPlanarReformation vtkKinshipFilters ${V
 
 ADD_EXECUTABLE( SplineDrivenImageSlicer SplineDrivenImageSlicer.cxx )
 TARGET_LINK_LIBRARIES( SplineDrivenImageSlicer vtkKinshipFilters ${VTK_LIBRARIES} )
+
+ADD_EXECUTABLE( DualPolyDataFilter DualPolyDataFilter.cxx )
+TARGET_LINK_LIBRARIES( DualPolyDataFilter vtkKinshipFilters ${VTK_LIBRARIES} )
+

@@ -40,7 +40,7 @@
 class VTK_EXPORT vtkSmoothPolyDataVectors : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkSmoothPolyDataVectors,vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkSmoothPolyDataVectors,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkSmoothPolyDataVectors *New();

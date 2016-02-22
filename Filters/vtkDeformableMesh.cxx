@@ -29,7 +29,6 @@
 
 #include "vtkStructuredGrid.h"
 
-vtkCxxRevisionMacro(vtkDeformableMesh, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkDeformableMesh);
 
 vtkDeformableMesh::vtkDeformableMesh()

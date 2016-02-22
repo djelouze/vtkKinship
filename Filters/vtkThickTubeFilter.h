@@ -46,7 +46,7 @@
 class VTK_EXPORT vtkThickTubeFilter : public vtkPolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkThickTubeFilter,vtkPolyDataAlgorithm);
+  vtkTypeMacro(vtkThickTubeFilter,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkThickTubeFilter *New();

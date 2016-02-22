@@ -27,7 +27,6 @@
 #include "vtkObjectFactory.h"
 #include "vtkSmartPointer.h"
 
-vtkCxxRevisionMacro(vtkRegularizedDeformableMesh, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkRegularizedDeformableMesh);
 
 vtkRegularizedDeformableMesh::vtkRegularizedDeformableMesh()

@@ -1,9 +1,6 @@
 ### Find VTK
 FIND_PACKAGE(VTK)
-
-IF (USE_VTK_FILE)
-  INCLUDE(${USE_VTK_FILE})
-ENDIF (USE_VTK_FILE)
+INCLUDE(${VTK_USE_FILE})
 
 ### Listing of the files used in VesselExtraction
 FILE(GLOB SRC_VTKKINSHIP_FILTERS *.cxx *.h)

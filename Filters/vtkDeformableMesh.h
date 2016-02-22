@@ -48,7 +48,7 @@
 class VTK_EXPORT vtkDeformableMesh : public vtkIterativePolyDataAlgorithm
 {
 public:
-  vtkTypeRevisionMacro(vtkDeformableMesh,vtkIterativePolyDataAlgorithm);
+  vtkTypeMacro(vtkDeformableMesh,vtkIterativePolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static vtkDeformableMesh *New();

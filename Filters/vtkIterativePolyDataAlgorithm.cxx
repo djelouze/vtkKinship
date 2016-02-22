@@ -28,7 +28,6 @@
 #include "vtkObjectFactory.h"
 #include "vtkSmartPointer.h"
 
-vtkCxxRevisionMacro(vtkIterativePolyDataAlgorithm, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkIterativePolyDataAlgorithm);
 
 vtkIterativePolyDataAlgorithm::vtkIterativePolyDataAlgorithm()

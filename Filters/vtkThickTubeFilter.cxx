@@ -31,7 +31,6 @@
 #include "vtkObjectFactory.h"
 #include "vtkSmartPointer.h"
 
-vtkCxxRevisionMacro(vtkThickTubeFilter, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkThickTubeFilter);
 
 vtkThickTubeFilter::vtkThickTubeFilter()
