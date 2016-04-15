@@ -44,8 +44,6 @@ vtkImageCropVOI::vtkImageCropVOI()
    this->SphereModifiedCommand = vtkCallbackCommand::New();
    this->SphereModifiedCommand->SetClientData( this );
    this->SphereModifiedCommand->SetCallback( this->SphereModifiedCallback );
-
-   vtkWin32OutputWindow::SafeDownCast( vtkOutputWindow::GetInstance() )->SendToStdErrOn();
 }
 
 
