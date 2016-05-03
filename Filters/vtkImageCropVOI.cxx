@@ -33,8 +33,6 @@
 
 #include <algorithm>
 
-#include "vtkWin32OutputWindow.h"
-
 vtkStandardNewMacro(vtkImageCropVOI);
 
 vtkImageCropVOI::vtkImageCropVOI()
