@@ -44,6 +44,12 @@ vtkChainSource::vtkChainSource()
     this->SetNumberOfInputPorts(0);
 }
 
+vtkChainSource::~vtkChainSource()
+{
+  this->ResetRawPoints();
+}
+
+
 int vtkChainSource::RequestInformation(
     vtkInformation *vtkNotUsed(request),
     vtkInformationVector **vtkNotUsed(inputVector),
@@ -65,8 +71,17 @@ void vtkChainSource::AddRawPoint( double* pt )
   this->Modified();
 }
 
+std::vector<double*> vtkChainSource::GetRawPoints()
+{
+  return(this->rawPoints);
+}
+
 void vtkChainSource::ResetRawPoints(  )
 {
+  for( double* pt : this->rawPoints )
+  {
+    delete pt;
+  }
   this->rawPoints.clear();
   this->Modified();
 }

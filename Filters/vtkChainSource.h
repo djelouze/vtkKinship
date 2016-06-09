@@ -59,9 +59,11 @@ public:
     void AddRawPoint( double* pt );
     void ResetRawPoints();
 
+    std::vector<double*> GetRawPoints();
+
 protected:
     vtkChainSource( );
-    ~vtkChainSource() {};
+    ~vtkChainSource();
 
     int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
     int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
