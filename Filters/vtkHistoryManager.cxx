@@ -9,7 +9,8 @@ vtkStandardNewMacro(vtkHistoryManager);
 
 vtkHistoryManager::vtkHistoryManager()
 {
-   this->CurrentOutput = -1;
+  this->SetNumberOfInputPorts( 0 );
+  this->CurrentOutput = -1;
 }
 
 
@@ -19,13 +20,19 @@ void vtkHistoryManager::PrintSelf(ostream& os, vtkIndent indent)
   os << indent << "CurrentOutput: " << this->CurrentOutput << endl;
 }
 
-//---------------------------------------------------------------------------
-int vtkHistoryManager::FillInputPortInformation(int port, vtkInformation *info)
+
+
+void vtkHistoryManager::AddInput( vtkPolyData* newInput )
 {
-  if( port == 0 ) // input mesh port
-     info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkPolyData");
-  return 1;
+  vtkSmartPointer<vtkPolyData> localNewInput;
+  localNewInput = vtkSmartPointer<vtkPolyData>::New();
+  localNewInput->Register( this );
+  localNewInput->DeepCopy( newInput );
+  this->Inputs.push_back( localNewInput );
+  this->CurrentOutput = this->Inputs.size() - 1;
+  this->Modified();
 }
+
 
 void vtkHistoryManager::ResetInputs()
 {
@@ -34,6 +41,7 @@ void vtkHistoryManager::ResetInputs()
     mesh->Delete();
   }
   this->Inputs.clear();
+  this->CurrentOutput = -1;
 }
 
 int vtkHistoryManager::RequestData(
@@ -42,28 +50,16 @@ int vtkHistoryManager::RequestData(
   vtkInformationVector *outputVector)
 {
    // get the info objects
-   vtkInformation *inMeshInfo = inputVector[0]->GetInformationObject(0);
    vtkInformation *outMeshInfo = outputVector->GetInformationObject(0);
 
-   vtkPolyData* inputMesh = vtkPolyData::SafeDownCast(
-    inMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
    vtkPolyData* outputMesh = vtkPolyData::SafeDownCast(
     outMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-   if( this->CurrentOutput == -1 )
-   {
-     vtkSmartPointer<vtkPolyData> newInput;
-     newInput = vtkSmartPointer<vtkPolyData>::New();
-     newInput->Register( this );
-     newInput->DeepCopy( inputMesh );
-     this->Inputs.push_back( newInput );
-     outputMesh->ShallowCopy( inputMesh );
-     this->CurrentOutput = this->Inputs.size() - 1;
-   }
-   else
+   if( this->CurrentOutput < this->Inputs.size() && this->CurrentOutput >= 0)
    {
      outputMesh->ShallowCopy( this->Inputs[this->CurrentOutput] );
    }
+
 
 
    return( 1 );

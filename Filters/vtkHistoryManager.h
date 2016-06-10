@@ -16,6 +16,9 @@ public:
 
   static vtkHistoryManager *New();
 
+  void ResetInputs();
+  void AddInput( vtkPolyData* );
+
   //! CurrentOutput accessors
   vtkSetMacro( CurrentOutput, int );
   //! CurrentOutput accessors
@@ -31,10 +34,6 @@ protected:
   int RequestData( vtkInformation*, 
                    vtkInformationVector**, 
                    vtkInformationVector*);
-  //! VTK Pipeline function
-  int FillInputPortInformation(int port, vtkInformation *info);
-
-  void ResetInputs();
 
 private:
   vtkHistoryManager(const vtkHistoryManager&);  // Not implemented.
