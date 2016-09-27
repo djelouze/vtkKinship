@@ -46,12 +46,26 @@ public:
     static vtkPolyDataToBinaryImage *New();
     vtkTypeMacro(vtkPolyDataToBinaryImage, vtkImageAlgorithm);
 
+    vtkSetMacro( OutsideValue, int );
+    vtkGetMacro( OutsideValue, int );
+
+    vtkSetMacro( InsideValue, int );
+    vtkGetMacro( InsideValue, int );
+
+    vtkSetVector3Macro( OutputSpacing, double );
+    vtkGetVector3Macro( OutputSpacing, double );
+
+
 protected:
     vtkPolyDataToBinaryImage();
     ~vtkPolyDataToBinaryImage();
     virtual int FillInputPortInformation(int, vtkInformation* );
     virtual int RequestData( vtkInformation*, vtkInformationVector**, vtkInformationVector* );
     virtual int RequestInformation( vtkInformation*, vtkInformationVector**, vtkInformationVector* );
+
+    int OutsideValue;
+    int InsideValue;
+    double OutputSpacing[3];
 
 private:
     vtkPolyDataToBinaryImage(const vtkPolyDataToBinaryImage&);  // Not implemented.

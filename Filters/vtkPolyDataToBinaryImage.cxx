@@ -33,11 +33,17 @@
 
 vtkStandardNewMacro(vtkPolyDataToBinaryImage);
 
-vtkPolyDataToBinaryImage::vtkPolyDataToBinaryImage( )
+vtkPolyDataToBinaryImage::vtkPolyDataToBinaryImage()
 {
-    this->SetNumberOfInputPorts( 2 );
-    this->polyDataToImageStencil = vtkPolyDataToImageStencil::New();
-    this->imageStencilToImage = vtkImageStencilToImage::New();
+  this->SetNumberOfInputPorts( 2 );
+  this->polyDataToImageStencil = vtkPolyDataToImageStencil::New();
+  this->imageStencilToImage = vtkImageStencilToImage::New();
+
+  this->InsideValue = 255;
+  this->OutsideValue = 0;
+  this->OutputSpacing[0] = 1;
+  this->OutputSpacing[1] = 1;
+  this->OutputSpacing[2] = 1;
 }
 
 vtkPolyDataToBinaryImage::~vtkPolyDataToBinaryImage( )
@@ -99,11 +105,19 @@ int vtkPolyDataToBinaryImage::RequestInformation(
 
         input->ComputeBounds();
         input->GetBounds(dextent);
-        int extent[6];
-        for( int i = 0; i< 6; i++)
-            extent[i] = static_cast<int>(dextent[i]);
+        this->polyDataToImageStencil->SetOutputOrigin( dextent[0], dextent[2], dextent[4] );
 
-        this->polyDataToImageStencil->SetOutputWholeExtent(extent);
+        double* spacing = this->OutputSpacing;
+        this->polyDataToImageStencil->SetOutputSpacing( spacing );
+
+        int extent[6] = { 0, -1, 0, -1, 0, -1 };
+        extent[1] = (dextent[1] - dextent[0]) / spacing[0];
+        extent[3] = (dextent[3] - dextent[2]) / spacing[1];
+        extent[5] = (dextent[5] - dextent[4]) / spacing[2];
+        this->polyDataToImageStencil->SetOutputWholeExtent( extent );
+
+        this->imageStencilToImage->SetInsideValue( this->InsideValue );
+        this->imageStencilToImage->SetOutsideValue( this->OutsideValue );
 
         outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
                      extent,6);
