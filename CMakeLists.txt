@@ -1,19 +1,14 @@
-PROJECT (vtkKinship)
+cmake_minimum_required(VERSION 3.0)
+cmake_policy(VERSION 3.0)
 
-### The following are needed to avoid warnings. See CMake doc. ######
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+project (vtkKinship)
 
-if(COMMAND cmake_policy)
-cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-#####################################################################
-
-SET (LIBRARY_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+set(LIBRARY_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
      CACHE 
      PATH
      "Single output directory for building all libraries.")
 
-SET (EXECUTABLE_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
+set(EXECUTABLE_OUTPUT_PATH ${vtkKinship_BINARY_DIR}/bin
      CACHE
      PATH
      "Single output directory for building all executables.")
