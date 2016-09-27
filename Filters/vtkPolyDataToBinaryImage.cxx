@@ -81,6 +81,8 @@ int vtkPolyDataToBinaryImage::RequestInformation(
     vtkPolyData *input = vtkPolyData::SafeDownCast(
                              inInfo->Get(vtkDataObject::DATA_OBJECT()));
 
+    this->imageStencilToImage->SetInsideValue( this->InsideValue );
+    this->imageStencilToImage->SetOutsideValue( this->OutsideValue );
 
     if( imageInfo )
     {
@@ -97,7 +99,6 @@ int vtkPolyDataToBinaryImage::RequestInformation(
         outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),
                      extent,6);
         vtkDataObject::SetPointDataActiveScalarInfo(outInfo, info->GetScalarType(), info->GetNumberOfScalarComponents());
-
     }
     else
     {
@@ -115,9 +116,6 @@ int vtkPolyDataToBinaryImage::RequestInformation(
         extent[3] = (dextent[3] - dextent[2]) / spacing[1];
         extent[5] = (dextent[5] - dextent[4]) / spacing[2];
         this->polyDataToImageStencil->SetOutputWholeExtent( extent );
-
-        this->imageStencilToImage->SetInsideValue( this->InsideValue );
-        this->imageStencilToImage->SetOutsideValue( this->OutsideValue );
 
         outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),
                      extent,6);
