@@ -29,7 +29,7 @@ void vtkHistoryManager::AddInput( vtkPolyData* newInput )
   localNewInput->Register( this );
   localNewInput->DeepCopy( newInput );
   this->Inputs.push_back( localNewInput );
-  this->CurrentOutput = this->Inputs.size() - 1;
+  this->CurrentOutput = this->Inputs.size();
   this->Modified();
 }
 
@@ -55,9 +55,9 @@ int vtkHistoryManager::RequestData(
    vtkPolyData* outputMesh = vtkPolyData::SafeDownCast(
     outMeshInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-   if( this->CurrentOutput < this->Inputs.size() && this->CurrentOutput >= 0)
+   if( this->CurrentOutput <= this->Inputs.size() && this->CurrentOutput > 0)
    {
-     outputMesh->ShallowCopy( this->Inputs[this->CurrentOutput] );
+     outputMesh->ShallowCopy( this->Inputs[this->CurrentOutput-1] );
    }
 
 
